@@ -5,11 +5,11 @@ Class {
 		'mainMenuBar',
 		'mainToolbar',
 		'mainStatusBar',
-		'content',
 		'elementProperties',
 		'levelTreeView',
 		'elementTemplateList',
-		'paletteNotebook'
+		'paletteNotebook',
+		'contentView'
 	],
 	#category : #'WodenEditor-UI-Spec'
 }
@@ -33,7 +33,7 @@ WDELevelEditor class >> defaultSpec [
 						    yourself);
 				   add: (SpPanedLayout newHorizontal
 						    positionOfSlider: 4 / 5;
-						    add: #content;
+						    add: #contentView;
 						    add: (SpPanedLayout newVertical
 								     positionOfSlider: 2 / 3;
 								     add: #elementProperties;
@@ -160,11 +160,11 @@ WDELevelEditor >> buildMainToolbar [
 		
 		addItem: (SpToolbarButtonPresenter new
 			label: 'Object';
-			action: [ content view activateObjectMode ];
+			action: [ contentView view activateObjectMode ];
 			yourself);
 		addItem: (SpToolbarButtonPresenter new
 			label: 'Placement';
-			action: [ content view activatePlacementMode ];
+			action: [ contentView view activatePlacementMode ];
 			yourself);
 		addItem: (SpToolbarButtonPresenter new
 			icon: (self iconNamed: #glamorousGo);
@@ -241,6 +241,11 @@ WDELevelEditor >> cameraMenu [
 WDELevelEditor >> connectForNewLevel: level [
 	levelTreeView roots: {level}.
 	level whenAddedOrRemovedElementDo: [	levelTreeView roots: {level} ]
+]
+
+{ #category : #accessing }
+WDELevelEditor >> contentView [
+	^ contentView
 ]
 
 { #category : #menu }
@@ -373,7 +378,7 @@ WDELevelEditor >> initializePresenters [
 	mainMenuBar := self buildMainMenuBar.
 	mainToolbar := self buildMainToolbar.
 	mainStatusBar := self newStatusBar.
-	content := self instantiate: WDSpScenePresenter.
+	contentView := self instantiate: WDELevelEditorContentView.
 	elementProperties := self instantiate: WDELevelElementPropertyEditor.
 	levelTreeView := self newTreeTable.
 	levelTreeView
@@ -411,6 +416,7 @@ WDELevelEditor >> initializeWindow: aWindowPresenter [
 
 { #category : #initialization }
 WDELevelEditor >> modelChanged [
+	contentView model: self model.
 	elementProperties model: self model selection.
 	self model
 		whenStatusMessageChangedDo: [ :message | mainStatusBar popMessage; pushMessage: message ];

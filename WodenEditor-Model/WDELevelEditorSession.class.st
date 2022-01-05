@@ -5,7 +5,8 @@ Class {
 		'gameSettings',
 		'level',
 		'selection',
-		'statusMessage'
+		'statusMessage',
+		'gridSize'
 	],
 	#category : #'WodenEditor-Model-Session'
 }
@@ -22,6 +23,21 @@ WDELevelEditorSession >> gameSettings: anObject [
 	level value ifNotNil: [ :lv | lv gameSettings: gameSettings ]
 ]
 
+{ #category : #accessing }
+WDELevelEditorSession >> gridSize [
+	^ gridSize value
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> gridSize: newValue [
+	gridSize value: ((newValue roundTo: self gridSizeGranularity) max: self gridSizeGranularity)
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> gridSizeGranularity [
+	^ 0.001
+]
+
 { #category : #initialization }
 WDELevelEditorSession >> initialize [
 	super initialize.
@@ -29,6 +45,7 @@ WDELevelEditorSession >> initialize [
 	level := nil asValueHolder.
 	statusMessage := '' asValueHolder.
 	selection := WDELevelEditorSelection empty asValueHolder.
+	gridSize := 10.0 asValueHolder.
 ]
 
 { #category : #accessing }
