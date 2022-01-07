@@ -87,6 +87,11 @@ WDELevelEditorContentView >> createGridNode [
 { #category : #initialization }
 WDELevelEditorContentView >> createScene [
 	scene := WDScene new.
+	self createSceneNodes
+]
+
+{ #category : #initialization }
+WDELevelEditorContentView >> createSceneNodes [
 	camera := WDCamera new
 		isPerspective: false;
 		yourself.
@@ -148,8 +153,28 @@ WDELevelEditorContentView >> leftView [
 ]
 
 { #category : #initialization }
+WDELevelEditorContentView >> levelChanged [
+	self levelSceneChanged
+]
+
+{ #category : #initialization }
+WDELevelEditorContentView >> levelScene [
+	^ self model ifNotNil: [ :m | m levelScene ]
+]
+
+{ #category : #initialization }
+WDELevelEditorContentView >> levelSceneChanged [
+	self levelScene ifNil: [
+		self createScene
+	] ifNotNil: [ :levelScene |
+		scene := levelScene.
+		self createSceneNodes
+	].
+]
+
+{ #category : #initialization }
 WDELevelEditorContentView >> modelChanged [
-	self createScene
+	self levelSceneChanged
 ]
 
 { #category : #event }
@@ -163,7 +188,7 @@ WDELevelEditorContentView >> onSceneDrag: event delta: delta [
 		] ifFalse: [
 			cameraNode translateBy: (cameraNode orientation transformVector3: (Vector3 x: delta x y: delta y negated z: 0.0) * 0.01).
 		].
-		Transcript show: cameraNode position; cr.
+
 		self updateCameraAndGrid
 	].
 ]

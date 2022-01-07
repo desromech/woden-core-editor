@@ -59,6 +59,11 @@ WDELevelEditorSession >> level: aLevel [
 	level value: aLevel.
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> levelScene [
+	^ self level ifNotNil: [ :l | l scene ]
+]
+
 { #category : #accessing }
 WDELevelEditorSession >> selection [
 	^ selection value

@@ -18,6 +18,11 @@ WDEWodenGameFrameworkWorldLevel >> elements [
 ]
 
 { #category : #accessing }
+WDEWodenGameFrameworkWorldLevel >> scene [
+	^ (world getOrCreateSubsystemWithClass: WDGFSceneSubsystem) scene
+]
+
+{ #category : #accessing }
 WDEWodenGameFrameworkWorldLevel >> world [
 
 	^ world

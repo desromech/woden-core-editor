@@ -49,6 +49,11 @@ WDELevel >> newEditorSession [
 	^ WDELevelEditorSession new level: self; yourself
 ]
 
+{ #category : #accessing }
+WDELevel >> scene [
+	^ nil
+]
+
 { #category : #'as yet unclassified' }
 WDELevel >> visibleInEditor [
 	^ true
