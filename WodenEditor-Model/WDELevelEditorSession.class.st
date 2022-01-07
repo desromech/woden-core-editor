@@ -6,10 +6,22 @@ Class {
 		'level',
 		'selection',
 		'statusMessage',
-		'gridSize'
+		'gridSize',
+		'activeToolModeOrEditionModeName'
 	],
 	#category : #'WodenEditor-Model-Session'
 }
+
+{ #category : #accessing }
+WDELevelEditorSession >> activeToolModeOrEditionModeName [
+	^ activeToolModeOrEditionModeName ifNil: [ activeToolModeOrEditionModeName := '' ]
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> activeToolModeOrEditionModeName: anObject [
+	activeToolModeOrEditionModeName := anObject.
+	self updateStatusMessage
+]
 
 { #category : #accessing }
 WDELevelEditorSession >> gameSettings [
@@ -84,6 +96,11 @@ WDELevelEditorSession >> statusMessage [
 { #category : #accessing }
 WDELevelEditorSession >> statusMessage: newMessage [
 	statusMessage value: newMessage
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> updateStatusMessage [
+	self statusMessage: self activeToolModeOrEditionModeName
 ]
 
 { #category : #enumerating }
