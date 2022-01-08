@@ -1,6 +1,9 @@
 Class {
 	#name : #WDELevelEditorViewEditionMode,
 	#superclass : #WDELevelEditorViewMode,
+	#instVars : [
+		'clickSelectionWheel'
+	],
 	#category : #'WodenEditor-UI-ViewMode'
 }
 
@@ -10,6 +13,34 @@ WDELevelEditorViewEditionMode >> activateAction [
 
 { #category : #actions }
 WDELevelEditorViewEditionMode >> cancelAction [
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewEditionMode >> nextValidClickSelectionWheelFor: clickPosition [
+	(clickSelectionWheel isNotNil and: [ clickSelectionWheel isValidForPosition: clickPosition ]) ifFalse: [
+		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new
+			clickPosition: clickPosition;
+			elements: (view elementsInScreenPosition: clickPosition);
+			yourself.
+	].
+
+	^ clickSelectionWheel advance
+]
+
+{ #category : #event }
+WDELevelEditorViewEditionMode >> onLeftClick: event [
+	| elements |
+	self supportsElementSelection ifFalse: [ ^ self ].
+	elements := (self nextValidClickSelectionWheelFor: event position) currentElement ifNil: [ #() ] ifNotNil: [ :e | { e } ].
+	
+	event shiftPressed ifTrue: [
+		^ self levelEditorSession addElementsToSelection: elements
+	].
+	event controlKeyPressed ifTrue: [ 
+		^ self levelEditorSession toggleElementsFromSelection: elements
+	].
+
+	^ self levelEditorSession setSelectedElements: elements
 ]
 
 { #category : #'as yet unclassified' }
@@ -80,6 +111,11 @@ WDELevelEditorViewEditionMode >> startManipulatorOrActionDraggingWith: event [
 	].
 
 	^ self startActionDraggingWith: event
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewEditionMode >> supportsElementSelection [
+	^ false
 ]
 
 { #category : #'as yet unclassified' }

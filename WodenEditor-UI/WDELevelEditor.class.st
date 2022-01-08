@@ -160,11 +160,11 @@ WDELevelEditor >> buildMainToolbar [
 		
 		addItem: (SpToolbarButtonPresenter new
 			label: 'Object';
-			action: [ contentView view activateObjectMode ];
+			action: [ contentView activateObjectMode ];
 			yourself);
 		addItem: (SpToolbarButtonPresenter new
 			label: 'Placement';
-			action: [ contentView view activatePlacementMode ];
+			action: [ contentView activatePlacementMode ];
 			yourself);
 		addItem: (SpToolbarButtonPresenter new
 			icon: (self iconNamed: #glamorousGo);

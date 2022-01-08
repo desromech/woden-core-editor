@@ -15,7 +15,10 @@ Class {
 		'lastDragPosition',
 		'editorViewType',
 		'activeEditionMode',
-		'activeToolMode'
+		'activeToolMode',
+		'activeToolManipulator',
+		'highlightedManipulator',
+		'highlightBoxNode'
 	],
 	#classVars : [
 		'OrthographicFarDistance',
@@ -82,6 +85,30 @@ WDELevelEditorContentView >> activeEditionMode [
 WDELevelEditorContentView >> activeEditionMode: newEditionMode [
 	activeEditionMode := newEditionMode.
 	self updateActiveToolStatusBarIndicator.
+]
+
+{ #category : #enumerating }
+WDELevelEditorContentView >> activeManipulatorsDo: aBlock [
+	activeToolManipulator ifNotNil: [ aBlock value: activeToolManipulator ].
+]
+
+{ #category : #accessing }
+WDELevelEditorContentView >> activeToolManipulator [
+	^ activeToolManipulator
+]
+
+{ #category : #accessing }
+WDELevelEditorContentView >> activeToolManipulator: newManipulator [
+	activeToolManipulator ifNotNil: [
+		activeToolManipulator removeFromScene.
+		activeToolManipulator := nil.
+	].
+
+	activeToolManipulator := newManipulator.
+	activeToolManipulator ifNotNil: [
+		activeToolManipulator addToScene: scene.
+		self highlightManipulator: nil; highlightElement: nil.
+	].
 ]
 
 { #category : #'editor modes' }
@@ -228,6 +255,17 @@ WDELevelEditorContentView >> depthAtCameraDistance: distance [
 WDELevelEditorContentView >> dragToolScreenOverlay: overlay [
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> elementsInPositionWithRayPicking: aPoint [
+	^ (self rayPickElements: (self rayForScreenPosition: aPoint)) collect: [ :each | each value ]
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> elementsInScreenPosition: aPoint [
+	^ self elementsInPositionWithRayPicking: aPoint
+
+]
+
 { #category : #'camera views' }
 WDELevelEditorContentView >> freePerspectiveView [
 	gridOrientation := Quaternion lookAtBottom.
@@ -248,6 +286,29 @@ WDELevelEditorContentView >> gridSize [
 	^ self model ifNil: [1.0 ] ifNotNil: [:m | m gridSize]
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> highlightElement: anElement [
+	anElement ifNil: [
+		highlightBoxNode ifNotNil: [ 
+			highlightBoxNode removeFromScene
+		].
+	] ifNotNil: [
+		"highlightBoxNode
+			visible: true;
+			color: WDELevelEditorTheme current highlightColor;
+			transform: (anElement selectableBoundingBox withExpandedHalfExtent: 0.025) reversibleTransformToConvertUnitBoxToMe."
+	].
+
+	sceneView refresh.
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> highlightManipulator: aManipulator [
+	highlightedManipulator ifNotNil: [ highlightedManipulator highlighted: false ].
+	highlightedManipulator := aManipulator.
+	highlightedManipulator ifNotNil: [ highlightedManipulator highlighted: true ].
+]
+
 { #category : #initialization }
 WDELevelEditorContentView >> initialize [
 	cameraAngle := Vector3 zeros.
@@ -263,6 +324,7 @@ WDELevelEditorContentView >> initializePresenters [
 	sceneView eventHandler
 		whenKeyDownDo: [ :event | self onSceneKeyDown: event ];
 		whenKeyUpDo: [ :event | self onSceneKeyUp: event ];
+		whenDoubleClickDo: [ :event | self onSceneDoubleClick: event ];
 		whenMouseDownDo: [ :event | self onSceneMouseDown: event ];
 		whenMouseUpDo: [ :event | self onSceneMouseUp: event ];
 		whenMouseMoveDo: [ :event | self onSceneMouseMove: event ]
@@ -335,6 +397,11 @@ WDELevelEditorContentView >> normalizedToLocal: aPosition depth: aDepth [
 ]
 
 { #category : #event }
+WDELevelEditorContentView >> onSceneDoubleClick: event [
+	self activeToolModeOrEditionMode onDoubleClick: event
+]
+
+{ #category : #event }
 WDELevelEditorContentView >> onSceneDrag: event delta: delta [
 	self activeToolModeOrEditionMode onMouseDrag: event delta: delta
 ]
@@ -384,14 +451,22 @@ WDELevelEditorContentView >> onSceneMouseMove: event [
 
 { #category : #event }
 WDELevelEditorContentView >> onSceneMouseUp: event [
-	lastDragPosition ifNotNil: [ 
+	lastDragPosition ifNotNil: [
 		(event isPrimaryButton or: [event isSecondaryButton or: [event isMiddleButton] ]) ifFalse: [
 			lastDragPosition := nil.
 			self onSceneDragEnd: event
 		].
 	].
-	self activeToolModeOrEditionMode onMouseUp: event
-
+	self activeToolModeOrEditionMode onMouseUp: event.
+	
+	lastDragPosition ifNil: [ 
+		event redButtonChanged ifTrue: [ 
+			self activeToolModeOrEditionMode onLeftClick: event.
+		].
+		event yellowButtonChanged ifTrue: [ 
+			self activeToolModeOrEditionMode onRightClick: event.
+		].
+	].
 ]
 
 { #category : #event }
@@ -427,6 +502,11 @@ WDELevelEditorContentView >> rayForNormalizedPosition: aPoint [
 { #category : #manipulators }
 WDELevelEditorContentView >> rayForScreenPosition: aPoint [
 	^ self rayForNormalizedPosition: (self normalizeScreenPosition: aPoint)
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> rayPickElements: ray [
+	^ self model ifNil: [ #() ] ifNotNil: [ :m | m rayCastAllAlong: ray ]
 ]
 
 { #category : #manipulators }

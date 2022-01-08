@@ -13,6 +13,11 @@ WDELevelEditorViewMode class >> for: aView [
 	^ self new view: aView; yourself
 ]
 
+{ #category : #testing }
+WDELevelEditorViewMode >> isPlacementMode [
+	^ false
+]
+
 { #category : #accessing }
 WDELevelEditorViewMode >> levelEditorSession [
 	^ view levelEditorSession
@@ -26,6 +31,10 @@ WDELevelEditorViewMode >> modeName [
 { #category : #accessing }
 WDELevelEditorViewMode >> model [
 	^ view model
+]
+
+{ #category : #event }
+WDELevelEditorViewMode >> onDoubleClick: event [
 ]
 
 { #category : #event }

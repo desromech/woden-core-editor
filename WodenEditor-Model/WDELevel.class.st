@@ -49,6 +49,11 @@ WDELevel >> newEditorSession [
 	^ WDELevelEditorSession new level: self; yourself
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevel >> rayCastAllAlong: ray [
+	^ #()
+]
+
 { #category : #accessing }
 WDELevel >> scene [
 	^ nil

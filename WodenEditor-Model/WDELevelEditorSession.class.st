@@ -31,6 +31,19 @@ WDELevelEditorSession >> activeToolModeOrEditionModeName: anObject [
 	self updateStatusMessage
 ]
 
+{ #category : #selection }
+WDELevelEditorSession >> addElementsToSelection: elements [
+	| newSelectedItems oldSelectedItemSet |
+	newSelectedItems := self selection selectedItems asOrderedCollection.
+	oldSelectedItemSet := newSelectedItems asSet.
+	elements do: [ :each |
+		(oldSelectedItemSet includes: each) ifFalse: [
+			newSelectedItems add: each
+		]
+	].
+	self selection: (WDELevelEditorSelection for: newSelectedItems asArray)
+]
+
 { #category : #action }
 WDELevelEditorSession >> decreaseGridSize [
 	self gridSize: self gridSize / self gridSizeIncrementFactor
@@ -111,6 +124,11 @@ WDELevelEditorSession >> levelScene [
 WDELevelEditorSession >> playLevel [
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> rayCastAllAlong: ray [
+	^ self level ifNil: [ #() ] ifNotNil: [ :l | l rayCastAllAlong: ray ]
+]
+
 { #category : #action }
 WDELevelEditorSession >> redo [
 ]
@@ -125,6 +143,11 @@ WDELevelEditorSession >> selection [
 WDELevelEditorSession >> selection: newSelection [
 	selection value: newSelection.
 
+]
+
+{ #category : #selection }
+WDELevelEditorSession >> setSelectedElements: elements [
+	self selection: (WDELevelEditorSelection for: elements asArray)
 ]
 
 { #category : #'as yet unclassified' }
@@ -149,6 +172,28 @@ WDELevelEditorSession >> subGridSize [
 
 { #category : #action }
 WDELevelEditorSession >> subtractSelectedItems [
+]
+
+{ #category : #selection }
+WDELevelEditorSession >> toggleElementsFromSelection: elements [
+	| newSelectedItems oldSelectedItemSet oldSelectedItems toggleElementSet |
+	newSelectedItems := OrderedCollection new.
+	oldSelectedItems := self selection selectedItems.
+	oldSelectedItemSet := newSelectedItems asSet.
+	toggleElementSet := elements asSet.
+
+	oldSelectedItems do: [ :each |
+		(toggleElementSet includes: each) ifFalse: [
+			newSelectedItems add: each
+		]
+	].
+
+	elements do: [ :each |
+		(oldSelectedItemSet includes: each) ifFalse: [
+			newSelectedItems add: each
+		]
+	].
+	self selection: (WDELevelEditorSelection for: newSelectedItems asArray)
 ]
 
 { #category : #action }

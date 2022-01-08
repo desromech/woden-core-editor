@@ -70,7 +70,7 @@ WDELevelEditorSelectionClickWheel >> initialize [
 
 { #category : #testing }
 WDELevelEditorSelectionClickWheel >> isValidForPosition: testPosition [
-	^ (clickPosition - testPosition) asFloat32x2 length2 < (PositionValidationTolerance*PositionValidationTolerance)
+	^ (clickPosition - testPosition) asVector2 length2 < (PositionValidationTolerance*PositionValidationTolerance)
 ]
 
 { #category : #testing }

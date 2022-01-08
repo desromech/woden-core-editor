@@ -41,14 +41,13 @@ WDELevelEditorBrushDrawDragToolMode >> finishDraggingWith: event [
 	super finishDraggingWith: event.
 	sceneNode ifNotNil: [ sceneNode removeFromScene ].
 	box := self computeBoxWithScreenEndPoint: dragEndPosition.
-	"(box isEmpty not and: [ box width > 0 and: [ box height > 0 and: [ box depth > 0 ] ] ]) ifTrue: [ 
+	(box isEmpty not and: [ box width > 0 and: [ box height > 0 and: [ box depth > 0 ] ] ]) ifTrue: [ 
 		self model activeToolManipulator: ((WDELevelEditor3DBoxPlacementManipulator for: self model)
-			isManipulating2DGeometry: self levelEditorSession activeSectorLayer isInSector2D;
 			boundingBox: box;
 			yourself)
 	] ifFalse: [
 		self model activeToolManipulator: nil
-	]."
+	].
 
 ]
 
