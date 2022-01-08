@@ -84,6 +84,11 @@ WDELevelEditorViewMode >> onRightClick: event [
 ]
 
 { #category : #accessing }
+WDELevelEditorViewMode >> scene [
+	^ view scene
+]
+
+{ #category : #accessing }
 WDELevelEditorViewMode >> shortcutList [
 	^ shortcutList ifNil: [ shortcutList := self shortcuts ]
 ]

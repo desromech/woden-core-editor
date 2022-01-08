@@ -8,3 +8,21 @@ Class {
 WDELevelEditorViewObjectEditionMode >> modeName [
 	^ 'Object Mode'
 ]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewObjectEditionMode >> startActionDraggingWith: event [
+	view activeToolMode: ((WDELevelEditorRectangleSelectionDragToolMode for: view)
+		dragStartedWith: event;
+		yourself)
+	
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewObjectEditionMode >> supportsElementSelection [
+	^ true
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewObjectEditionMode >> supportsManipulators [
+	^ true
+]

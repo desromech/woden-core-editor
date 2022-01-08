@@ -127,6 +127,11 @@ WDELevelEditorSession >> selection: newSelection [
 
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> snapToSubGrid: vector [
+	^ vector roundWithQuantum: self subGridSize
+]
+
 { #category : #accessing }
 WDELevelEditorSession >> statusMessage [
 	^ statusMessage value
@@ -135,6 +140,11 @@ WDELevelEditorSession >> statusMessage [
 { #category : #accessing }
 WDELevelEditorSession >> statusMessage: newMessage [
 	statusMessage value: newMessage
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> subGridSize [
+	^ self gridSize * 0.1
 ]
 
 { #category : #action }

@@ -5,7 +5,10 @@ Class {
 		'axisMesh',
 		'gridMaterial',
 		'gridMesh',
-		'subGridMesh'
+		'subGridMesh',
+		'flatShadedTranslucentUnitCubeMesh',
+		'unitCube',
+		'flatShadedTranslucentMaterial'
 	],
 	#classInstVars : [
 		'uniqueInstance'
@@ -60,6 +63,23 @@ WDELevelEditorMeshes >> baseGridSize [
 ]
 
 { #category : #accessing }
+WDELevelEditorMeshes >> flatShadedTranslucentMaterial [
+	^ flatShadedTranslucentMaterial ifNil: [
+		flatShadedTranslucentMaterial := WDUnlitMaterial new
+			alphaMode: #BLEND;
+			colorFactor: (Vector4 x: 1 y: 1 z: 1 w: 0.3);
+			yourself
+	]
+]
+
+{ #category : #accessing }
+WDELevelEditorMeshes >> flatShadedTranslucentUnitCubeMesh [
+	^ flatShadedTranslucentUnitCubeMesh ifNil: [
+		flatShadedTranslucentUnitCubeMesh := self unitCube copyWithMaterial: self flatShadedTranslucentMaterial
+	]
+]
+
+{ #category : #accessing }
 WDELevelEditorMeshes >> gridMaterial [
 	^ gridMaterial ifNil: [ gridMaterial := WDUnlitMaterial new
 		background: true;
@@ -90,6 +110,15 @@ WDELevelEditorMeshes >> subGridMesh [
 		subGridMesh := WDMeshBuilder new
 			currentMaterial: self gridMaterial;
 			addLineGridWithWidth: 200 height: 200 subdivisions: 201;
+			mesh
+	]
+]
+
+{ #category : #accessing }
+WDELevelEditorMeshes >> unitCube [
+	^ unitCube ifNil: [
+		unitCube := WDMeshBuilder new
+			addCubeWithWidth: 1 height: 1 depth: 1;
 			mesh
 	]
 ]

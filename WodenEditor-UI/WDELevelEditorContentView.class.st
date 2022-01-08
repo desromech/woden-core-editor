@@ -152,7 +152,7 @@ WDELevelEditorContentView >> cameraXYToWorld: screenPosition [
 WDELevelEditorContentView >> cameraXYToWorld: screenPosition distance: screenDistance [
 	| depth cameraPosition |
 	depth := self depthAtCameraDistance: screenDistance.
-	cameraPosition := (self windowToLocal: screenPosition depth: depth).
+	cameraPosition := (self screenToLocal: screenPosition depth: depth).
 	^ cameraNode position +
 	(cameraPosition x * self xDragDirection) + (cameraPosition y * self yDragDirection) + (screenDistance * self zDragDirection)
 ]
@@ -301,6 +301,16 @@ WDELevelEditorContentView >> levelSceneChanged [
 	].
 ]
 
+{ #category : #manipulators }
+WDELevelEditorContentView >> manipulatorInPositionWithRayPicking: aPoint [
+	^ self rayPickManipulator: (self rayForScreenPosition: aPoint)
+]
+
+{ #category : #manipulators }
+WDELevelEditorContentView >> manipulatorInScreenPosition: aPoint [
+	^ self manipulatorInPositionWithRayPicking: aPoint
+]
+
 { #category : #initialization }
 WDELevelEditorContentView >> modelChanged [
 	self model ifNotNil: [ :session |
@@ -409,6 +419,26 @@ WDELevelEditorContentView >> perspectiveView [
 	self updateCameraAndGrid
 ]
 
+{ #category : #manipulators }
+WDELevelEditorContentView >> rayForNormalizedPosition: aPoint [
+	^ self worldRayAtWindowCoordinate: aPoint
+]
+
+{ #category : #manipulators }
+WDELevelEditorContentView >> rayForScreenPosition: aPoint [
+	^ self rayForNormalizedPosition: (self normalizeScreenPosition: aPoint)
+]
+
+{ #category : #manipulators }
+WDELevelEditorContentView >> rayPickManipulator: ray [
+	^ nil
+]
+
+{ #category : #accessing }
+WDELevelEditorContentView >> refresh [
+	sceneView refresh
+]
+
 { #category : #'camera views' }
 WDELevelEditorContentView >> rightView [
 	camera isPerspective: false.
@@ -438,9 +468,19 @@ WDELevelEditorContentView >> rotateCameraToAngles: newAngles withFocalPoint: foc
 ]
 
 { #category : #accessing }
+WDELevelEditorContentView >> scene [
+	^ scene
+]
+
+{ #category : #accessing }
 WDELevelEditorContentView >> sceneView [
 
 	^ sceneView
+]
+
+{ #category : #camera }
+WDELevelEditorContentView >> screenToLocal: aPosition depth: aDepth [
+	^ self windowToLocal: aPosition - sceneView adapter widget bounds origin depth: aDepth
 ]
 
 { #category : #accessing }
@@ -537,6 +577,16 @@ WDELevelEditorContentView >> validCameraTransform [
 { #category : #camera }
 WDELevelEditorContentView >> windowToLocal: aPosition depth: aDepth [
 	^ self normalizedToLocal: (self normalizeScreenPosition: aPosition) depth: aDepth
+]
+
+{ #category : #manipulators }
+WDELevelEditorContentView >> worldRayAtWindowCoordinate: point [
+	| ray frustum |
+	frustum := self cameraFrustum.
+	frustum leftBottomFar ifNil: [ ^ nil ].
+	
+	ray := frustum rayForNormalizedPoint: point.
+	^ ray transformedWith: cameraNode transform
 ]
 
 { #category : #camera }

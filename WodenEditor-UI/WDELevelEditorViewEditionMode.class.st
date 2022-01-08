@@ -71,4 +71,18 @@ WDELevelEditorViewEditionMode >> startCameraRotateDraggingWith: event [
 
 { #category : #'as yet unclassified' }
 WDELevelEditorViewEditionMode >> startManipulatorOrActionDraggingWith: event [
+	self supportsManipulators ifTrue: [
+		| manipulator |
+		manipulator := view manipulatorInScreenPosition: event position.
+		manipulator ifNotNil: [
+			^ manipulator startDragToolWithEvent: event on: view
+		].
+	].
+
+	^ self startActionDraggingWith: event
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewEditionMode >> supportsManipulators [
+	^ false
 ]
