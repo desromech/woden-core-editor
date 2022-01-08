@@ -2,7 +2,7 @@
 I represent a quake style level element.
 "
 Class {
-	#name : #WDEQuakeStyleLevelElement,
+	#name : #WDELevelElement,
 	#superclass : #Object,
 	#instVars : [
 		'visibleInEditor'
@@ -10,20 +10,30 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #'as yet unclassified' }
+WDELevelElement >> editorTreeChildren [
+	^ #()
+]
+
 { #category : #initialization }
-WDEQuakeStyleLevelElement >> initialize [
+WDELevelElement >> initialize [
 	super initialize.
 	visibleInEditor := true.
 ]
 
 { #category : #accessing }
-WDEQuakeStyleLevelElement >> visibleInEditor [
+WDELevelElement >> rayCastAllAlong: ray [
+	^ #()
+]
+
+{ #category : #accessing }
+WDELevelElement >> visibleInEditor [
 
 	^ visibleInEditor
 ]
 
 { #category : #accessing }
-WDEQuakeStyleLevelElement >> visibleInEditor: anObject [
+WDELevelElement >> visibleInEditor: anObject [
 
 	visibleInEditor := anObject
 ]
