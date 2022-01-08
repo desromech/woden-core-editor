@@ -32,7 +32,6 @@ WDELevelEditorViewMode >> model [
 WDELevelEditorViewMode >> onKeyDown: event [
 	| eventCombination |
 	eventCombination := event asKeyCombination.
-	Transcript show: eventCombination; cr.
 	self shortcutList pairsDo: [ :shortcut :action |
 		(shortcut matchesCompletely: eventCombination) ifTrue: [
 			^ action value

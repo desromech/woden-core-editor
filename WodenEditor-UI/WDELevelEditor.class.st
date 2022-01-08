@@ -239,7 +239,6 @@ WDELevelEditor >> cameraMenu [
 
 { #category : #initialization }
 WDELevelEditor >> connectForNewLevel: level [
-	contentView levelChanged.
 	levelTreeView roots: {level}.
 	level whenAddedOrRemovedElementDo: [	levelTreeView roots: {level} ]
 ]
@@ -418,8 +417,8 @@ WDELevelEditor >> initializeWindow: aWindowPresenter [
 
 { #category : #initialization }
 WDELevelEditor >> modelChanged [
-	contentView model: self model.
-	elementProperties model: self model selection.
+	contentView model: self model; modelChanged.
+	elementProperties model: self model selection; modelChanged.
 	self model
 		whenStatusMessageChangedDo: [ :message | mainStatusBar popMessage; pushMessage: message ];
 		whenSelectionChangedDo: [ :selection |

@@ -95,12 +95,20 @@ WDELevelEditorContentView >> activeToolModeOrEditionMode [
 	^ activeToolMode ifNil: [ self activeEditionMode ]
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> backView [
+	camera isPerspective: false.
+	gridOrientation := Quaternion lookAtBack.
+	editorViewType := #back.
+	self rotateCameraToAngles: (Vector3 y: Float pi).
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> bottomView [
+	camera isPerspective: false.
+	gridOrientation := Quaternion lookAtBottom.
+	editorViewType := #bottom.
+	self rotateCameraToAngles: (Vector3 x: Float halfPi).
 ]
 
 { #category : #camera }
@@ -220,15 +228,19 @@ WDELevelEditorContentView >> depthAtCameraDistance: distance [
 WDELevelEditorContentView >> dragToolScreenOverlay: overlay [
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> freePerspectiveView [
 	gridOrientation := Quaternion lookAtBottom.
 	editorViewType := #free.
 	self updateCameraAndGrid.
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> frontView [
+	camera isPerspective: false.
+	gridOrientation := Quaternion lookAtFront.
+	editorViewType := #front.
+	self rotateCameraToAngles: (Vector3 zeros).
 ]
 
 { #category : #accessing }
@@ -256,8 +268,12 @@ WDELevelEditorContentView >> initializePresenters [
 		whenMouseMoveDo: [ :event | self onSceneMouseMove: event ]
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> leftView [
+	camera isPerspective: false.
+	gridOrientation := Quaternion lookAtLeft.
+	editorViewType := #left.
+	self rotateCameraToAngles: (Vector3 y: Float halfPi).
 ]
 
 { #category : #initialization }
@@ -287,7 +303,11 @@ WDELevelEditorContentView >> levelSceneChanged [
 
 { #category : #initialization }
 WDELevelEditorContentView >> modelChanged [
-	self levelSceneChanged
+	self model ifNotNil: [ :session |
+		session
+			whenGridSizeChangedDo: [ self updateCameraAndGrid ];
+			whenLevelChangedDoNow: [ self levelSceneChanged ].
+	].
 ]
 
 { #category : #camera }
@@ -338,6 +358,7 @@ WDELevelEditorContentView >> onSceneMouseDown: event [
 
 { #category : #event }
 WDELevelEditorContentView >> onSceneMouseMove: event [
+	sceneView takeKeyboardFocus.
 	lastDragPosition ifNotNil: [
 		| delta |
 		delta := event position - lastDragPosition.
@@ -368,20 +389,32 @@ WDELevelEditorContentView >> onSceneMouseWheel: event [
 	self activeToolModeOrEditionMode onMouseWheel: event
 ]
 
-{ #category : #camera }
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> openShadingMenu [
+	| menu |
+	menu := SpMenuPresenter new.
+	WDELevelEditor fillShadingMenu: menu viewBlock: [self].
+	^ menu openWithSpecAtPointer
+]
+
+{ #category : #'camera views' }
 WDELevelEditorContentView >> orthographicView [
 	camera isPerspective: false.	
 	self updateCameraAndGrid
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> perspectiveView [
 	camera isPerspective: true.
 	self updateCameraAndGrid
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> rightView [
+	camera isPerspective: false.
+	gridOrientation := Quaternion lookAtRight.
+	editorViewType := #right.
+	self rotateCameraToAngles: (Vector3 y: Float halfPi negated).
 ]
 
 { #category : #camera }
@@ -415,13 +448,13 @@ WDELevelEditorContentView >> session [
 	^ self model
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> togglePerspective [
 	camera isPerspective: camera isPerspective not.
 	self updateCameraAndGrid
 ]
 
-{ #category : #camera }
+{ #category : #'camera views' }
 WDELevelEditorContentView >> topView [
 	camera isPerspective: false.
 	gridOrientation := Quaternion lookAtBottom.

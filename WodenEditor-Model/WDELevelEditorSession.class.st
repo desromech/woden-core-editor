@@ -12,6 +12,14 @@ Class {
 	#category : #'WodenEditor-Model-Session'
 }
 
+{ #category : #action }
+WDELevelEditorSession >> actionOpenFile [
+]
+
+{ #category : #action }
+WDELevelEditorSession >> actionSaveFile [
+]
+
 { #category : #accessing }
 WDELevelEditorSession >> activeToolModeOrEditionModeName [
 	^ activeToolModeOrEditionModeName ifNil: [ activeToolModeOrEditionModeName := '' ]
@@ -21,6 +29,19 @@ WDELevelEditorSession >> activeToolModeOrEditionModeName [
 WDELevelEditorSession >> activeToolModeOrEditionModeName: anObject [
 	activeToolModeOrEditionModeName := anObject.
 	self updateStatusMessage
+]
+
+{ #category : #action }
+WDELevelEditorSession >> decreaseGridSize [
+	self gridSize: self gridSize / self gridSizeIncrementFactor
+]
+
+{ #category : #action }
+WDELevelEditorSession >> deleteSelectedItems [
+]
+
+{ #category : #action }
+WDELevelEditorSession >> duplicateSelectedItems [
 ]
 
 { #category : #accessing }
@@ -50,6 +71,16 @@ WDELevelEditorSession >> gridSizeGranularity [
 	^ 0.001
 ]
 
+{ #category : #action }
+WDELevelEditorSession >> gridSizeIncrementFactor [
+	^ 10
+]
+
+{ #category : #action }
+WDELevelEditorSession >> increaseGridSize [
+	self gridSize: self gridSize * self gridSizeIncrementFactor
+]
+
 { #category : #initialization }
 WDELevelEditorSession >> initialize [
 	super initialize.
@@ -76,6 +107,14 @@ WDELevelEditorSession >> levelScene [
 	^ self level ifNotNil: [ :l | l scene ]
 ]
 
+{ #category : #action }
+WDELevelEditorSession >> playLevel [
+]
+
+{ #category : #action }
+WDELevelEditorSession >> redo [
+]
+
 { #category : #accessing }
 WDELevelEditorSession >> selection [
 	^ selection value
@@ -98,14 +137,33 @@ WDELevelEditorSession >> statusMessage: newMessage [
 	statusMessage value: newMessage
 ]
 
+{ #category : #action }
+WDELevelEditorSession >> subtractSelectedItems [
+]
+
+{ #category : #action }
+WDELevelEditorSession >> undo [
+]
+
 { #category : #accessing }
 WDELevelEditorSession >> updateStatusMessage [
 	self statusMessage: self activeToolModeOrEditionModeName
 ]
 
 { #category : #enumerating }
+WDELevelEditorSession >> whenGridSizeChangedDo: aBlock [
+	gridSize whenChangedDo: aBlock
+]
+
+{ #category : #enumerating }
+WDELevelEditorSession >> whenLevelChangedDo: aBlock [
+	level whenChangedDo: aBlock
+]
+
+{ #category : #enumerating }
 WDELevelEditorSession >> whenLevelChangedDoNow: aBlock [
-	aBlock value: self level
+	aBlock cull: self level.
+	self whenLevelChangedDo: aBlock
 ]
 
 { #category : #enumerating }
