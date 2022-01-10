@@ -109,6 +109,7 @@ WDELevelEditorContentView >> activeToolManipulator: newManipulator [
 		activeToolManipulator addToScene: scene.
 		self highlightManipulator: nil; highlightElement: nil.
 	].
+	sceneView refresh.
 ]
 
 { #category : #'editor modes' }
@@ -124,12 +125,12 @@ WDELevelEditorContentView >> activeToolModeOrEditionMode [
 
 { #category : #'as yet unclassified' }
 WDELevelEditorContentView >> applyNewSelection: newSelection [
-	| selectedEntities |
+	| selectedElements |
 	self activeToolManipulator: nil.
-	selectedEntities := newSelection selectedItems select: [ :each | each isLevelEditorEntity ].
-	selectedEntities ifNotEmpty: [
+	selectedElements := newSelection selectedItems select: [:item | item isManipulableInEditorSceneView ].
+	selectedElements ifNotEmpty: [
 		self activeToolManipulator: ((WDELevelEditor3DSelectionManipulator for: self)
-			selectedElements: selectedEntities;
+			selectedElements: selectedElements;
 			yourself)
 	].
 
@@ -210,6 +211,11 @@ WDELevelEditorContentView >> cameraXZDeltaToWorld: screenDelta distance: screenD
 	^ (cameraDelta x * self xDragDirection) + (cameraDelta y * self zDragDirection)
 ]
 
+{ #category : #camera }
+WDELevelEditorContentView >> computeScreenDistanceForPoint: aPoint [
+	^ (cameraNode transform inverseTransformPosition: aPoint) z negated
+]
+
 { #category : #initialization }
 WDELevelEditorContentView >> createAxisNode [
 	axisNode := WDELevelEditorMeshes uniqueInstance axisMesh asSceneNode.
@@ -266,6 +272,17 @@ WDELevelEditorContentView >> depthAtCameraDistance: distance [
 
 { #category : #'as yet unclassified' }
 WDELevelEditorContentView >> dragToolScreenOverlay: overlay [
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> elementInPositionWithRayPicking: aPoint [
+	^ (self rayPickElement: (self rayForScreenPosition: aPoint))
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> elementInScreenPosition: aPoint [
+	^ self elementInPositionWithRayPicking: aPoint
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -515,6 +532,21 @@ WDELevelEditorContentView >> perspectiveView [
 ]
 
 { #category : #manipulators }
+WDELevelEditorContentView >> rayCastForManipulator: ray [
+	| bestResult |
+	bestResult := nil.
+	self activeManipulatorsDo: [ :each |
+		(each rayCast: ray) ifNotNil: [ :result |
+			(bestResult isNil or: [ result < bestResult ]) ifTrue: [ 
+				bestResult := result
+			]
+		].
+	].
+
+	^ bestResult value
+]
+
+{ #category : #manipulators }
 WDELevelEditorContentView >> rayForNormalizedPosition: aPoint [
 	^ self worldRayAtWindowCoordinate: aPoint
 ]
@@ -525,13 +557,22 @@ WDELevelEditorContentView >> rayForScreenPosition: aPoint [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelEditorContentView >> rayPickElement: ray [
+	| result |
+	result := self rayPickElements: ray.
+	^ result size >= 1 ifTrue: [ result first ] ifFalse: [ nil ]
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditorContentView >> rayPickElements: ray [
 	^ self model ifNil: [ #() ] ifNotNil: [ :m | m rayCastAllAlong: ray ]
 ]
 
 { #category : #manipulators }
 WDELevelEditorContentView >> rayPickManipulator: ray [
-	^ nil
+	| distanceElement |
+	distanceElement := self rayCastForManipulator: ray.
+	^ distanceElement value ifNil: [ nil ]
 ]
 
 { #category : #accessing }
@@ -586,6 +627,11 @@ WDELevelEditorContentView >> screenToLocal: aPosition depth: aDepth [
 { #category : #accessing }
 WDELevelEditorContentView >> session [
 	^ self model
+]
+
+{ #category : #initialization }
+WDELevelEditorContentView >> setSelectedElements: elements [
+	^ self levelEditorSession setSelectedElements: elements
 ]
 
 { #category : #'camera views' }

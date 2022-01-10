@@ -26,7 +26,7 @@ WDELevelElement >> initialize [
 ]
 
 { #category : #testing }
-WDELevelElement >> isLevelEditorEntity [
+WDELevelElement >> isManipulableInEditorSceneView [
 	^ false
 ]
 

@@ -6,7 +6,8 @@ Class {
 		'faces',
 		'sceneNode',
 		'hasValidTopology',
-		'boundingBox'
+		'boundingBox',
+		'transform'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -77,11 +78,22 @@ WDEBrush >> faces: anObject [
 	hasValidTopology := false.
 ]
 
+{ #category : #accessing }
+WDEBrush >> globalBoundingBox [
+	^ (self boundingBox transformedWith: transform) transformedWith: parent transform
+]
+
 { #category : #initialization }
 WDEBrush >> initialize [
 	super initialize.
 	faces := #().
 	hasValidTopology := false.
+	transform := TRSTransform3D identity.
+]
+
+{ #category : #testing }
+WDEBrush >> isManipulableInEditorSceneView [
+	^ true
 ]
 
 { #category : #accessing }
@@ -96,16 +108,33 @@ WDEBrush >> parent: anObject [
 	parent := anObject
 ]
 
+{ #category : #accessing }
+WDEBrush >> position [
+	^ transform translation
+]
+
+{ #category : #accessing }
+WDEBrush >> position: aPosition [
+	transform translation: aPosition.
+	self transformChanged.
+]
+
+{ #category : #memento }
+WDEBrush >> positionStateMemento [
+	^ self position
+]
+
 { #category : #'as yet unclassified' }
 WDEBrush >> rayCast: ray [
-	| bestDistance |
+	| localRay bestDistance |
 	bestDistance := nil.
+	localRay := ray inverseTransformedWith: transform.
 	faces do: [ :face |
 		| intersectionDistance  |
-		intersectionDistance := face plane intersectionWithRay: ray.
+		intersectionDistance := face plane intersectionWithRay: localRay.
 		intersectionDistance ifNotNil: [
 			| intersectionPoint |
-			intersectionPoint := ray pointAtDistance: intersectionDistance.
+			intersectionPoint := localRay pointAtDistance: intersectionDistance.
 			(faces allSatisfy: [ :otherFace | otherFace == face or: [ otherFace plane isPointInsideOrBehind: intersectionPoint ] ]) ifTrue: [ 
 				(bestDistance isNil or: [ intersectionDistance < bestDistance ]) ifTrue: [ 
 					bestDistance := intersectionDistance
@@ -131,6 +160,53 @@ WDEBrush >> removeFromScene: aScene [
 		sceneNode := nil.
 	]
 	
+]
+
+{ #category : #memento }
+WDEBrush >> restorePositionStateMemento: memento [
+	self position: memento
+]
+
+{ #category : #memento }
+WDEBrush >> restoreTransformStateMemento: memento [
+	self transform: memento
+]
+
+{ #category : #accessing }
+WDEBrush >> selectableGlobalBoundingBox [
+	^ self globalBoundingBox
+]
+
+{ #category : #accessing }
+WDEBrush >> transform [
+
+	^ transform
+]
+
+{ #category : #accessing }
+WDEBrush >> transform: anObject [
+	transform := anObject.
+	self transformChanged.
+]
+
+{ #category : #accessing }
+WDEBrush >> transformChanged [
+	sceneNode ifNotNil: [ sceneNode transform: transform ]
+]
+
+{ #category : #memento }
+WDEBrush >> transformStateMemento [
+	^ transform copy
+]
+
+{ #category : #transforming }
+WDEBrush >> transformWith: newTransform [
+	self transform: (newTransform transformTransform: self transform)
+]
+
+{ #category : #transforming }
+WDEBrush >> translateBy: translation [
+	self position: self position + translation
 ]
 
 { #category : #'as yet unclassified' }

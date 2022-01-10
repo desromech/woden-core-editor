@@ -58,21 +58,18 @@ WDEEntity >> initialize [
 ]
 
 { #category : #testing }
-WDEEntity >> isLevelEditorEntity [
-	^ true
-]
-
-{ #category : #testing }
 WDEEntity >> isWorldEntity [
 	^ #(worldspawn world) includes: className
 ]
 
 { #category : #accessing }
 WDEEntity >> rayCastAllAlong: ray [
-	| result |
+	| localRay result |
+	localRay := ray inverseTransformedWith: transform.
+
 	result := OrderedCollection new.
 	brushes do: [ :brush |
-		result addAll: (brush rayCastAllAlong: ray)
+		result addAll: (brush rayCastAllAlong: localRay)
 	].
 	^ result
 ]

@@ -50,6 +50,48 @@ WDELevelEditorViewEditionMode >> onMouseDragStart: event [
 	event isSecondaryButton ifTrue: [ ^ self startCameraDraggingWith: event ].
 ]
 
+{ #category : #event }
+WDELevelEditorViewEditionMode >> onMouseMove: event [
+	| elementBeingPointed manipulatorBeingPointed |
+	manipulatorBeingPointed := self supportsManipulators
+		ifTrue: [view manipulatorInScreenPosition: event position]
+		ifFalse: [nil].
+
+	manipulatorBeingPointed ifNotNil: [ 
+		view
+			highlightManipulator: manipulatorBeingPointed;
+			highlightElement: nil
+	] ifNil: [
+		
+		(self supportsElementSelection and: [self levelEditorSession selection selectedItems isNotEmpty]) ifTrue: [ 
+			elementBeingPointed := self supportsElementSelection
+				ifTrue: [view elementInScreenPosition: event position]
+				ifFalse: [nil].
+			view
+				highlightElement: elementBeingPointed;
+				highlightManipulator: nil
+		] ifFalse: [ 
+			view
+				highlightElement: nil;
+				highlightManipulator: nil
+		]
+	].
+
+	^ super onMouseMove: event
+]
+
+{ #category : #event }
+WDELevelEditorViewEditionMode >> onRightClick: event [
+	| elements |
+	self supportsElementSelection ifFalse: [ ^ self ].
+	elements := (self validRightClickSelectionWheelFor: event position) currentElement ifNil: [ #() ] ifNotNil: [ :e | { e } ].
+	view setSelectedElements: elements.
+	elements ifNotEmpty: [ 
+		self levelEditorSession buildSelectionContextMenu openWithSpecAtPointer
+	].
+
+]
+
 { #category : #'as yet unclassified' }
 WDELevelEditorViewEditionMode >> shortcuts [
 	^ super shortcuts , {
@@ -106,7 +148,7 @@ WDELevelEditorViewEditionMode >> startManipulatorOrActionDraggingWith: event [
 		| manipulator |
 		manipulator := view manipulatorInScreenPosition: event position.
 		manipulator ifNotNil: [
-			^ manipulator startDragToolWithEvent: event on: view
+			^ manipulator startDragToolWithEvent: event
 		].
 	].
 
@@ -121,4 +163,16 @@ WDELevelEditorViewEditionMode >> supportsElementSelection [
 { #category : #'as yet unclassified' }
 WDELevelEditorViewEditionMode >> supportsManipulators [
 	^ false
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewEditionMode >> validRightClickSelectionWheelFor: clickPosition [
+	(clickSelectionWheel isNotNil and: [ clickSelectionWheel isValidForPositionForRightClick: clickPosition view: view ]) ifFalse: [
+		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new
+			clickPosition: clickPosition;
+			elements: (view elementsInScreenPosition: clickPosition);
+			yourself.
+	].
+
+	^ clickSelectionWheel
 ]

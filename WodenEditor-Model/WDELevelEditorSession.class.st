@@ -44,6 +44,11 @@ WDELevelEditorSession >> addElementsToSelection: elements [
 	self selection: (WDELevelEditorSelection for: newSelectedItems asArray)
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> buildSelectionContextMenu [
+	^ self selection buildContextMenuFor: self
+]
+
 { #category : #action }
 WDELevelEditorSession >> decreaseGridSize [
 	self gridSize: self gridSize / self gridSizeIncrementFactor
