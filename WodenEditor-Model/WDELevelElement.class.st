@@ -8,11 +8,24 @@ Class {
 		'visibleInEditor',
 		'parent'
 	],
+	#classVars : [
+		'Epsilon'
+	],
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #initialization }
+WDELevelElement class >> initialize [
+	Epsilon := 0.00001.
+]
+
 { #category : #accessing }
 WDELevelElement >> addedToScene: aScene [
+]
+
+{ #category : #'constructive solid geometry' }
+WDELevelElement >> canBeSubtracted [
+	^ false
 ]
 
 { #category : #'as yet unclassified' }
@@ -82,6 +95,11 @@ WDELevelElement >> restoreMaterialStateMemento: memento [
 
 { #category : #initialization }
 WDELevelElement >> setMaterialRecursively: newMaterial [
+]
+
+{ #category : #'constructive solid geometry' }
+WDELevelElement >> subtract: otherElement withTransform: otherElementTransform [
+	^ { self }
 ]
 
 { #category : #accessing }

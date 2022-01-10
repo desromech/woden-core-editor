@@ -3,9 +3,10 @@ Class {
 	#superclass : #WDELevelElement,
 	#instVars : [
 		'plane',
-		'vertices',
+		'indices',
 		'boundingBox',
-		'material'
+		'material',
+		'vertices'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -16,8 +17,9 @@ WDEBrushFace class >> plane: aPlane [
 ]
 
 { #category : #'mesh building' }
-WDEBrushFace >> addVertex: position [
-	vertices add: position
+WDEBrushFace >> addIndex: index [
+	indices add: index.
+	vertices := nil.
 ]
 
 { #category : #accessing }
@@ -27,35 +29,46 @@ WDEBrushFace >> boundingBox [
 
 { #category : #'mesh building' }
 WDEBrushFace >> buildFaceMeshWith: builder [
-	| normal |
+	| normal brushVertices |
 	builder
 		currentMaterial: material;
 		beginTriangles.
 	normal := plane normal.
-	vertices do: [ :v |
+	brushVertices := parent vertices.
+	indices do: [ :i |
+		| v |
+		v := brushVertices at: i + 1.
 		builder addP: v; addN: normal
 	].
-	2 to: vertices size - 1 do: [ :i |
+	2 to: indices size - 1 do: [ :i |
 		builder addTriangleI0: 0 i1: i - 1 i2: i
 	].
 ]
 
 { #category : #'mesh building' }
-WDEBrushFace >> clearVertices [
-	vertices := OrderedCollection new.
+WDEBrushFace >> clearIndices [
+	indices := OrderedCollection new.
+	vertices := nil.
 	boundingBox := AABox empty.
 ]
 
 { #category : #'mesh building' }
 WDEBrushFace >> computeBoundingBox [
+	| brushVertices |
 	boundingBox := AABox empty.
-	vertices do: [ :v | boundingBox insertPoint: v ].
+	brushVertices := parent vertices.
+	indices do: [ :i | boundingBox insertPoint: (brushVertices at: i + 1) ].
 	
 ]
 
 { #category : #'as yet unclassified' }
 WDEBrushFace >> editorTreeDisplayName [
 	^ 'Face'
+]
+
+{ #category : #accessing }
+WDEBrushFace >> indices [
+	^ indices
 ]
 
 { #category : #initialization }
@@ -104,6 +117,20 @@ WDEBrushFace >> plane: anObject [
 	plane := anObject
 ]
 
+{ #category : #copying }
+WDEBrushFace >> postCopy [
+	parent := nil.
+	indices := nil.
+	vertices := nil.
+	boundingBox := AABox empty.
+]
+
+{ #category : #printing }
+WDEBrushFace >> printOn: aStream [
+	aStream nextPutAll: self class name;
+		nextPutAll: ' plane: '; print: plane
+]
+
 { #category : #memento }
 WDEBrushFace >> restoreMaterialStateMemento: memento [
 	self material: memento
@@ -115,14 +142,29 @@ WDEBrushFace >> setMaterialRecursively: newMaterial [
 ]
 
 { #category : #'mesh building' }
-WDEBrushFace >> sortVertices [
-	| centroid n |
-	centroid := vertices sum / vertices size.
+WDEBrushFace >> sortIndices [
+	| centroid n brushVertices |
+	brushVertices := parent vertices.
+	centroid := Vector3 zeros.
+	indices do: [ :i |
+		centroid := centroid + (brushVertices at: i + 1)
+	].
+	centroid := centroid / indices size.
 	n := plane normal.
-	vertices sort: [ :a :b |
+
+	indices sort: [ :a :b |
 		| u v |
-		u := centroid - a.
-		v := centroid - b.
+		u := centroid - (brushVertices at: a + 1).
+		v := centroid - (brushVertices at: b + 1).
 		((u cross: v) dot: n) >= 0
+	]
+]
+
+{ #category : #accessing }
+WDEBrushFace >> vertices [
+	^ vertices ifNil: [
+		| brushVertices |
+		brushVertices := parent vertices.
+		vertices := indices collect: [ :i | brushVertices at: i + 1 ]
 	]
 ]

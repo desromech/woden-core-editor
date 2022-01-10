@@ -3,6 +3,7 @@ Class {
 	#superclass : #WDELevelElement,
 	#instVars : [
 		'faces',
+		'vertices',
 		'sceneNode',
 		'hasValidTopology',
 		'transform',
@@ -42,6 +43,66 @@ WDEBrush >> addedToScene: aScene [
 { #category : #accessing }
 WDEBrush >> boundingBox [
 	^ self localBoundingBox transformedWith: transform
+]
+
+{ #category : #testing }
+WDEBrush >> canBeSubtracted [
+	^ true
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrush >> clipAgainstPlane: plane [
+	| classification frontFaces backFaces planeInFront planeInBack frontPolyhedron backPolyhedron |
+	self validateTopology.
+	classification := plane classifyVertices: vertices epsilon: Epsilon.
+	self assert: classification ~~ #inside.
+	classification == #front ifTrue: [ ^ { self . nil } ].
+	classification == #back ifTrue: [ ^ { nil . self } ].
+	self assert: classification == #frontAndBack.
+	
+	frontFaces := OrderedCollection new.
+	backFaces := OrderedCollection new.
+	
+	planeInFront := false.
+	planeInBack := false.
+	faces do: [ :eachFace |
+		| faceClassification |
+		faceClassification := plane classifyVertices: eachFace vertices epsilon: Epsilon.
+		faceClassification == #inside ifTrue: [
+			| normalDirection |
+			normalDirection := eachFace plane normal dot: plane normal.
+			normalDirection > 0 ifTrue: [
+				self assert: (eachFace plane normal normalized closeTo: plane normal normalized).
+				backFaces add: eachFace copy.
+				planeInBack := true.
+			] ifFalse: [ 
+				self assert: (eachFace plane normal normalized closeTo: plane normal normalized).
+				frontFaces add: (eachFace copy plane: eachFace plane negated).
+				planeInFront := true.
+			].
+		].
+		faceClassification == #front ifTrue: [ 
+			frontFaces add: eachFace copy		
+		].
+		faceClassification == #back ifTrue: [ 
+			backFaces add: eachFace copy
+		].
+		faceClassification == #frontAndBack ifTrue: [ 
+			frontFaces add: eachFace copy.
+			backFaces add: eachFace copy.
+		].
+	].
+
+	planeInBack ifFalse: [
+		backFaces add: (WDEBrushFace plane: plane)
+	].
+	planeInFront ifFalse: [
+		frontFaces add: (WDEBrushFace plane: plane negated)
+	].
+
+	frontPolyhedron := self class new faces: frontFaces; yourself.
+	backPolyhedron := self class new faces: backFaces; yourself.
+	^ { frontPolyhedron . backPolyhedron }
 ]
 
 { #category : #'as yet unclassified' }
@@ -91,10 +152,18 @@ WDEBrush >> globalBoundingBox [
 	^ self boundingBox transformedWith: parent transform
 ]
 
+{ #category : #testing }
+WDEBrush >> hasIntersectionWith: otherElement withTransform: otherElementTransform [
+	self class == otherElement class ifFalse: [ ^ false ].
+	self flag: 'TODO: Implement this properly'.
+	^ true
+]
+
 { #category : #initialization }
 WDEBrush >> initialize [
 	super initialize.
 	faces := #().
+	vertices := #().
 	hasValidTopology := false.
 	transform := TRSTransform3D identity.
 ]
@@ -224,7 +293,52 @@ WDEBrush >> selectableGlobalBoundingBox [
 
 { #category : #initialization }
 WDEBrush >> setMaterialRecursively: newMaterial [
-	faces do: [ :face | face setMaterial: newMaterial ]
+	faces do: [ :face | face setMaterialRecursively: newMaterial ]
+]
+
+{ #category : #'constructive solid geometry' }
+WDEBrush >> subtract: otherBrush withTransform: otherBrushTransform [
+	| otherPlanes otherPlaneClassifications clippingPlanes result remaining |
+	self validateTopology.
+	(self hasIntersectionWith: otherBrush withTransform: otherBrushTransform) ifFalse: [ 
+		^ super subtract: otherBrush withTransform: otherBrushTransform
+	].
+	otherPlanes := otherBrush faces collect: [ :face | face plane transformedWith: otherBrushTransform ].
+	otherPlanes ifEmpty: [ ^ { self } ].
+
+	otherPlaneClassifications := otherPlanes collect: [ :eachPlane | eachPlane classifyVertices: vertices epsilon: Epsilon ].
+	
+	"Am I fully contained in the other polytope?"
+	(otherPlaneClassifications allSatisfy: [:each | #(back inside) includes: each ]) ifTrue: [ ^ #() ].
+
+	"Am I fully outside the other polytope?"
+	(otherPlaneClassifications anySatisfy: [:each | #(front inside) includes: each ]) ifTrue: [ ^ { self } ].
+
+	"We only clip against front and back planes."
+	clippingPlanes := OrderedCollection new.
+	otherPlaneClassifications doWithIndex: [ :classification :index |
+		classification == #frontAndBack ifTrue: [ 
+			clippingPlanes add: (otherPlanes at: index)
+		].
+	].
+
+	self assert: clippingPlanes isNotEmpty.
+	result := OrderedCollection new. 
+	remaining := self.
+	clippingPlanes do: [ :plane |
+		| frontAndBack front back |
+		frontAndBack := remaining clipAgainstPlane: plane.
+		front := frontAndBack first.
+		back := frontAndBack second.
+		front ifNotNil: [
+			result add: front
+		].
+
+		self assert: back isNotNil.
+		remaining := back
+	].
+	
+	^ result
 ]
 
 { #category : #accessing }
@@ -262,8 +376,10 @@ WDEBrush >> translateBy: translation [
 { #category : #'as yet unclassified' }
 WDEBrush >> validateTopology [
 	| faceCount |
+	hasValidTopology ifTrue: [ ^ self ].
 	faceCount := faces size.
-	faces do: [ :f | f clearVertices ].
+	vertices := OrderedCollection new.
+	faces do: [ :f | f clearIndices ].
 	
 	1 to: faceCount do: [ :i |
 		| f1 p1 |
@@ -279,14 +395,16 @@ WDEBrush >> validateTopology [
 				p3 := f3 plane.
 				(i ~= j and: [j ~= k]) ifTrue: [
 					| m |
-					m := Matrix3x3 columns: { p1 normal . p2 normal . p3 normal }.
+					m := Matrix3x3 rows: { p1 normal . p2 normal . p3 normal }.
 					(m determinant closeTo: 0) ifFalse: [ 
-						| v p |
+						| v p vi |
 						v := Vector3 x: p1 distance y: p2 distance z: p3 distance.
 						p := m inverse * v.
-						f1 addVertex: p.
-						f2 addVertex: p.
-						f3 addVertex: p.
+						vi := vertices size.
+						vertices add: p.
+						f1 addIndex: vi.
+						f2 addIndex: vi.
+						f3 addIndex: vi.
 					].
 				]
 			]
@@ -295,8 +413,13 @@ WDEBrush >> validateTopology [
 
 	localBoundingBox := AABox empty.
 	faces do: [ :f |
-		f sortVertices; computeBoundingBox.
+		f sortIndices; computeBoundingBox.
 		localBoundingBox insertBox: f boundingBox
 	].
+	hasValidTopology := true
+]
 
+{ #category : #accessing }
+WDEBrush >> vertices [
+	^ vertices
 ]
