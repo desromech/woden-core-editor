@@ -66,7 +66,11 @@ WDELevelEditor3DBoxManipulator >> computeManipulationPoints [
 { #category : #scene }
 WDELevelEditor3DBoxManipulator >> createSceneNode [
 	self displayBoundingBox isEmpty ifTrue: [ ^ nil ].
-	material := WDUnlitMaterial new colorFactor: self currentColor.
+	material := WDUnlitMaterial new
+		xray: true;
+		alphaMode: #BLEND;
+		colorFactor: self currentColor;
+		yourself.
 	^ (WDELevelEditorMeshes uniqueInstance flatShadedTranslucentUnitCubeMesh copyWithMaterial: material) asSceneNode
 		transform: self displayBoundingBox trsTransformToConvertUnitBoxToMe;
 		yourself

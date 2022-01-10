@@ -48,7 +48,11 @@ WDELevelEditor3DBoxCornerHandle >> boundingBoxChanged [
 { #category : #scene }
 WDELevelEditor3DBoxCornerHandle >> createSceneNode [
 	boundingBox isEmpty ifTrue: [ ^ nil ].
-	material := WDUnlitMaterial new colorFactor: self currentColor.
+	material := WDUnlitMaterial new
+		xray: true;
+		alphaMode: #BLEND;
+		colorFactor: self currentColor;
+		yourself.
 	^ (WDELevelEditorMeshes uniqueInstance flatShadedTranslucentUnitCubeMesh copyWithMaterial: material) asSceneNode
 		transform: boundingBox trsTransformToConvertUnitBoxToMe;
 		yourself
