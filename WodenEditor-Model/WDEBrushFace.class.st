@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'plane',
 		'vertices',
-		'boundingBox'
+		'boundingBox',
+		'material'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -27,7 +28,9 @@ WDEBrushFace >> boundingBox [
 { #category : #'mesh building' }
 WDEBrushFace >> buildFaceMeshWith: builder [
 	| normal |
-	builder beginTriangles.
+	builder
+		currentMaterial: material;
+		beginTriangles.
 	normal := plane normal.
 	vertices do: [ :v |
 		builder addP: v; addN: normal
@@ -72,6 +75,24 @@ WDEBrushFace >> instantiateForPlacingInLevel: level point: placementPoint [
 ]
 
 { #category : #accessing }
+WDEBrushFace >> material [
+	^ material
+]
+
+{ #category : #accessing }
+WDEBrushFace >> material: aMaterial [
+	| changed |
+	changed := material ~~ aMaterial.
+	material := aMaterial.
+	(changed and: [parent isNotNil]) ifTrue: [ parent faceTexturesChanged ].
+]
+
+{ #category : #memento }
+WDEBrushFace >> materialStateMemento [
+	^ material
+]
+
+{ #category : #accessing }
 WDEBrushFace >> plane [
 
 	^ plane
@@ -81,6 +102,16 @@ WDEBrushFace >> plane [
 WDEBrushFace >> plane: anObject [
 
 	plane := anObject
+]
+
+{ #category : #memento }
+WDEBrushFace >> restoreMaterialStateMemento: memento [
+	self material: memento
+]
+
+{ #category : #initialization }
+WDEBrushFace >> setMaterialRecursively: newMaterial [
+	self material: newMaterial
 ]
 
 { #category : #'mesh building' }

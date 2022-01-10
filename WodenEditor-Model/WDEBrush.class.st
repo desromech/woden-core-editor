@@ -66,6 +66,13 @@ WDEBrush >> editorTreeDisplayName [
 	^ 'Brush'
 ]
 
+{ #category : #'as yet unclassified' }
+WDEBrush >> faceTexturesChanged [
+	sceneNode ifNotNil: [ 
+		sceneNode renderables: {self computeMesh}
+	].
+]
+
 { #category : #accessing }
 WDEBrush >> faces [
 
@@ -73,8 +80,9 @@ WDEBrush >> faces [
 ]
 
 { #category : #accessing }
-WDEBrush >> faces: anObject [
-	faces := anObject.
+WDEBrush >> faces: aListOfFaces [
+	faces := aListOfFaces.
+	faces do: [ :each | each parent: self ].
 	hasValidTopology := false.
 ]
 
@@ -118,6 +126,11 @@ WDEBrush >> isManipulableInEditorSceneView [
 WDEBrush >> localBoundingBox [
 	self validateTopology.
 	^ localBoundingBox
+]
+
+{ #category : #memento }
+WDEBrush >> materialStateMemento [
+	^ faces collect: [ :each | each materialStateMemento ]
 ]
 
 { #category : #accessing }
@@ -174,6 +187,12 @@ WDEBrush >> rayCastAllAlong: ray [
 	^ result ifNil: [ #() ] ifNotNil: [ {result -> self} ]
 ]
 
+{ #category : #removing }
+WDEBrush >> removeFromParent [
+	parent ifNotNil: [ parent removeBrush: self ]
+
+]
+
 { #category : #accessing }
 WDEBrush >> removeFromScene: aScene [
 	sceneNode ifNotNil: [ 
@@ -181,6 +200,11 @@ WDEBrush >> removeFromScene: aScene [
 		sceneNode := nil.
 	]
 	
+]
+
+{ #category : #memento }
+WDEBrush >> restoreMaterialStateMemento: memento [
+	faces doWithIndex: [ :face :faceIndex | face restoreMaterialStateMemento: (memento at: faceIndex) ]
 ]
 
 { #category : #memento }
@@ -196,6 +220,11 @@ WDEBrush >> restoreTransformStateMemento: memento [
 { #category : #accessing }
 WDEBrush >> selectableGlobalBoundingBox [
 	^ self globalBoundingBox
+]
+
+{ #category : #initialization }
+WDEBrush >> setMaterialRecursively: newMaterial [
+	faces do: [ :face | face setMaterial: newMaterial ]
 ]
 
 { #category : #accessing }

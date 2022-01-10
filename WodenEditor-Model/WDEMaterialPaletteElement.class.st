@@ -48,10 +48,10 @@ WDEMaterialPaletteElement >> activateInLevelSession: levelSession [
 	memento := oldSelection materialStateMemento.
 	levelSession doWith: [
 		levelSession selection selectedItems do: [ :each |
-			each setMaterial: material
-		]
+			each setMaterialRecursively: material
+		].
 	] undoWith: [
-		oldSelection restoreMaterialStateMemento: memento
+		oldSelection restoreMaterialStateMemento: memento.
 	].
 
 

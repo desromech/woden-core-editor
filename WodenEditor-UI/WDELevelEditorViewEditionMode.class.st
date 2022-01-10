@@ -84,6 +84,23 @@ WDELevelEditorViewEditionMode >> onMouseMove: event [
 ]
 
 { #category : #event }
+WDELevelEditorViewEditionMode >> onMouseWheel: event [
+	| delta |
+	delta := 0.
+	event isUp ifTrue: [ delta := 1 ].
+	event isDown ifTrue: [ delta := -1 ].
+	delta = 0 ifTrue: [ ^ self ].
+
+	view isPerspective ifTrue: [ 
+		view translateCameraBy: (view zDragDirection * delta * 0.5)
+	] ifFalse: [
+		view viewScale: view viewScale *(1.0 - (delta*0.1) max:0.1)
+	].
+	view refresh.
+
+]
+
+{ #category : #event }
 WDELevelEditorViewEditionMode >> onRightClick: event [
 	| elements |
 	self supportsElementSelection ifFalse: [ ^ self ].

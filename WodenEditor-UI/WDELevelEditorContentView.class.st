@@ -381,7 +381,8 @@ WDELevelEditorContentView >> initializePresenters [
 		whenDoubleClickDo: [ :event | self onSceneDoubleClick: event ];
 		whenMouseDownDo: [ :event | self onSceneMouseDown: event ];
 		whenMouseUpDo: [ :event | self onSceneMouseUp: event ];
-		whenMouseMoveDo: [ :event | self onSceneMouseMove: event ]
+		whenMouseMoveDo: [ :event | self onSceneMouseMove: event ];
+		whenMouseWheelDo: [ :event | self onSceneMouseWheel: event ]
 ]
 
 { #category : #testing }
@@ -404,6 +405,7 @@ WDELevelEditorContentView >> level [
 
 { #category : #initialization }
 WDELevelEditorContentView >> levelChanged [
+	self level ifNotNil: [ :l | l whenAddedOrRemovedElementDo: [ self refresh ] ].
 	self levelSceneChanged
 ]
 
@@ -707,6 +709,7 @@ WDELevelEditorContentView >> updateActiveToolStatusBarIndicator [
 { #category : #camera }
 WDELevelEditorContentView >> updateCamera [
 	cameraNode orientation: self validCameraOrientation.
+	camera focalDistance: self cameraFocalPointDistance.
 	camera isPerspective ifTrue: [ 
 		camera
 			nearDistance: PerspectiveNearDistance;
@@ -774,6 +777,14 @@ WDELevelEditorContentView >> validCameraTransform [
 { #category : #accessing }
 WDELevelEditorContentView >> viewScale [
 	^ viewScale
+]
+
+{ #category : #accessing }
+WDELevelEditorContentView >> viewScale: newViewScale [
+	| oldFocalPoint |
+	oldFocalPoint := self cameraFocalPoint.
+	viewScale := newViewScale.
+	self rotateCameraToAngles: cameraAngle withFocalPoint: oldFocalPoint distance: self cameraFocalPointDistance
 ]
 
 { #category : #camera }

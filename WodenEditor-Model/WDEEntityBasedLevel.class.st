@@ -5,7 +5,8 @@ Class {
 	#name : #WDEEntityBasedLevel,
 	#superclass : #WDELevel,
 	#instVars : [
-		'entities'
+		'entities',
+		'addedOrRemovedElementsBlock'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -20,6 +21,12 @@ WDEEntityBasedLevel >> addEntity: anEntity [
 	entities add: anEntity.
 	anEntity parent: self.
 	editorScene ifNotNil: [anEntity addedToScene: editorScene].
+	self addedOrRemovedElement.
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel >> addedOrRemovedElement [
+	addedOrRemovedElementsBlock value
 ]
 
 { #category : #accessing }
@@ -54,6 +61,20 @@ WDEEntityBasedLevel >> rayCastAllAlong: ray [
 	].
 	result sort: [ :a :b | a key <= b key ].
 	^ result
+]
+
+{ #category : #removing }
+WDEEntityBasedLevel >> removeEntity: anEntity [
+	entities remove: anEntity.
+	editorScene ifNotNil: [ 
+		anEntity removedFromScene: editorScene
+	].
+	
+]
+
+{ #category : #enumerating }
+WDEEntityBasedLevel >> whenAddedOrRemovedElementDo: aBlock [
+	addedOrRemovedElementsBlock := aBlock
 ]
 
 { #category : #'as yet unclassified' }

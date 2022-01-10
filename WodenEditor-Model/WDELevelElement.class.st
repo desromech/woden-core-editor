@@ -46,6 +46,11 @@ WDELevelElement >> level [
 	^ parent ifNotNil: [ parent level ]
 ]
 
+{ #category : #memento }
+WDELevelElement >> materialStateMemento [
+	^ nil
+]
+
 { #category : #accessing }
 WDELevelElement >> parent [
 
@@ -63,8 +68,20 @@ WDELevelElement >> rayCastAllAlong: ray [
 	^ #()
 ]
 
+{ #category : #removing }
+WDELevelElement >> removeFromParent [
+]
+
 { #category : #accessing }
 WDELevelElement >> removeFromScene: aScene [
+]
+
+{ #category : #memento }
+WDELevelElement >> restoreMaterialStateMemento: memento [
+]
+
+{ #category : #initialization }
+WDELevelElement >> setMaterialRecursively: newMaterial [
 ]
 
 { #category : #accessing }

@@ -17,7 +17,8 @@ Class {
 WDEEntity >> addBrush: aBrush [
 	brushes add: aBrush.
 	aBrush parent: self.
-	sceneNode ifNotNil: [ aBrush addedToScene: self level editorScene ]
+	sceneNode ifNotNil: [ aBrush addedToScene: self level editorScene ].
+	self level ifNotNil: [ :l | l addedOrRemovedElement ].
 ]
 
 { #category : #accessing }
@@ -98,6 +99,21 @@ WDEEntity >> rayCastAllAlong: ray [
 		result addAll: (brush rayCastAllAlong: localRay)
 	].
 	^ result
+]
+
+{ #category : #removing }
+WDEEntity >> removeBrush: aBrush [
+	brushes remove: aBrush.
+	sceneNode ifNotNil: [ 
+		aBrush removedFromScene: self level editorScene
+	].
+	
+]
+
+{ #category : #removing }
+WDEEntity >> removeFromParent [
+	parent ifNotNil: [ parent removeEntity: self ]
+
 ]
 
 { #category : #accessing }
