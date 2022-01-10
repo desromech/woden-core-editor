@@ -18,7 +18,8 @@ Class {
 		'activeToolMode',
 		'activeToolManipulator',
 		'highlightedManipulator',
-		'highlightBoxNode'
+		'highlightBoxNode',
+		'lastDownEvent'
 	],
 	#classVars : [
 		'OrthographicFarDistance',
@@ -506,22 +507,27 @@ WDELevelEditorContentView >> onSceneKeyUp: event [
 
 { #category : #event }
 WDELevelEditorContentView >> onSceneMouseDown: event [
+	lastDownEvent := event.
 	self activeToolModeOrEditionMode onMouseDown: event
 ]
 
 { #category : #event }
 WDELevelEditorContentView >> onSceneMouseMove: event [
 	sceneView takeKeyboardFocus.
+	lastDragPosition ifNil: [
+		(event isPrimaryButton or: [event isSecondaryButton or: [event isMiddleButton] ]) ifTrue: [
+			lastDragPosition := lastDownEvent position.
+			self onSceneDragStart: lastDownEvent.
+		].
+	].
+
 	lastDragPosition ifNotNil: [
 		| delta |
 		delta := event position - lastDragPosition.
+		lastDragPosition := event position.
 		self onSceneDrag: event delta: delta
 	].
 
-	(event isPrimaryButton or: [event isSecondaryButton or: [event isMiddleButton] ]) ifTrue: [
-		lastDragPosition := event position.
-		self onSceneDragStart: event
-	].
 	self activeToolModeOrEditionMode onMouseMove: event
 ]
 
