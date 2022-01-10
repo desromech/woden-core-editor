@@ -2,12 +2,11 @@ Class {
 	#name : #WDEBrush,
 	#superclass : #WDELevelElement,
 	#instVars : [
-		'parent',
 		'faces',
 		'sceneNode',
 		'hasValidTopology',
-		'boundingBox',
-		'transform'
+		'transform',
+		'localBoundingBox'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -36,12 +35,13 @@ WDEBrush >> addedToScene: aScene [
 	
 	mesh := self computeMesh.
 	sceneNode := mesh asSceneNode.
+	sceneNode transform: transform.
 	parent sceneNode add: sceneNode.
 ]
 
 { #category : #accessing }
 WDEBrush >> boundingBox [
-	^ boundingBox
+	^ self localBoundingBox transformedWith: transform
 ]
 
 { #category : #'as yet unclassified' }
@@ -80,7 +80,7 @@ WDEBrush >> faces: anObject [
 
 { #category : #accessing }
 WDEBrush >> globalBoundingBox [
-	^ (self boundingBox transformedWith: transform) transformedWith: parent transform
+	^ self boundingBox transformedWith: parent transform
 ]
 
 { #category : #initialization }
@@ -91,21 +91,33 @@ WDEBrush >> initialize [
 	transform := TRSTransform3D identity.
 ]
 
+{ #category : #'as yet unclassified' }
+WDEBrush >> instantiateForPlacingInLevel: level box: placementBox [
+	| instance |
+	instance := self copy.
+	instance transformWith: (placementBox trsTransformToConvertToMe: instance boundingBox).
+	level addBrush: instance.
+	^ instance
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrush >> instantiateForPlacingInLevel: level point: placementPoint [
+	| instance |
+	instance := self copy.
+	instance position: placementPoint.
+	level addBrush: instance.
+	^ instance
+]
+
 { #category : #testing }
 WDEBrush >> isManipulableInEditorSceneView [
 	^ true
 ]
 
 { #category : #accessing }
-WDEBrush >> parent [
-
-	^ parent
-]
-
-{ #category : #accessing }
-WDEBrush >> parent: anObject [
-
-	parent := anObject
+WDEBrush >> localBoundingBox [
+	self validateTopology.
+	^ localBoundingBox
 ]
 
 { #category : #accessing }
@@ -122,6 +134,15 @@ WDEBrush >> position: aPosition [
 { #category : #memento }
 WDEBrush >> positionStateMemento [
 	^ self position
+]
+
+{ #category : #copying }
+WDEBrush >> postCopy [
+	parent := nil.
+	faces := faces collect: [ :each | each copy ].
+	sceneNode := nil.
+	localBoundingBox := localBoundingBox copy.
+	transform := transform copy.
 ]
 
 { #category : #'as yet unclassified' }
@@ -243,10 +264,10 @@ WDEBrush >> validateTopology [
 		]
 	].
 
-	boundingBox := AABox empty.
+	localBoundingBox := AABox empty.
 	faces do: [ :f |
 		f sortVertices; computeBoundingBox.
-		boundingBox insertBox: f boundingBox
+		localBoundingBox insertBox: f boundingBox
 	].
 
 ]

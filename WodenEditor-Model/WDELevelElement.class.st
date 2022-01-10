@@ -5,7 +5,8 @@ Class {
 	#name : #WDELevelElement,
 	#superclass : #Object,
 	#instVars : [
-		'visibleInEditor'
+		'visibleInEditor',
+		'parent'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -25,9 +26,36 @@ WDELevelElement >> initialize [
 	visibleInEditor := true.
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelElement >> instantiateForPlacingInLevel: level box: placementBox [
+	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelElement >> instantiateForPlacingInLevel: level point: placementPoint [
+	self subclassResponsibility
+]
+
 { #category : #testing }
 WDELevelElement >> isManipulableInEditorSceneView [
 	^ false
+]
+
+{ #category : #accessing }
+WDELevelElement >> level [
+	^ parent ifNotNil: [ parent level ]
+]
+
+{ #category : #accessing }
+WDELevelElement >> parent [
+
+	^ parent
+]
+
+{ #category : #accessing }
+WDELevelElement >> parent: anObject [
+
+	parent := anObject
 ]
 
 { #category : #accessing }

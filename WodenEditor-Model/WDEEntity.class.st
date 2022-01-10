@@ -17,6 +17,7 @@ Class {
 WDEEntity >> addBrush: aBrush [
 	brushes add: aBrush.
 	aBrush parent: self.
+	sceneNode ifNotNil: [ aBrush addedToScene: self level editorScene ]
 ]
 
 { #category : #accessing }
@@ -57,9 +58,34 @@ WDEEntity >> initialize [
 	transform := TRSTransform3D identity.
 ]
 
+{ #category : #'as yet unclassified' }
+WDEEntity >> instantiateForPlacingInLevel: level box: placementBox [
+	| instance |
+	instance := self copy.
+	instance transformWith: (placementBox trsTransformToConvertToMe: instance boundingBox).
+	level addEntity: instance.
+	^ instance
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntity >> instantiateForPlacingInLevel: level point: placementPoint [
+	| instance |
+	instance := self copy.
+	instance position: placementPoint.
+	level addEntity: instance.
+	^ instance
+]
+
 { #category : #testing }
 WDEEntity >> isWorldEntity [
 	^ #(worldspawn world) includes: className
+]
+
+{ #category : #copying }
+WDEEntity >> postCopy [
+	brushes := brushes collect: [ :each | each copy ].
+	sceneNode := nil.
+	transform := transform copy.
 ]
 
 { #category : #accessing }

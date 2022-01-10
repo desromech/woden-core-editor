@@ -8,7 +8,9 @@ Class {
 		'statusMessage',
 		'gridSize',
 		'activeToolModeOrEditionModeName',
-		'activeLevelElementTemplate'
+		'activeLevelElementTemplate',
+		'undoOperationHistory',
+		'redoOperationHistory'
 	],
 	#category : #'WodenEditor-Model-Session'
 }
@@ -69,6 +71,15 @@ WDELevelEditorSession >> decreaseGridSize [
 WDELevelEditorSession >> deleteSelectedItems [
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> doWith: doBlock undoWith: undoBlock [
+	| operation |
+	operation := WDELevelEditorOperation doWith: doBlock undoWith: undoBlock.
+	operation doIt.
+	undoOperationHistory add: operation.
+	redoOperationHistory removeAll.
+]
+
 { #category : #action }
 WDELevelEditorSession >> duplicateSelectedItems [
 ]
@@ -119,6 +130,8 @@ WDELevelEditorSession >> initialize [
 	statusMessage := '' asValueHolder.
 	selection := WDELevelEditorSelection empty asValueHolder.
 	gridSize := 10.0 asValueHolder.
+	undoOperationHistory := OrderedCollection new.
+	redoOperationHistory := OrderedCollection new.
 ]
 
 { #category : #accessing }

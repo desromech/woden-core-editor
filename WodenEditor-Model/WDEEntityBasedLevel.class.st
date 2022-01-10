@@ -11,8 +11,14 @@ Class {
 }
 
 { #category : #adding }
+WDEEntityBasedLevel >> addBrush: aBrush [
+	self worldEntity addBrush: aBrush
+]
+
+{ #category : #adding }
 WDEEntityBasedLevel >> addEntity: anEntity [
 	entities add: anEntity.
+	anEntity parent: self.
 	editorScene ifNotNil: [anEntity addedToScene: editorScene].
 ]
 
@@ -36,7 +42,7 @@ WDEEntityBasedLevel >> entities [
 WDEEntityBasedLevel >> initialize [
 	super initialize.
 	entities := OrderedCollection new.
-	entities add: (WDEEntity new className: #worldspawn)
+	self addEntity: (WDEEntity new className: #worldspawn)
 ]
 
 { #category : #accessing }

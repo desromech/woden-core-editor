@@ -3,7 +3,7 @@ I provide an abstract interface for connecting the level editor with an actual g
 "
 Class {
 	#name : #WDELevel,
-	#superclass : #Object,
+	#superclass : #WDELevelElement,
 	#instVars : [
 		'gameSettings',
 		'editorScene'
@@ -54,6 +54,11 @@ WDELevel >> gameSettings [
 WDELevel >> gameSettings: anObject [
 
 	gameSettings := anObject
+]
+
+{ #category : #accessing }
+WDELevel >> level [
+	^ self
 ]
 
 { #category : #'instance creation' }

@@ -61,6 +61,16 @@ WDEBrushFace >> initialize [
 	boundingBox := AABox empty.
 ]
 
+{ #category : #'as yet unclassified' }
+WDEBrushFace >> instantiateForPlacingInLevel: level box: placementBox [
+	self shouldNotImplement
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrushFace >> instantiateForPlacingInLevel: level point: placementPoint [
+	self shouldNotImplement
+]
+
 { #category : #accessing }
 WDEBrushFace >> plane [
 
