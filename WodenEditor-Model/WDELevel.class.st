@@ -5,16 +5,28 @@ Class {
 	#name : #WDELevel,
 	#superclass : #Object,
 	#instVars : [
-		'gameSettings'
+		'gameSettings',
+		'editorScene'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
 
-{ #category : #requirements }
-WDELevel class >> empty [
-	^ WDEWodenGameFrameworkWorldLevel new
-		world: WDGFWorld new;
-		yourself
+{ #category : #accessing }
+WDELevel >> addedToScene: aScene [
+	self assert: editorScene isNil.
+	editorScene := aScene.
+]
+
+{ #category : #accessing }
+WDELevel >> editorScene [
+
+	^ editorScene
+]
+
+{ #category : #accessing }
+WDELevel >> editorScene: anObject [
+
+	editorScene := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -52,6 +64,12 @@ WDELevel >> newEditorSession [
 { #category : #'as yet unclassified' }
 WDELevel >> rayCastAllAlong: ray [
 	^ #()
+]
+
+{ #category : #accessing }
+WDELevel >> removeFromScene: aScene [
+	"Added the level onto the specified scene"
+	editorScene := nil.
 ]
 
 { #category : #accessing }

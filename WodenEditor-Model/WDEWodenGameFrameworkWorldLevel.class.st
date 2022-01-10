@@ -7,6 +7,13 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #requirements }
+WDEWodenGameFrameworkWorldLevel class >> empty [
+	^ WDEWodenGameFrameworkWorldLevel new
+		world: WDGFWorld new;
+		yourself
+]
+
 { #category : #'as yet unclassified' }
 WDEWodenGameFrameworkWorldLevel >> editorTreeDisplayName [
 	^ world editorTreeDisplayName

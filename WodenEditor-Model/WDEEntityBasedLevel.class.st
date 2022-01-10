@@ -12,7 +12,14 @@ Class {
 
 { #category : #adding }
 WDEEntityBasedLevel >> addEntity: anEntity [
-	entities add: anEntity
+	entities add: anEntity.
+	editorScene ifNotNil: [anEntity addedToScene: editorScene].
+]
+
+{ #category : #accessing }
+WDEEntityBasedLevel >> addedToScene: aScene [
+	super addedToScene: aScene.
+	entities do: [ :each | each addedToScene: aScene ]
 ]
 
 { #category : #accessing }
@@ -29,7 +36,7 @@ WDEEntityBasedLevel >> entities [
 WDEEntityBasedLevel >> initialize [
 	super initialize.
 	entities := OrderedCollection new.
-	entities add: (WDEEntity new className: #worlspawn)
+	entities add: (WDEEntity new className: #worldspawn)
 ]
 
 { #category : #accessing }

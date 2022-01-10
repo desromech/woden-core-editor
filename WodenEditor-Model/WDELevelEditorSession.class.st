@@ -223,6 +223,7 @@ WDELevelEditorSession >> whenLevelChangedDoNow: aBlock [
 
 { #category : #enumerating }
 WDELevelEditorSession >> whenSelectionChangedDo: aBlock [
+	selection whenChangedDo: aBlock
 ]
 
 { #category : #enumerating }

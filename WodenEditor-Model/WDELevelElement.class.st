@@ -10,6 +10,10 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #accessing }
+WDELevelElement >> addedToScene: aScene [
+]
+
 { #category : #'as yet unclassified' }
 WDELevelElement >> editorTreeChildren [
 	^ #()
@@ -21,9 +25,18 @@ WDELevelElement >> initialize [
 	visibleInEditor := true.
 ]
 
+{ #category : #testing }
+WDELevelElement >> isLevelEditorEntity [
+	^ false
+]
+
 { #category : #accessing }
 WDELevelElement >> rayCastAllAlong: ray [
 	^ #()
+]
+
+{ #category : #accessing }
+WDELevelElement >> removeFromScene: aScene [
 ]
 
 { #category : #accessing }

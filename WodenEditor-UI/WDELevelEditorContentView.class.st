@@ -122,6 +122,19 @@ WDELevelEditorContentView >> activeToolModeOrEditionMode [
 	^ activeToolMode ifNil: [ self activeEditionMode ]
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> applyNewSelection: newSelection [
+	| selectedEntities |
+	self activeToolManipulator: nil.
+	selectedEntities := newSelection selectedItems select: [ :each | each isLevelEditorEntity ].
+	selectedEntities ifNotEmpty: [
+		self activeToolManipulator: ((WDELevelEditor3DSelectionManipulator for: self)
+			selectedElements: selectedEntities;
+			yourself)
+	].
+
+]
+
 { #category : #'camera views' }
 WDELevelEditorContentView >> backView [
 	camera isPerspective: false.
@@ -339,6 +352,11 @@ WDELevelEditorContentView >> leftView [
 ]
 
 { #category : #initialization }
+WDELevelEditorContentView >> level [
+	^ self model ifNotNil: [ :m | m level ]
+]
+
+{ #category : #initialization }
 WDELevelEditorContentView >> levelChanged [
 	self levelSceneChanged
 ]
@@ -356,7 +374,8 @@ WDELevelEditorContentView >> levelScene [
 { #category : #initialization }
 WDELevelEditorContentView >> levelSceneChanged [
 	self levelScene ifNil: [
-		self createScene
+		self createScene.
+		self level ifNotNil: [ :level | level addedToScene: scene ].
 	] ifNotNil: [ :levelScene |
 		scene := levelScene.
 		self createSceneNodes
@@ -378,7 +397,8 @@ WDELevelEditorContentView >> modelChanged [
 	self model ifNotNil: [ :session |
 		session
 			whenGridSizeChangedDo: [ self updateCameraAndGrid ];
-			whenLevelChangedDoNow: [ self levelSceneChanged ].
+			whenLevelChangedDoNow: [ self levelSceneChanged ];
+			whenSelectionChangedDo: [ :newSelection | self applyNewSelection: newSelection ].
 	].
 ]
 
@@ -501,7 +521,7 @@ WDELevelEditorContentView >> rayForNormalizedPosition: aPoint [
 
 { #category : #manipulators }
 WDELevelEditorContentView >> rayForScreenPosition: aPoint [
-	^ self rayForNormalizedPosition: (self normalizeScreenPosition: aPoint)
+	^ self rayForNormalizedPosition: (self normalizeScreenPosition: aPoint - self windowOrigin)
 ]
 
 { #category : #'as yet unclassified' }
@@ -560,7 +580,7 @@ WDELevelEditorContentView >> sceneView [
 
 { #category : #camera }
 WDELevelEditorContentView >> screenToLocal: aPosition depth: aDepth [
-	^ self windowToLocal: aPosition - sceneView adapter widget bounds origin depth: aDepth
+	^ self windowToLocal: aPosition - self windowOrigin depth: aDepth
 ]
 
 { #category : #accessing }
@@ -652,6 +672,11 @@ WDELevelEditorContentView >> validCameraTransform [
 		rotation: self validCameraOrientation;
 		translation: cameraNode position;
 		yourself
+]
+
+{ #category : #camera }
+WDELevelEditorContentView >> windowOrigin [
+	^ sceneView adapter widget bounds origin
 ]
 
 { #category : #camera }
