@@ -7,7 +7,8 @@ Class {
 		'selection',
 		'statusMessage',
 		'gridSize',
-		'activeToolModeOrEditionModeName'
+		'activeToolModeOrEditionModeName',
+		'activeLevelElementTemplate'
 	],
 	#category : #'WodenEditor-Model-Session'
 }
@@ -18,6 +19,16 @@ WDELevelEditorSession >> actionOpenFile [
 
 { #category : #action }
 WDELevelEditorSession >> actionSaveFile [
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> activeLevelElementTemplate [
+	^ activeLevelElementTemplate value
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> activeLevelElementTemplate: aTemplate [
+	activeLevelElementTemplate value: aTemplate
 ]
 
 { #category : #accessing }
@@ -104,6 +115,7 @@ WDELevelEditorSession >> initialize [
 	super initialize.
 	gameSettings := WDEGameSettings default.
 	level := nil asValueHolder.
+	activeLevelElementTemplate := nil asValueHolder.
 	statusMessage := '' asValueHolder.
 	selection := WDELevelEditorSelection empty asValueHolder.
 	gridSize := 10.0 asValueHolder.
@@ -201,6 +213,21 @@ WDELevelEditorSession >> toggleElementsFromSelection: elements [
 	self selection: (WDELevelEditorSelection for: newSelectedItems asArray)
 ]
 
+{ #category : #palette }
+WDELevelEditorSession >> topLevelElementTemplateCategories [
+	^ WDELevelElementTemplateProvider allTopLevelPaletteCategories , self gameSettings topLevelElementTemplateCategories
+]
+
+{ #category : #palette }
+WDELevelEditorSession >> topLevelLightSourcePaletteCategories [
+	^ WDELightSourcePaletteProvider allTopLevelPaletteCategories , gameSettings topLevelLightSourcePaletteCategories
+]
+
+{ #category : #palette }
+WDELevelEditorSession >> topMaterialPaletteCategories [
+	^ WDEMaterialPaletteProvider allTopLevelPaletteCategories , gameSettings topMaterialPaletteCategories
+]
+
 { #category : #action }
 WDELevelEditorSession >> undo [
 ]
@@ -210,27 +237,32 @@ WDELevelEditorSession >> updateStatusMessage [
 	self statusMessage: self activeToolModeOrEditionModeName
 ]
 
-{ #category : #enumerating }
+{ #category : #events }
+WDELevelEditorSession >> whenActiveLevelElementTemplateChangedDo: aBlock [
+	activeLevelElementTemplate whenChangedDo: aBlock
+]
+
+{ #category : #events }
 WDELevelEditorSession >> whenGridSizeChangedDo: aBlock [
 	gridSize whenChangedDo: aBlock
 ]
 
-{ #category : #enumerating }
+{ #category : #events }
 WDELevelEditorSession >> whenLevelChangedDo: aBlock [
 	level whenChangedDo: aBlock
 ]
 
-{ #category : #enumerating }
+{ #category : #events }
 WDELevelEditorSession >> whenLevelChangedDoNow: aBlock [
 	aBlock cull: self level.
 	self whenLevelChangedDo: aBlock
 ]
 
-{ #category : #enumerating }
+{ #category : #events }
 WDELevelEditorSession >> whenSelectionChangedDo: aBlock [
 	selection whenChangedDo: aBlock
 ]
 
-{ #category : #enumerating }
+{ #category : #events }
 WDELevelEditorSession >> whenStatusMessageChangedDo: aBlock [
 ]

@@ -20,6 +20,23 @@ WDELevelEditorViewPlacementMode >> modeName [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelEditorViewPlacementMode >> startActionDraggingWith: event [
+	| manipulator |
+	manipulator := view manipulatorInScreenPosition: event position.
+	manipulator ifNotNil: [
+		^ manipulator startDragToolWithEvent: event
+	].
+
+	self levelEditorSession activeLevelElementTemplate ifNotNil: [ :elementTemplate |
+		elementTemplate isPointElementTemplate ifFalse: [
+			view activeToolMode: ((WDELevelEditorBrushDrawDragToolMode for: view)
+				dragStartedWith: event;
+				yourself)
+		]
+	]
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditorViewPlacementMode >> supportsManipulators [
 	^ true
 ]

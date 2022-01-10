@@ -42,11 +42,11 @@ WDELevelEditorBrushDrawDragToolMode >> finishDraggingWith: event [
 	sceneNode ifNotNil: [ sceneNode removeFromScene ].
 	box := self computeBoxWithScreenEndPoint: dragEndPosition.
 	(box isEmpty not and: [ box width > 0 and: [ box height > 0 and: [ box depth > 0 ] ] ]) ifTrue: [ 
-		self model activeToolManipulator: ((WDELevelEditor3DBoxPlacementManipulator for: self model)
+		view activeToolManipulator: ((WDELevelEditor3DBoxPlacementManipulator for: view)
 			boundingBox: box;
 			yourself)
 	] ifFalse: [
-		self model activeToolManipulator: nil
+		view activeToolManipulator: nil
 	].
 
 ]

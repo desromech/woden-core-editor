@@ -70,6 +70,12 @@ WDELevelEditor3DBoxCornerHandle >> currentDragToolClass [
 	^ WDELevelEditorViewTranslateManipulatorDragToolMode
 ]
 
+{ #category : #accessing }
+WDELevelEditor3DBoxCornerHandle >> halfExtent: halfExtent [
+	currentHalfExtent := halfExtent.
+	self position: boundingBox center
+]
+
 { #category : #initialization }
 WDELevelEditor3DBoxCornerHandle >> initialize [
 	super initialize.
@@ -102,4 +108,23 @@ WDELevelEditor3DBoxCornerHandle >> restoreMementoForDragging: memento [
 	boundingBox := memento first.
 	parent restoreTransformStateMemento: memento second.
 	view refresh
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditor3DBoxCornerHandle >> updateForViewCamera [
+	super updateForViewCamera.
+	self halfExtent: 0.005 * (self sizeScaleFactorForPosition: self position).
+
+	view isPerspective ifTrue: [
+		self visible: true.
+	] ifFalse: [
+		view hasFreeEditorViewType ifTrue: [
+			self visible: true
+		] ifFalse: [
+			| viewCorner |
+			viewCorner := view validCameraOrientation conjugated rotateVector: self manipulatedBoxCornerAxis.
+			self visible: viewCorner z = 0
+		].
+	]
+
 ]

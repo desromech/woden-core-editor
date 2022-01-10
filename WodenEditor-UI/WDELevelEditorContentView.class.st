@@ -67,6 +67,11 @@ WDELevelEditorContentView >> activateObjectMode [
 	self activeEditionMode: (WDELevelEditorViewObjectEditionMode for: self)
 ]
 
+{ #category : #'editor modes' }
+WDELevelEditorContentView >> activatePlacementMode [
+	self activeEditionMode: (WDELevelEditorViewPlacementMode for: self)
+]
+
 { #category : #shading }
 WDELevelEditorContentView >> activateShadedColor [
 ]
@@ -108,6 +113,7 @@ WDELevelEditorContentView >> activeToolManipulator: newManipulator [
 	activeToolManipulator ifNotNil: [
 		activeToolManipulator addToScene: scene.
 		self highlightManipulator: nil; highlightElement: nil.
+		activeToolManipulator updateForViewCamera
 	].
 	sceneView refresh.
 ]
@@ -169,6 +175,11 @@ WDELevelEditorContentView >> cameraFrustum [
 	| sceneExtent |
 	sceneExtent := sceneView adapter extent.
 	^ camera frustumWithAspect: sceneExtent x asFloat / (sceneExtent y max: 1)
+]
+
+{ #category : #accessing }
+WDELevelEditorContentView >> cameraPosition [
+	^ cameraNode position
 ]
 
 { #category : #camera }
@@ -265,6 +276,13 @@ WDELevelEditorContentView >> createSubGridNode [
 	scene add: subGridNode.
 ]
 
+{ #category : #'editor modes' }
+WDELevelEditorContentView >> deactivatePlacementMode [
+	self activeEditionMode isPlacementMode ifTrue: [ 
+		self activateObjectMode
+	].
+]
+
 { #category : #camera }
 WDELevelEditorContentView >> depthAtCameraDistance: distance [
 	^ (distance - camera nearDistance) / (camera farDistance - camera nearDistance)
@@ -316,6 +334,11 @@ WDELevelEditorContentView >> gridSize [
 	^ self model ifNil: [1.0 ] ifNotNil: [:m | m gridSize]
 ]
 
+{ #category : #testing }
+WDELevelEditorContentView >> hasFreeEditorViewType [
+	^ editorViewType == #free
+]
+
 { #category : #'as yet unclassified' }
 WDELevelEditorContentView >> highlightElement: anElement [
 	anElement ifNil: [
@@ -360,6 +383,11 @@ WDELevelEditorContentView >> initializePresenters [
 		whenMouseMoveDo: [ :event | self onSceneMouseMove: event ]
 ]
 
+{ #category : #testing }
+WDELevelEditorContentView >> isPerspective [
+	^ camera isPerspective
+]
+
 { #category : #'camera views' }
 WDELevelEditorContentView >> leftView [
 	camera isPerspective: false.
@@ -381,6 +409,16 @@ WDELevelEditorContentView >> levelChanged [
 { #category : #accessing }
 WDELevelEditorContentView >> levelEditorSession [
 	^ self model
+]
+
+{ #category : #initialization }
+WDELevelEditorContentView >> levelElementTemplateSelected: template [
+	(template isNotNil and: [template canBePlacedInLevel]) ifTrue: [
+		self activatePlacementMode
+	] ifFalse: [
+		self deactivatePlacementMode
+	]
+
 ]
 
 { #category : #initialization }
@@ -413,6 +451,7 @@ WDELevelEditorContentView >> manipulatorInScreenPosition: aPoint [
 WDELevelEditorContentView >> modelChanged [
 	self model ifNotNil: [ :session |
 		session
+			whenActiveLevelElementTemplateChangedDo: [ :template | self levelElementTemplateSelected: template ];
 			whenGridSizeChangedDo: [ self updateCameraAndGrid ];
 			whenLevelChangedDoNow: [ self levelSceneChanged ];
 			whenSelectionChangedDo: [ :newSelection | self applyNewSelection: newSelection ].
@@ -677,7 +716,8 @@ WDELevelEditorContentView >> updateCamera [
 WDELevelEditorContentView >> updateCameraAndGrid [
 	self
 		updateCamera;
-		updateGrid.
+		updateGrid;
+		updateManipulatorsForCamera.
 	sceneView refresh
 ]
 
@@ -708,6 +748,11 @@ WDELevelEditorContentView >> updateGrid [
 ]
 
 { #category : #camera }
+WDELevelEditorContentView >> updateManipulatorsForCamera [
+	self activeToolManipulator ifNotNil: [:manip | manip updateForViewCamera]
+]
+
+{ #category : #camera }
 WDELevelEditorContentView >> validCameraOrientation [
 	^ (Quaternion yRotation: cameraAngle y) * (Quaternion xRotation: cameraAngle x)
 ]
@@ -718,6 +763,11 @@ WDELevelEditorContentView >> validCameraTransform [
 		rotation: self validCameraOrientation;
 		translation: cameraNode position;
 		yourself
+]
+
+{ #category : #accessing }
+WDELevelEditorContentView >> viewScale [
+	^ viewScale
 ]
 
 { #category : #camera }

@@ -36,3 +36,13 @@ WDELevelEditorPalettePresenter >> initializePresenters [
 		].
 
 ]
+
+{ #category : #initialization }
+WDELevelEditorPalettePresenter >> modelChanged [
+	treeView roots: self fetchTopLevelPaletteCategories.
+]
+
+{ #category : #initialization }
+WDELevelEditorPalettePresenter >> setSelectedPaletteElement: paletteElement [
+	"By default do nothing."
+]

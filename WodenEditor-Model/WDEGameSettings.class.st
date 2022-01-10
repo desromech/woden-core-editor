@@ -20,3 +20,18 @@ WDEGameSettings class >> default [
 WDEGameSettings class >> isAbstract [
 	^ self == WDEGameSettings
 ]
+
+{ #category : #palette }
+WDEGameSettings >> topLevelElementTemplateCategories [
+	^ #()
+]
+
+{ #category : #palette }
+WDEGameSettings >> topLevelLightSourcePaletteCategories [
+	^ #()
+]
+
+{ #category : #palette }
+WDEGameSettings >> topMaterialPaletteCategories [
+	^ #()
+]

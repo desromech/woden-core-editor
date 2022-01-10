@@ -9,6 +9,9 @@ Class {
 
 { #category : #actions }
 WDELevelEditorViewEditionMode >> activateAction [
+	view activeToolManipulator ifNotNil: [ :manip |
+		manip activateAction
+	]
 ]
 
 { #category : #actions }
@@ -126,6 +129,10 @@ WDELevelEditorViewEditionMode >> shortcuts [
 		(KeyboardKey named: #KP_5) asKeyCombination . [ self view togglePerspective ].
 		KeyboardKey delete asKeyCombination . [ self levelEditorSession deleteSelectedItems ].
 	}
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewEditionMode >> startActionDraggingWith: event [
 ]
 
 { #category : #'as yet unclassified' }

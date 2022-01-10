@@ -144,6 +144,13 @@ WDELevelEditor3DManipulator >> restoreMementoForDragging: memento [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelEditor3DManipulator >> sizeScaleFactorForPosition: position [
+	^ view isPerspective
+		ifTrue: [ (position - view cameraPosition) length max: 1.0 ]
+		ifFalse: [ view viewScale * 2.0 ]
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditor3DManipulator >> startDragToolWithEvent: event [
 	| dragToolClass |
 	dragToolClass := self currentDragToolClass.
@@ -153,6 +160,11 @@ WDELevelEditor3DManipulator >> startDragToolWithEvent: event [
 			manipulator: self;
 			dragStartedWith: event;
 			yourself)
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditor3DManipulator >> updateForViewCamera [
+	children do: [ :each | each updateForViewCamera ].
 ]
 
 { #category : #accessing }
