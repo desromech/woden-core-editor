@@ -29,6 +29,11 @@ WDEBrush class >> withFaces: aCollectionOfFaces [
 	^ self new faces: aCollectionOfFaces; yourself
 ]
 
+{ #category : #adding }
+WDEBrush >> addToEntity: anEntity [
+	^ anEntity addBrush: self
+]
+
 { #category : #accessing }
 WDEBrush >> addedToScene: aScene [
 	| mesh |
@@ -163,10 +168,31 @@ WDEBrush >> globalTransform [
 ]
 
 { #category : #testing }
-WDEBrush >> hasIntersectionWith: otherElement withTransform: otherElementTransform [
+WDEBrush >> hasIntersectionWithBrush: otherElement withTransform: otherElementTransform [
+	| otherSupportFunction |
 	self class == otherElement class ifFalse: [ ^ false ].
-	self flag: 'TODO: Implement this properly'.
-	^ true
+	
+	"Test the bounding to quickly discard."
+	(self localBoundingBox hasIntersectionWithBox: (otherElement localBoundingBox transformedWith: otherElementTransform)) ifFalse: [ ^ false ].
+	
+	"Test using GJK."
+	otherSupportFunction := GeometricFunctions transformSupportFunction: (otherElement localSupportFunction) with: otherElementTransform.
+	
+	^ GeometricFunctions gjkIntersectionTest: self localSupportFunction with: otherSupportFunction
+]
+
+{ #category : #testing }
+WDEBrush >> hasIntersectionWithConvexSupportFunction: otherSupportFunction [
+	^ GeometricFunctions gjkIntersectionTest: self supportFunction with: otherSupportFunction
+]
+
+{ #category : #testing }
+WDEBrush >> hasIntersectsWithVolume: volumeToTest [
+	volumeToTest class == self class ifTrue: [
+		^ self hasIntersectionWithBrush: volumeToTest withTransform: (self globalTransform inverseTransformTransform: volumeToTest globalTransform)
+	].
+
+	^ volumeToTest hasIntersectionWithConvexSupportFunction: self supportFunction
 ]
 
 { #category : #initialization }
@@ -205,6 +231,26 @@ WDEBrush >> isManipulableInEditorSceneView [
 WDEBrush >> localBoundingBox [
 	self validateTopology.
 	^ localBoundingBox
+]
+
+{ #category : #support }
+WDEBrush >> localSupportFunction [
+	self validateTopology.
+	^ [ :d |
+		| best bestDot |
+		best := nil.
+		bestDot := Float negativeInfinity.
+		vertices do: [ :v |
+			| dot |
+			dot := v dot: d.
+			dot > bestDot ifTrue: [
+				best := v.
+				bestDot := dot
+			]
+		].
+	
+		best
+	]
 ]
 
 { #category : #memento }
@@ -306,7 +352,7 @@ WDEBrush >> setMaterialRecursively: newMaterial [
 	faces do: [ :face | face setMaterialRecursively: newMaterial ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'constructive solid geometry' }
 WDEBrush >> subtract: otherBrush [
 	| otherBrushTransform myTransform |
 	otherBrush class == self class ifFalse: [ ^ { self } ].
@@ -320,7 +366,7 @@ WDEBrush >> subtract: otherBrush [
 WDEBrush >> subtract: otherBrush withTransform: otherBrushTransform [
 	| otherPlanes otherPlaneClassifications clippingPlanes result remaining |
 	self validateTopology.
-	(self hasIntersectionWith: otherBrush withTransform: otherBrushTransform) ifFalse: [ 
+	(self hasIntersectionWithBrush: otherBrush withTransform: otherBrushTransform) ifFalse: [ 
 		^ super subtract: otherBrush withTransform: otherBrushTransform
 	].
 	otherPlanes := otherBrush faces collect: [ :face | face plane transformedWith: otherBrushTransform ].
@@ -359,6 +405,11 @@ WDEBrush >> subtract: otherBrush withTransform: otherBrushTransform [
 	].
 	
 	^ result
+]
+
+{ #category : #support }
+WDEBrush >> supportFunction [
+	^ GeometricFunctions transformSupportFunction: self localSupportFunction with: self globalTransform
 ]
 
 { #category : #accessing }

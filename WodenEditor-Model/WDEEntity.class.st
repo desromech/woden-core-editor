@@ -21,6 +21,11 @@ WDEEntity >> addBrush: aBrush [
 	self level ifNotNil: [ :l | l addedOrRemovedElement ].
 ]
 
+{ #category : #adding }
+WDEEntity >> addChild: child [
+	child addToEntity: self
+]
+
 { #category : #accessing }
 WDEEntity >> addedToScene: aScene [
 	sceneNode := WDSceneNode new
@@ -29,6 +34,11 @@ WDEEntity >> addedToScene: aScene [
 	aScene add: sceneNode.
 	
 	brushes do: [ :each | each addedToScene: aScene ].
+]
+
+{ #category : #accessing }
+WDEEntity >> brushes [
+	^ brushes
 ]
 
 { #category : #accessing }
@@ -50,6 +60,27 @@ WDEEntity >> editorTreeChildren [
 { #category : #'as yet unclassified' }
 WDEEntity >> editorTreeDisplayName [
 	^ className asString
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntity >> findVolumeElementsThatIntersectElements: elementsToTest [
+	| result |
+	result := OrderedCollection new.
+	brushes do: [ :eachBrush |
+		(elementsToTest includes: eachBrush) ifFalse: [
+			(elementsToTest anySatisfy: [ :testElement | eachBrush hasIntersectsWithVolume: testElement ]) ifTrue: [ 
+				result add: eachBrush
+			]
+		]
+	].
+	^ result
+]
+
+{ #category : #accessing }
+WDEEntity >> globalTransform [
+	^ parent
+		ifNil: [transform]
+		ifNotNil: [parent globalTransform transformTransform: transform]
 ]
 
 { #category : #initialization }
@@ -105,9 +136,9 @@ WDEEntity >> rayCastAllAlong: ray [
 WDEEntity >> removeBrush: aBrush [
 	brushes remove: aBrush.
 	sceneNode ifNotNil: [ 
-		aBrush removedFromScene: self level editorScene
+		aBrush removeFromScene: self level editorScene
 	].
-	
+	aBrush parent: nil
 ]
 
 { #category : #removing }

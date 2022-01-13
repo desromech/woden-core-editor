@@ -62,18 +62,18 @@ WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
 	affectedElements ifEmpty: [ ^ self ].
 	
 	originalsWithParents := affectedElements collect: [:each | {each parent . each} ] as: Array.
-	remainingElements := affectedElements.
+	remainingElements := originalsWithParents.
 	affectedElementSet := affectedElements as: IdentitySet.
 	actuallyAffectedElementsSet := IdentitySet new.
 	subtractingItems do: [ :subtractor |
 		| newRemainingElements |
 		newRemainingElements := OrderedCollection new.
-		remainingElements do: [ :layerWithEach |
-			| subtractionResult layer each |
-			layer := layerWithEach first. 
-			each := layerWithEach second.
+		remainingElements do: [ :parentWithEach |
+			| subtractionResult parent each |
+			parent := parentWithEach first. 
+			each := parentWithEach second.
 			subtractionResult := each subtract: subtractor.
-			newRemainingElements addAll: (subtractionResult collect: [:r | {layer . r} ]).
+			newRemainingElements addAll: (subtractionResult collect: [:r | {parent . r} ]).
 			((affectedElementSet includes: each) and: [ (actuallyAffectedElementsSet includes: each) not ]) ifTrue: [
 				(subtractionResult size = 1 and: [ subtractionResult first == each ]) ifFalse: [
 					actuallyAffectedElementsSet add: each.
@@ -83,8 +83,8 @@ WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
 		remainingElements := newRemainingElements
 	].
 
-	affectedOriginals := originalsWithParents select: [ :layerAndElement | (actuallyAffectedElementsSet includes: layerAndElement second) ].
-	newElements := remainingElements reject: [ :layerAndElement | (affectedElementSet includes: layerAndElement second) ].
+	affectedOriginals := originalsWithParents select: [ :parentAndElement | (actuallyAffectedElementsSet includes: parentAndElement second) ].
+	newElements := remainingElements reject: [ :parentAndElement | (affectedElementSet includes: parentAndElement second) ].
 
 	levelSession
 		doWith: [ 

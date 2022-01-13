@@ -71,7 +71,7 @@ WDELevelEditorSession >> decreaseGridSize [
 WDELevelEditorSession >> deleteSelectedItems [
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'undo - redo' }
 WDELevelEditorSession >> doWith: doBlock undoWith: undoBlock [
 	| operation |
 	operation := WDELevelEditorOperation doWith: doBlock undoWith: undoBlock.
@@ -159,8 +159,14 @@ WDELevelEditorSession >> rayCastAllAlong: ray [
 	^ self level ifNil: [ #() ] ifNotNil: [ :l | l rayCastAllAlong: ray ]
 ]
 
-{ #category : #action }
+{ #category : #'undo - redo' }
 WDELevelEditorSession >> redo [
+	| operation |
+	redoOperationHistory ifEmpty: [ ^ self ].
+	operation := redoOperationHistory first.
+	redoOperationHistory removeFirst.
+	operation doIt.
+	undoOperationHistory addLast: operation.
 ]
 
 { #category : #accessing }
@@ -241,8 +247,14 @@ WDELevelEditorSession >> topMaterialPaletteCategories [
 	^ WDEMaterialPaletteProvider allTopLevelPaletteCategories , gameSettings topMaterialPaletteCategories
 ]
 
-{ #category : #action }
+{ #category : #'undo - redo' }
 WDELevelEditorSession >> undo [
+	| operation |
+	undoOperationHistory ifEmpty: [ ^ self ].
+	operation := undoOperationHistory last.
+	undoOperationHistory removeLast.
+	operation undoIt.
+	redoOperationHistory addFirst: operation.
 ]
 
 { #category : #accessing }

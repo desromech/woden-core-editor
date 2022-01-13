@@ -45,6 +45,16 @@ WDEEntityBasedLevel >> entities [
 	^ entities
 ]
 
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel >> findVolumeElementsThatIntersectElements: aSetOfElements [
+	^ self worldEntity findVolumeElementsThatIntersectElements: aSetOfElements
+]
+
+{ #category : #accessing }
+WDEEntityBasedLevel >> globalTransform [
+	^ TRSTransform3D identity
+]
+
 { #category : #initialization }
 WDEEntityBasedLevel >> initialize [
 	super initialize.
