@@ -442,6 +442,11 @@ WDELevelEditor >> shadingMenu [
 		
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditor >> treeViewMenu [
+	^ self model buildSelectionContextMenu
+]
+
 { #category : #menu }
 WDELevelEditor >> viewMenu [
 	^ self newMenu

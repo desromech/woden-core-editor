@@ -518,6 +518,7 @@ WDELevelEditorContentView >> onSceneMouseMove: event [
 	sceneView takeKeyboardFocus.
 	lastDragPosition ifNil: [
 		(event isPrimaryButton or: [event isSecondaryButton or: [event isMiddleButton] ]) ifTrue: [
+			lastDownEvent ifNil: [ lastDownEvent := event ].
 			lastDragPosition := lastDownEvent position.
 			self onSceneDragStart: lastDownEvent.
 		].

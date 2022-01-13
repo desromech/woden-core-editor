@@ -23,8 +23,17 @@ WDELevelElement class >> initialize [
 WDELevelElement >> addedToScene: aScene [
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelElement >> buildContextMenuForEditorSession: levelSession on: menuPresenter [
+]
+
 { #category : #'constructive solid geometry' }
 WDELevelElement >> canBeSubtracted [
+	^ false
+]
+
+{ #category : #testing }
+WDELevelElement >> canBeUsedForVolumeSubtractionInEditor [
 	^ false
 ]
 

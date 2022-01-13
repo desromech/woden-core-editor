@@ -50,6 +50,11 @@ WDEBrush >> canBeSubtracted [
 	^ true
 ]
 
+{ #category : #testing }
+WDEBrush >> canBeUsedForVolumeSubtractionInEditor [
+	^ true
+]
+
 { #category : #'as yet unclassified' }
 WDEBrush >> clipAgainstPlane: plane [
 	| classification frontFaces backFaces planeInFront planeInBack frontPolyhedron backPolyhedron |
@@ -152,6 +157,11 @@ WDEBrush >> globalBoundingBox [
 	^ self boundingBox transformedWith: parent transform
 ]
 
+{ #category : #accessing }
+WDEBrush >> globalTransform [ 
+	^ parent ifNil: [ transform ] ifNotNil: [ parent globalTransform transformTransform: transform ]
+]
+
 { #category : #testing }
 WDEBrush >> hasIntersectionWith: otherElement withTransform: otherElementTransform [
 	self class == otherElement class ifFalse: [ ^ false ].
@@ -221,7 +231,7 @@ WDEBrush >> positionStateMemento [
 { #category : #copying }
 WDEBrush >> postCopy [
 	parent := nil.
-	faces := faces collect: [ :each | each copy ].
+	self faces: (faces collect: [ :each | each copy ]).
 	sceneNode := nil.
 	localBoundingBox := localBoundingBox copy.
 	transform := transform copy.
@@ -294,6 +304,16 @@ WDEBrush >> selectableGlobalBoundingBox [
 { #category : #initialization }
 WDEBrush >> setMaterialRecursively: newMaterial [
 	faces do: [ :face | face setMaterialRecursively: newMaterial ]
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrush >> subtract: otherBrush [
+	| otherBrushTransform myTransform |
+	otherBrush class == self class ifFalse: [ ^ { self } ].
+	
+	otherBrushTransform := otherBrush globalTransform.
+	myTransform := self globalTransform.
+	^ self subtract: otherBrush withTransform: (myTransform inverseTransformTransform: otherBrushTransform)
 ]
 
 { #category : #'constructive solid geometry' }

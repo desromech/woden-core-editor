@@ -12,42 +12,30 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession [
 { #category : #'*WodenEditor-UI' }
 WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 	selectedItems ifEmpty: [
-		levelSession buildUnselectedElementContextMenuOn: menuPresenter
-	] ifNotEmpty: [
-		selectedItems size = 1 ifTrue: [ 
-			selectedItems first buildContextMenuFor: levelSession on: menuPresenter
+		^ levelSession buildUnselectedElementContextMenuOn: menuPresenter
+	].
+	selectedItems size = 1 ifTrue: [ 
+		selectedItems first buildContextMenuForEditorSession: levelSession on: menuPresenter
+	].
+
+	menuPresenter
+		addItem: [ :item |
+			item
+				name: 'Delete';
+				action: [ self deleteSelectedItemsInSession: levelSession ]
+		];
+		addItem: [ :item |
+			item
+				name: 'Duplicate';
+				action: [ self duplicateSelectedItemsInSession: levelSession ]
 		].
-	
+
+	(selectedItems anySatisfy: [ :each | each canBeUsedForVolumeSubtractionInEditor]) ifTrue: [ 
 		menuPresenter
-			addItem: [ :item |
-				item
-					name: 'Delete';
-					action: [ self deleteSelectedItemsInSession: levelSession ]
-			];
-			addItem: [ :item |
-				item
-					name: 'Duplicate';
-					action: [ self duplicateSelectedItemsInSession: levelSession ]
-			];
 			addItem: [ :item |
 				item
 					name: 'Subtract volumes';
 					action: [ self subtractSelectedItemsInSession: levelSession ]
 			].
-.
-		(selectedItems allSatisfy: [ :each | each isSectorLayerChild ]) ifTrue: [
-			| parentSectorSet |
-			parentSectorSet := selectedItems collect: [ :each | each sector ] as: IdentitySet.
-			parentSectorSet size = 1 ifTrue: [
-				| parentSector |
-				parentSector := parentSectorSet anyOne.
-				menuPresenter
-					addItem: [ :item |
-						item
-							name: 'Move All to Layer'.
-						
-					]
-			].
-		]
-	]
+	].
 ]

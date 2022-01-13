@@ -50,6 +50,55 @@ WDELevelEditorSelection >> selectedItems: anObject [
 	selectedItems := anObject
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
+	| affectedElements subtractingItems remainingElements affectedElementSet actuallyAffectedElementsSet newElements affectedOriginals originalsWithParents |
+	selectedItems ifEmpty: [ ^ self ].
+	
+	subtractingItems := selectedItems select: [ :each | each canBeUsedForVolumeSubtractionInEditor ].
+	subtractingItems ifEmpty: [ ^ self ].
+
+	affectedElements := levelSession level findVolumeElementsThatIntersectElements: subtractingItems.
+	affectedElements ifEmpty: [ ^ self ].
+	
+	originalsWithParents := affectedElements collect: [:each | {each parent . each} ] as: Array.
+	remainingElements := affectedElements.
+	affectedElementSet := affectedElements as: IdentitySet.
+	actuallyAffectedElementsSet := IdentitySet new.
+	subtractingItems do: [ :subtractor |
+		| newRemainingElements |
+		newRemainingElements := OrderedCollection new.
+		remainingElements do: [ :layerWithEach |
+			| subtractionResult layer each |
+			layer := layerWithEach first. 
+			each := layerWithEach second.
+			subtractionResult := each subtract: subtractor.
+			newRemainingElements addAll: (subtractionResult collect: [:r | {layer . r} ]).
+			((affectedElementSet includes: each) and: [ (actuallyAffectedElementsSet includes: each) not ]) ifTrue: [
+				(subtractionResult size = 1 and: [ subtractionResult first == each ]) ifFalse: [
+					actuallyAffectedElementsSet add: each.
+				]
+			]
+		].
+		remainingElements := newRemainingElements
+	].
+
+	affectedOriginals := originalsWithParents select: [ :layerAndElement | (actuallyAffectedElementsSet includes: layerAndElement second) ].
+	newElements := remainingElements reject: [ :layerAndElement | (affectedElementSet includes: layerAndElement second) ].
+
+	levelSession
+		doWith: [ 
+			affectedOriginals do: [ :each | each second removeFromParent ].
+			newElements do: [ :each | each first addChild: each second ].
+			levelSession selection: self.
+		] undoWith: [ 
+			newElements do: [ :each | each second removeFromParent ].
+			affectedOriginals do: [ :each | each first addChild: each second ].
+			levelSession selection: self.
+		]
+
+]
+
 { #category : #memento }
 WDELevelEditorSelection >> transformStateMemento [
 	^ selectedItems collect: [ :each | each transformStateMemento ]

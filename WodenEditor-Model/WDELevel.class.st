@@ -44,6 +44,11 @@ WDELevel >> elements [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevel >> findVolumeElementsThatIntersectElements: aSetOfElements [
+	^ #()
+]
+
 { #category : #accessing }
 WDELevel >> gameSettings [
 
