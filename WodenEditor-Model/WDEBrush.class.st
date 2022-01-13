@@ -7,7 +7,15 @@ Class {
 		'sceneNode',
 		'hasValidTopology',
 		'transform',
-		'localBoundingBox'
+		'localBoundingBox',
+		'editorColor',
+		'wireframeMesh',
+		'texturedMesh',
+		'solidMesh',
+		'editorColorMaterial',
+		'editorColorLitMaterial',
+		'solidLitMesh',
+		'texturedLitMesh'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -36,11 +44,9 @@ WDEBrush >> addToEntity: anEntity [
 
 { #category : #accessing }
 WDEBrush >> addedToScene: aScene [
-	| mesh |
 	self assert: parent isNotNil.
 	
-	mesh := self computeMesh.
-	sceneNode := mesh asSceneNode.
+	sceneNode := self validWireframeMesh asSceneNode.
 	sceneNode transform: transform.
 	parent sceneNode add: sceneNode.
 ]
@@ -110,21 +116,47 @@ WDEBrush >> clipAgainstPlane: plane [
 		frontFaces add: (WDEBrushFace plane: plane negated)
 	].
 
-	frontPolyhedron := self class new faces: frontFaces; yourself.
-	backPolyhedron := self class new faces: backFaces; yourself.
+	frontPolyhedron := self class new
+		setupForNewInstance;
+		faces: frontFaces;
+		yourself.
+	backPolyhedron := self class new
+		setupForNewInstance;
+		faces: backFaces;
+		yourself.
 	^ { frontPolyhedron . backPolyhedron }
 ]
 
-{ #category : #'as yet unclassified' }
-WDEBrush >> computeMesh [
-	| builder |
-	self validateTopology.
-	builder := WDMeshBuilder new.
-	faces do: [ :face |
-		face buildFaceMeshWith: builder
-	].
+{ #category : #accessing }
+WDEBrush >> editorColor [
+	^ editorColor
+]
 
-	^ builder mesh
+{ #category : #accessing }
+WDEBrush >> editorColor: anObject [
+	editorColor := anObject.
+	editorColorMaterial ifNotNil: [ editorColorMaterial colorFactor: editorColor ].
+	editorColorLitMaterial ifNotNil: [ editorColorLitMaterial baseColorFactor: editorColor ].
+]
+
+{ #category : #accessing }
+WDEBrush >> editorColorLitMaterial [
+	^ editorColorLitMaterial ifNil: [
+		editorColorLitMaterial := WDMetallicRoughnessMaterial new
+			baseColorFactor: self editorColor;
+			metallicFactor: 0.0;
+			roughnessFactor: 0.7;
+			yourself
+	]
+]
+
+{ #category : #accessing }
+WDEBrush >> editorColorMaterial [
+	^ editorColorMaterial ifNil: [
+		editorColorMaterial := WDUnlitMaterial new
+		colorFactor: self editorColor;
+		yourself
+	]
 ]
 
 { #category : #'as yet unclassified' }
@@ -137,11 +169,9 @@ WDEBrush >> editorTreeDisplayName [
 	^ 'Brush'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #caching }
 WDEBrush >> faceTexturesChanged [
-	sceneNode ifNotNil: [ 
-		sceneNode renderables: {self computeMesh}
-	].
+	self invalidateTexturedMeshes
 ]
 
 { #category : #accessing }
@@ -154,7 +184,12 @@ WDEBrush >> faces [
 WDEBrush >> faces: aListOfFaces [
 	faces := aListOfFaces.
 	faces do: [ :each | each parent: self ].
-	hasValidTopology := false.
+	self invalidateTopology
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrush >> generateEditorColor [
+	self editorColor: self class generateEditorColor.
 ]
 
 { #category : #accessing }
@@ -202,12 +237,13 @@ WDEBrush >> initialize [
 	vertices := #().
 	hasValidTopology := false.
 	transform := TRSTransform3D identity.
+	editorColor := Vector4 ones.
 ]
 
 { #category : #'as yet unclassified' }
 WDEBrush >> instantiateForPlacingInLevel: level box: placementBox [
 	| instance |
-	instance := self copy.
+	instance := self copy setupForNewInstance.
 	instance transformWith: (placementBox trsTransformToConvertToMe: instance boundingBox).
 	level addBrush: instance.
 	^ instance
@@ -216,10 +252,33 @@ WDEBrush >> instantiateForPlacingInLevel: level box: placementBox [
 { #category : #'as yet unclassified' }
 WDEBrush >> instantiateForPlacingInLevel: level point: placementPoint [
 	| instance |
-	instance := self copy.
+	instance := self copy setupForNewInstance.
 	instance position: placementPoint.
 	level addBrush: instance.
 	^ instance
+]
+
+{ #category : #caching }
+WDEBrush >> invalidateMeshes [
+	wireframeMesh := nil.
+	solidMesh := nil.
+	solidLitMesh := nil.
+	self invalidateTexturedMeshes
+]
+
+{ #category : #caching }
+WDEBrush >> invalidateTexturedMeshes [
+	texturedLitMesh := nil.
+	texturedMesh := nil.
+	sceneNode ifNotNil: [
+		sceneNode renderables: {self validWireframeMesh}
+	].
+]
+
+{ #category : #caching }
+WDEBrush >> invalidateTopology [
+	hasValidTopology := false.
+	self invalidateMeshes
 ]
 
 { #category : #testing }
@@ -281,6 +340,11 @@ WDEBrush >> postCopy [
 	sceneNode := nil.
 	localBoundingBox := localBoundingBox copy.
 	transform := transform copy.
+	
+	wireframeMesh := nil.
+	solidMesh := nil.
+	texturedMesh := nil.
+	editorColorMaterial := nil.
 ]
 
 { #category : #'as yet unclassified' }
@@ -350,6 +414,11 @@ WDEBrush >> selectableGlobalBoundingBox [
 { #category : #initialization }
 WDEBrush >> setMaterialRecursively: newMaterial [
 	faces do: [ :face | face setMaterialRecursively: newMaterial ]
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrush >> setupForNewInstance [
+	self generateEditorColor
 ]
 
 { #category : #'constructive solid geometry' }
@@ -444,7 +513,59 @@ WDEBrush >> translateBy: translation [
 	self position: self position + translation
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #caching }
+WDEBrush >> validSolidLitMesh [
+	^ solidLitMesh ifNil: [ solidLitMesh := self validSolidMesh copyWithMaterial: self editorColorLitMaterial ]
+	
+]
+
+{ #category : #caching }
+WDEBrush >> validSolidMesh [
+	| builder |
+	solidMesh ifNotNil: [ ^ solidMesh ].
+	self validateTopology.
+	builder := WDMeshBuilder new.
+	builder currentMaterial: self editorColorMaterial.
+	faces do: [ :face |
+		face buildSolidFaceMeshWith: builder
+	].
+
+	^ solidMesh := builder mesh
+]
+
+{ #category : #caching }
+WDEBrush >> validTexturedLitMesh [
+	| builder |
+	texturedLitMesh ifNotNil: [ ^ texturedLitMesh ].
+	self validateTopology.
+	builder := WDMeshBuilder new.
+	faces do: [ :face |
+		face buildTexturedFaceMeshWith: builder
+	].
+
+	^ texturedLitMesh := builder mesh
+]
+
+{ #category : #caching }
+WDEBrush >> validTexturedMesh [
+	^ texturedMesh ifNil: [ texturedMesh := self validTexturedLitMesh copyTransformingMaterialsWith: [ :mat | mat asUnlitMaterial ] ]
+]
+
+{ #category : #caching }
+WDEBrush >> validWireframeMesh [
+	| builder |
+	wireframeMesh ifNotNil: [ ^ wireframeMesh ].
+	self validateTopology.
+	builder := WDMeshBuilder new.
+	builder currentMaterial: self editorColorMaterial.
+	faces do: [ :face |
+		face buildWireframeFaceMeshWith: builder
+	].
+
+	^ wireframeMesh := builder mesh
+]
+
+{ #category : #caching }
 WDEBrush >> validateTopology [
 	| faceCount |
 	hasValidTopology ifTrue: [ ^ self ].

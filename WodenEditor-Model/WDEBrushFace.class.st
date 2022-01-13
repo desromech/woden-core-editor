@@ -28,10 +28,9 @@ WDEBrushFace >> boundingBox [
 ]
 
 { #category : #'mesh building' }
-WDEBrushFace >> buildFaceMeshWith: builder [
+WDEBrushFace >> buildSolidFaceMeshWith: builder [
 	| normal brushVertices |
 	builder
-		currentMaterial: material;
 		beginTriangles.
 	normal := plane normal.
 	brushVertices := parent vertices.
@@ -42,6 +41,41 @@ WDEBrushFace >> buildFaceMeshWith: builder [
 	].
 	2 to: indices size - 1 do: [ :i |
 		builder addTriangleI0: 0 i1: i - 1 i2: i
+	].
+]
+
+{ #category : #'mesh building' }
+WDEBrushFace >> buildTexturedFaceMeshWith: builder [
+	| normal brushVertices |
+	builder
+		currentMaterial: (material ifNil: [WDELevelEditorMeshes uniqueInstance defaultMaterial]);
+		beginTriangles.
+	normal := plane normal.
+	brushVertices := parent vertices.
+	indices do: [ :i |
+		| v |
+		v := brushVertices at: i + 1.
+		builder addP: v; addN: normal
+	].
+	2 to: indices size - 1 do: [ :i |
+		builder addTriangleI0: 0 i1: i - 1 i2: i
+	].
+]
+
+{ #category : #'mesh building' }
+WDEBrushFace >> buildWireframeFaceMeshWith: builder [
+	| normal brushVertices |
+	builder
+		beginLines.
+	normal := plane normal.
+	brushVertices := parent vertices.
+	indices do: [ :i |
+		| v |
+		v := brushVertices at: i + 1.
+		builder addP: v
+	].
+	0 to: indices size - 1 do: [ :i |
+		builder addLineI0: i i1: (i + 1) % indices size
 	].
 ]
 

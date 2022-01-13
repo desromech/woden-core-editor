@@ -9,14 +9,29 @@ Class {
 		'parent'
 	],
 	#classVars : [
+		'EditorColorPalette',
+		'EditorColorPaletteLastGeneratedColor',
+		'EditorColorPaletteRandomGenerator',
 		'Epsilon'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #'as yet unclassified' }
+WDELevelElement class >> generateEditorColor [
+	| newColor |
+	[
+		newColor := EditorColorPalette atRandom: EditorColorPaletteRandomGenerator
+	] doWhileTrue: [ EditorColorPaletteLastGeneratedColor = newColor ].
+	^ (EditorColorPaletteLastGeneratedColor := newColor) asVector4
+]
+
 { #category : #initialization }
 WDELevelElement class >> initialize [
 	Epsilon := 0.00001.
+	EditorColorPalette := Color wheel: 13.
+	EditorColorPaletteRandomGenerator := Random seed: 1.
+	EditorColorPaletteLastGeneratedColor := nil.
 ]
 
 { #category : #accessing }
@@ -104,6 +119,10 @@ WDELevelElement >> restoreMaterialStateMemento: memento [
 
 { #category : #initialization }
 WDELevelElement >> setMaterialRecursively: newMaterial [
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelElement >> setupForNewInstance [
 ]
 
 { #category : #'constructive solid geometry' }

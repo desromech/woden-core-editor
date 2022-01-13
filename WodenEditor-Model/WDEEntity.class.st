@@ -8,7 +8,8 @@ Class {
 		'className',
 		'brushes',
 		'transform',
-		'sceneNode'
+		'sceneNode',
+		'editorColor'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -52,6 +53,18 @@ WDEEntity >> className: anObject [
 	className := anObject
 ]
 
+{ #category : #accessing }
+WDEEntity >> editorColor [
+
+	^ editorColor
+]
+
+{ #category : #accessing }
+WDEEntity >> editorColor: anObject [
+
+	editorColor := anObject
+]
+
 { #category : #'as yet unclassified' }
 WDEEntity >> editorTreeChildren [
 	^ brushes
@@ -76,6 +89,11 @@ WDEEntity >> findVolumeElementsThatIntersectElements: elementsToTest [
 	^ result
 ]
 
+{ #category : #'as yet unclassified' }
+WDEEntity >> generateEditorColor [
+	editorColor := self class generateEditorColor.
+]
+
 { #category : #accessing }
 WDEEntity >> globalTransform [
 	^ parent
@@ -88,12 +106,13 @@ WDEEntity >> initialize [
 	super initialize.
 	brushes := OrderedCollection new.
 	transform := TRSTransform3D identity.
+	editorColor := Vector4 ones.
 ]
 
 { #category : #'as yet unclassified' }
 WDEEntity >> instantiateForPlacingInLevel: level box: placementBox [
 	| instance |
-	instance := self copy.
+	instance := self copy setupForNewInstance.
 	instance transformWith: (placementBox trsTransformToConvertToMe: instance boundingBox).
 	level addEntity: instance.
 	^ instance
@@ -102,7 +121,7 @@ WDEEntity >> instantiateForPlacingInLevel: level box: placementBox [
 { #category : #'as yet unclassified' }
 WDEEntity >> instantiateForPlacingInLevel: level point: placementPoint [
 	| instance |
-	instance := self copy.
+	instance := self copy setupForNewInstance.
 	instance position: placementPoint.
 	level addEntity: instance.
 	^ instance
@@ -159,6 +178,11 @@ WDEEntity >> removeFromScene: aScene [
 { #category : #accessing }
 WDEEntity >> sceneNode [
 	^ sceneNode
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntity >> setupForNewInstance [
+	self generateEditorColor
 ]
 
 { #category : #accessing }

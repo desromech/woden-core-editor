@@ -8,12 +8,13 @@ Class {
 		'subGridMesh',
 		'flatShadedTranslucentUnitCubeMesh',
 		'unitCube',
-		'flatShadedTranslucentMaterial'
+		'flatShadedTranslucentMaterial',
+		'defaultMaterial'
 	],
 	#classInstVars : [
 		'uniqueInstance'
 	],
-	#category : #'WodenEditor-UI-Scene'
+	#category : #'WodenEditor-Model-Assets'
 }
 
 { #category : #accessing }
@@ -60,6 +61,16 @@ WDELevelEditorMeshes >> axisMesh [
 { #category : #'as yet unclassified' }
 WDELevelEditorMeshes >> baseGridSize [
 	^ 10
+]
+
+{ #category : #accessing }
+WDELevelEditorMeshes >> defaultMaterial [
+	^ defaultMaterial ifNil: [ defaultMaterial := WDMetallicRoughnessMaterial new
+		baseColorFactor: 0.8;
+		metallicFactor: 0.0;
+		roughnessFactor: 0.7;
+		yourself
+	]
 ]
 
 { #category : #accessing }
