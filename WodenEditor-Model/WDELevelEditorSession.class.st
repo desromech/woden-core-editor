@@ -11,7 +11,8 @@ Class {
 		'activeLevelElementTemplate',
 		'undoOperationHistory',
 		'redoOperationHistory',
-		'whenStartingToPlaceDuplicatedItems'
+		'whenStartingToPlaceDuplicatedItems',
+		'levelFileReference'
 	],
 	#category : #'WodenEditor-Model-Session'
 }
@@ -121,6 +122,7 @@ WDELevelEditorSession >> initialize [
 	super initialize.
 	gameSettings := WDEGameSettings default.
 	level := nil asValueHolder.
+	levelFileReference := nil asValueHolder.
 	activeLevelElementTemplate := nil asValueHolder.
 	statusMessage := '' asValueHolder.
 	selection := WDELevelEditorSelection empty asValueHolder.
@@ -141,9 +143,29 @@ WDELevelEditorSession >> level: aLevel [
 	level value: aLevel.
 ]
 
+{ #category : #accessing }
+WDELevelEditorSession >> levelFileReference [
+	^ levelFileReference value
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> levelFileReference: aFileReference [
+	levelFileReference value: aFileReference
+]
+
 { #category : #'as yet unclassified' }
 WDELevelEditorSession >> levelScene [
 	^ self level ifNotNil: [ :l | l scene ]
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> openFrom: aFileReference [
+	| loadedLevel |
+	aFileReference exists ifFalse: [ ^ self ].
+	loadedLevel := gameSettings loadFromFileReference: aFileReference.
+	self
+		level: loadedLevel;
+		levelFileReference: aFileReference
 ]
 
 { #category : #action }
@@ -163,6 +185,13 @@ WDELevelEditorSession >> redo [
 	redoOperationHistory removeFirst.
 	operation doIt.
 	undoOperationHistory addLast: operation.
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> saveTo: aFileReference [
+	self level ifNil: [ ^ self ].
+	self level saveTo: aFileReference.
+	self levelFileReference: aFileReference.
 ]
 
 { #category : #accessing }

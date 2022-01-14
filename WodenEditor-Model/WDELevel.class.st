@@ -88,6 +88,11 @@ WDELevel >> scene [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevel >> validExtensions [
+	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
 WDELevel >> visibleInEditor [
 	^ true
 ]

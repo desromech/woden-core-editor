@@ -21,6 +21,21 @@ WDEGameSettings class >> isAbstract [
 	^ self == WDEGameSettings
 ]
 
+{ #category : #'as yet unclassified' }
+WDEGameSettings >> emptyLevel [
+	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+WDEGameSettings >> loadFromFileReference: aFileReference [
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
+WDEGameSettings >> name [
+	self subclassResponsibility
+]
+
 { #category : #palette }
 WDEGameSettings >> topLevelElementTemplateCategories [
 	^ #()
@@ -34,4 +49,9 @@ WDEGameSettings >> topLevelLightSourcePaletteCategories [
 { #category : #palette }
 WDEGameSettings >> topMaterialPaletteCategories [
 	^ #()
+]
+
+{ #category : #'as yet unclassified' }
+WDEGameSettings >> validExtensions [
+	^ self subclassResponsibility
 ]

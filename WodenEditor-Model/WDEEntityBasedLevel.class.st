@@ -22,6 +22,11 @@ WDEEntityBasedLevel class >> loadFromJsonString: jsonString [
 	^ self loadFromJson: (NeoJSONReader fromString: jsonString)
 ]
 
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel class >> validExtensions [
+	^ #(weblvl)
+]
+
 { #category : #adding }
 WDEEntityBasedLevel >> addBrush: aBrush [
 	self worldEntity addBrush: aBrush
@@ -115,6 +120,18 @@ WDEEntityBasedLevel >> removeEntity: anEntity [
 		anEntity removedFromScene: editorScene
 	].
 	
+]
+
+{ #category : #fileout }
+WDEEntityBasedLevel >> saveTo: aFileReference [
+	| encodedLevel |
+	encodedLevel := self encodeAsJSONString.
+	aFileReference writeStreamDo: [ :out | out truncate; nextPutAll: encodedLevel ].
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel >> validExtensions [
+	^ self class validExtensions
 ]
 
 { #category : #'as yet unclassified' }

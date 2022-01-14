@@ -91,7 +91,7 @@ WDELevelEditor class >> menuCommandOn: builder [
 
 { #category : #'world menu' }
 WDELevelEditor class >> openEditorWithGameSettings: gameSettings [
-	WDELevel empty newEditorSession
+	gameSettings emptyLevel newEditorSession
 		gameSettings: gameSettings;
 		openEditor
 ]

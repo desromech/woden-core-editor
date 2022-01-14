@@ -49,17 +49,40 @@ WDELevelEditorContentView class >> initialize [
 
 { #category : #actions }
 WDELevelEditorContentView >> actionOpenFile [
-	self inform: 'TODO: open file'.
+	| dialog result |
+	dialog := self createLevelFileDialog.
+	dialog title: 'Select the level to open'; answerPathName.
+	result := dialog openModal answer.
+	result ifNil: [ ^ self ].
+	self model openFrom: result asFileReference
 ]
 
 { #category : #actions }
 WDELevelEditorContentView >> actionSaveFile [
-	self inform: 'TODO: save file'.
+	self model levelFileReference ifNotNil: [ :fileReference |
+		self model saveTo: fileReference
+	] ifNil: [
+		self actionSaveFileAs
+	]
 ]
 
 { #category : #actions }
 WDELevelEditorContentView >> actionSaveFileAs [
-	self inform: 'TODO: save file as'.
+	| dialog result |
+	dialog := self createLevelFileDialog.
+	dialog
+		title: 'Select the location to save the level';
+		fileNameText: 'level.wtlevel';
+		answerSaveFile.
+	self model levelFileReference ifNotNil: [ :fileRef |
+		dialog
+			fileNameText: fileRef basename;
+			selectPath: fileRef parent
+	].
+
+	result := dialog openModal answer.
+	result ifNil: [ ^ self ].
+	self model saveTo: result asFileReference
 ]
 
 { #category : #shading }
@@ -267,6 +290,14 @@ WDELevelEditorContentView >> createGridNode [
 	gridMaterial := WDELevelEditorMeshes uniqueInstance gridMaterial copy colorFactor: Color gray lighter.
 	gridNode := (WDELevelEditorMeshes uniqueInstance gridMesh copyWithMaterial: gridMaterial) asSceneNode.
 	scene add: gridNode
+]
+
+{ #category : #actions }
+WDELevelEditorContentView >> createLevelFileDialog [
+	^ FileDialogWindow basicNew
+		initialize;
+		validExtensions: self level validExtensions;
+		yourself
 ]
 
 { #category : #initialization }
