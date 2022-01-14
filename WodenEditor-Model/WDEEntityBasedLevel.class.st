@@ -12,6 +12,16 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #serialization }
+WDEEntityBasedLevel class >> loadFromJson: jsonData [
+	^ self new loadFromJson: jsonData
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel class >> loadFromJsonString: jsonString [
+	^ self loadFromJson: (NeoJSONReader fromString: jsonString)
+]
+
 { #category : #adding }
 WDEEntityBasedLevel >> addBrush: aBrush [
 	self worldEntity addBrush: aBrush
@@ -42,6 +52,13 @@ WDEEntityBasedLevel >> elements [
 ]
 
 { #category : #accessing }
+WDEEntityBasedLevel >> encodeJsonKeyValues [
+	^ {
+		#entities . entities collect: [ :each | each encodeForJSON ]
+	}
+]
+
+{ #category : #accessing }
 WDEEntityBasedLevel >> entities [
 	^ entities
 ]
@@ -62,6 +79,17 @@ WDEEntityBasedLevel >> initialize [
 	entities := OrderedCollection new.
 	invalidSceneElements := IdentitySet new.
 	self addEntity: (WDEEntity new className: #worldspawn)
+]
+
+{ #category : #serialization }
+WDEEntityBasedLevel >> loadFromJson: jsonData [
+	entities := (jsonData at: #entities ifAbsent: [nil]) collect: [ :each |
+		WDEEntity new
+			loadFromJson: each inLevel: self;
+			parent: self
+	] as: OrderedCollection.
+
+	self assert: entities first isWorldEntity
 ]
 
 { #category : #accessing }

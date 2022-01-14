@@ -175,6 +175,15 @@ WDEBrush >> editorTreeDisplayName [
 	^ 'Brush'
 ]
 
+{ #category : #serialization }
+WDEBrush >> encodeJsonKeyValues [
+	^ {
+		#editorColor . editorColor encodeForJSON.
+		#transform . transform encodeForJSON.
+		#faces . faces collect: [ :each | each encodeForJSON ]
+	}
+]
+
 { #category : #caching }
 WDEBrush >> faceTexturesChanged [
 	self invalidateTexturedMeshes
@@ -288,6 +297,15 @@ WDEBrush >> invalidateTopology [
 { #category : #testing }
 WDEBrush >> isManipulableInEditorSceneView [
 	^ true
+]
+
+{ #category : #serialization }
+WDEBrush >> loadFromJson: jsonData inLevel: level [
+	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
+	self faces: ((jsonData at: #faces ifAbsent: [ #() ]) collect: [ :each |
+		WDEBrushFace new
+			loadFromJson: each inLevel: self
+	])
 ]
 
 { #category : #accessing }

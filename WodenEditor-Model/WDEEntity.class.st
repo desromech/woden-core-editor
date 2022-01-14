@@ -9,7 +9,8 @@ Class {
 		'brushes',
 		'transform',
 		'sceneNode',
-		'editorColor'
+		'editorColor',
+		'properties'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -80,6 +81,16 @@ WDEEntity >> editorTreeDisplayName [
 	^ className asString
 ]
 
+{ #category : #serialization }
+WDEEntity >> encodeJsonKeyValues [
+	^ {
+		#className . className .
+		#editorColor . editorColor encodeForJSON.
+		#properties . properties.
+		#brushes . brushes collect: [ :each | each encodeForJSON ]
+	}
+]
+
 { #category : #'as yet unclassified' }
 WDEEntity >> findVolumeElementsThatIntersectElements: elementsToTest [
 	| result |
@@ -111,6 +122,7 @@ WDEEntity >> initialize [
 	super initialize.
 	brushes := OrderedCollection new.
 	transform := TRSTransform3D identity.
+	properties := Dictionary new.
 	editorColor := Vector4 ones.
 ]
 
@@ -135,6 +147,19 @@ WDEEntity >> instantiateForPlacingInLevel: level point: placementPoint [
 { #category : #testing }
 WDEEntity >> isWorldEntity [
 	^ #(worldspawn world) includes: className
+]
+
+{ #category : #serialization }
+WDEEntity >> loadFromJson: jsonData inLevel: level [
+	className := jsonData at: #className ifAbsent: [ '' ].
+	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
+	properties := properties at: #properties ifAbsent: [ Dictionary new ].
+	brushes := (jsonData at: #brushes ifAbsent: [ #() ]) collect: [ :each |
+		WDEBrush new
+			loadFromJson: each inLevel: self;
+			parent: self;
+			yourself
+	] as: OrderedCollection.
 ]
 
 { #category : #copying }

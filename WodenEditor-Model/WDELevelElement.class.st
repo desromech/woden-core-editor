@@ -62,6 +62,21 @@ WDELevelElement >> editorTreeChildren [
 	^ #()
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelElement >> encodeAsJSONString [
+	^ (NeoJSONWriter toStringPretty: self encodeForJSON) withUnixLineEndings
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelElement >> encodeForJSON [
+	^ OrderedDictionary newFromPairs: self encodeJsonKeyValues
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelElement >> encodeJsonKeyValues [
+	^ self subclassResponsibility
+]
+
 { #category : #initialization }
 WDELevelElement >> initialize [
 	super initialize.

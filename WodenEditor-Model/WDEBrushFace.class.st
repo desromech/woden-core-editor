@@ -100,6 +100,13 @@ WDEBrushFace >> editorTreeDisplayName [
 	^ 'Face'
 ]
 
+{ #category : #serialization }
+WDEBrushFace >> encodeJsonKeyValues [
+	^ {
+		#plane . plane encodeForJSON
+	}
+]
+
 { #category : #accessing }
 WDEBrushFace >> indices [
 	^ indices
@@ -119,6 +126,11 @@ WDEBrushFace >> instantiateForPlacingInLevel: level box: placementBox [
 { #category : #'as yet unclassified' }
 WDEBrushFace >> instantiateForPlacingInLevel: level point: placementPoint [
 	self shouldNotImplement
+]
+
+{ #category : #serialization }
+WDEBrushFace >> loadFromJson: jsonData inLevel: level [
+	plane := Plane loadFromJson: (jsonData at: #plane)
 ]
 
 { #category : #accessing }
