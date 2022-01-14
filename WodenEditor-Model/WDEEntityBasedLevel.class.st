@@ -6,7 +6,8 @@ Class {
 	#superclass : #WDELevel,
 	#instVars : [
 		'entities',
-		'addedOrRemovedElementsBlock'
+		'addedOrRemovedElementsBlock',
+		'invalidSceneElements'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -59,6 +60,7 @@ WDEEntityBasedLevel >> globalTransform [
 WDEEntityBasedLevel >> initialize [
 	super initialize.
 	entities := OrderedCollection new.
+	invalidSceneElements := IdentitySet new.
 	self addEntity: (WDEEntity new className: #worldspawn)
 ]
 
@@ -73,6 +75,11 @@ WDEEntityBasedLevel >> rayCastAllAlong: ray [
 	^ result
 ]
 
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel >> recordElementWithInvalidScene: anElement [
+	invalidSceneElements add: anElement
+]
+
 { #category : #removing }
 WDEEntityBasedLevel >> removeEntity: anEntity [
 	entities remove: anEntity.
@@ -80,6 +87,12 @@ WDEEntityBasedLevel >> removeEntity: anEntity [
 		anEntity removedFromScene: editorScene
 	].
 	
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel >> validateScene [
+	invalidSceneElements do: [ :each | each validateScene ].
+	invalidSceneElements removeAll
 ]
 
 { #category : #enumerating }

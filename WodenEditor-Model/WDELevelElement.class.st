@@ -130,6 +130,10 @@ WDELevelElement >> subtract: otherElement withTransform: otherElementTransform [
 	^ { self }
 ]
 
+{ #category : #caching }
+WDELevelElement >> validateScene [
+]
+
 { #category : #accessing }
 WDELevelElement >> visibleInEditor [
 

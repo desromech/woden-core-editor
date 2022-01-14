@@ -49,18 +49,26 @@ WDELevelEditorContentView class >> initialize [
 
 { #category : #shading }
 WDELevelEditorContentView >> activateFlatColor [
+	camera viewMode: WDFlatColorViewMode.
+	self refresh
 ]
 
 { #category : #shading }
 WDELevelEditorContentView >> activateFlatTextured [
+	camera viewMode: WDFlatTexturedViewMode.
+	self refresh
 ]
 
 { #category : #shading }
 WDELevelEditorContentView >> activateFullShaded [
+	camera viewMode: WDFullShadedViewMode.
+	self refresh
 ]
 
 { #category : #shading }
 WDELevelEditorContentView >> activateMaterialValidation [
+	camera viewMode: WDMaterialValidationViewMode.
+	self refresh
 ]
 
 { #category : #'editor modes' }
@@ -75,10 +83,14 @@ WDELevelEditorContentView >> activatePlacementMode [
 
 { #category : #shading }
 WDELevelEditorContentView >> activateShadedColor [
+	camera viewMode: WDFlatColorShadedViewMode.
+	self refresh
 ]
 
 { #category : #shading }
 WDELevelEditorContentView >> activateWireFrame [
+	camera viewMode: WDWireframeViewMode.
+	self refresh
 ]
 
 { #category : #'editor modes' }
@@ -252,6 +264,7 @@ WDELevelEditorContentView >> createScene [
 WDELevelEditorContentView >> createSceneNodes [
 	camera := WDCamera new
 		isPerspective: false;
+		viewMode: WDWireframeViewMode;
 		yourself.
 	cameraNode := camera asSceneNode.
 	sceneView 
@@ -625,6 +638,7 @@ WDELevelEditorContentView >> rayPickManipulator: ray [
 
 { #category : #accessing }
 WDELevelEditorContentView >> refresh [
+	self level ifNotNil: [ :l | l validateScene ].
 	sceneView refresh
 ]
 

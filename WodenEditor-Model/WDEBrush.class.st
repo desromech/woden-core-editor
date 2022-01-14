@@ -15,7 +15,8 @@ Class {
 		'editorColorMaterial',
 		'editorColorLitMaterial',
 		'solidLitMesh',
-		'texturedLitMesh'
+		'texturedLitMesh',
+		'meshWithAlternatives'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -46,7 +47,7 @@ WDEBrush >> addToEntity: anEntity [
 WDEBrush >> addedToScene: aScene [
 	self assert: parent isNotNil.
 	
-	sceneNode := self validWireframeMesh asSceneNode.
+	sceneNode := self validMeshWithAlternatives asSceneNode.
 	sceneNode transform: transform.
 	parent sceneNode add: sceneNode.
 ]
@@ -263,6 +264,7 @@ WDEBrush >> invalidateMeshes [
 	wireframeMesh := nil.
 	solidMesh := nil.
 	solidLitMesh := nil.
+	self level ifNotNil: [ :level | level recordElementWithInvalidScene: self ].
 	self invalidateTexturedMeshes
 ]
 
@@ -270,9 +272,6 @@ WDEBrush >> invalidateMeshes [
 WDEBrush >> invalidateTexturedMeshes [
 	texturedLitMesh := nil.
 	texturedMesh := nil.
-	sceneNode ifNotNil: [
-		sceneNode renderables: {self validWireframeMesh}
-	].
 ]
 
 { #category : #caching }
@@ -341,9 +340,12 @@ WDEBrush >> postCopy [
 	localBoundingBox := localBoundingBox copy.
 	transform := transform copy.
 	
+	meshWithAlternatives := nil.
 	wireframeMesh := nil.
 	solidMesh := nil.
+	solidLitMesh := nil.
 	texturedMesh := nil.
+	texturedLitMesh := nil.
 	editorColorMaterial := nil.
 ]
 
@@ -514,6 +516,18 @@ WDEBrush >> translateBy: translation [
 ]
 
 { #category : #caching }
+WDEBrush >> validMeshWithAlternatives [
+	^ meshWithAlternatives ifNil: [ meshWithAlternatives := WDRenderableWithViewModeAlternatives new
+		wireframe: self validWireframeMesh;
+		flatColor: self validSolidMesh;
+		flatColorShaded: self validSolidLitMesh;
+		flatTextured: self validTexturedMesh;
+		fullShaded: self validTexturedLitMesh;
+		yourself
+	]
+]
+
+{ #category : #caching }
 WDEBrush >> validSolidLitMesh [
 	^ solidLitMesh ifNil: [ solidLitMesh := self validSolidMesh copyWithMaterial: self editorColorLitMaterial ]
 	
@@ -563,6 +577,14 @@ WDEBrush >> validWireframeMesh [
 	].
 
 	^ wireframeMesh := builder mesh
+]
+
+{ #category : #caching }
+WDEBrush >> validateScene [
+	sceneNode ifNotNil: [ 
+		sceneNode renderables: { self validMeshWithAlternatives }
+	].
+	
 ]
 
 { #category : #caching }
