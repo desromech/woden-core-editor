@@ -317,20 +317,20 @@ WDELevelEditor >> fileMenu [
 						name: 'Open File...';
 						icon: (self iconNamed: #openIcon);
 						shortcut: $o command mac | $o control unix | $o control win;
-						action: [ self actionOpenFile ].
+						action: [ contentView actionOpenFile ].
 				];
 				addItem: [ :item |
 					item
 						name: 'Save';
 						icon: (self iconNamed: #smallSaveIcon);
 						shortcut: $s command mac | $s control unix | $s control win;
-						action: [ self actionSaveFile ].
+						action: [ contentView actionSaveFile ].
 				];
 				addItem: [ :item |
 					item
 						name: 'Save As...';
 						icon: (self iconNamed: #smallSaveAsIcon);
-						action: [ self actionSaveFileAs ].
+						action: [ contentView actionSaveFileAs ].
 				]
 		];
 		addGroup: [ :group |

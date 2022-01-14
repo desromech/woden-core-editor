@@ -58,6 +58,11 @@ WDEBrush >> boundingBox [
 ]
 
 { #category : #testing }
+WDEBrush >> canBeDuplicatedAndPlaced [
+	^ true
+]
+
+{ #category : #testing }
 WDEBrush >> canBeSubtracted [
 	^ true
 ]
@@ -490,8 +495,8 @@ WDEBrush >> transform [
 ]
 
 { #category : #accessing }
-WDEBrush >> transform: anObject [
-	transform := anObject.
+WDEBrush >> transform: aTransform [
+	transform := aTransform asTRSTransform3D copy.
 	self transformChanged.
 ]
 

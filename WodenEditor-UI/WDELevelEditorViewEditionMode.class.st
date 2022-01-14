@@ -118,8 +118,8 @@ WDELevelEditorViewEditionMode >> shortcuts [
 		KeyboardKey escape asKeyCombination . [ self cancelAction ].
 		KeyboardKey enter asKeyCombination . [ self activateAction ].
 
-		$s command mac | $s control unix | $s control win . [ self model actionSaveFile ].
-		$o command mac | $o control unix | $o control win . [ self model actionOpenFile ].
+		$s command mac | $s control unix | $s control win . [ view actionSaveFile ].
+		$o command mac | $o control unix | $o control win . [ view actionOpenFile ].
 
 		(KeyboardKey named: #KP_ADD) asKeyCombination asKeyCombination . [ self levelEditorSession increaseGridSize ].
 		(KeyboardKey named: #KP_SUBTRACT) asKeyCombination asKeyCombination . [ self levelEditorSession decreaseGridSize ].

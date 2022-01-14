@@ -17,6 +17,44 @@ WDELevelEditorSelection class >> for: selectedItems [
 	^ self new selectedItems: selectedItems
 ]
 
+{ #category : #actions }
+WDELevelEditorSelection >> deleteSelectedItemsInSession: levelSession [
+	| oldParents |
+	oldParents := selectedItems collect: [ :each | each parent ].
+	self assert: (oldParents allSatisfy: [ :each | each isNotNil ]).
+	levelSession
+		doWith: [
+			levelSession selection: self class empty.
+			selectedItems do: [ :each | each removeFromParent ]
+		]
+		undoWith: [
+			selectedItems doWithIndex: [:removedItem :parentIndex |
+				| oldParent |
+				oldParent := oldParents at: parentIndex.
+				oldParent addChild: removedItem
+			].
+			levelSession selection: self
+		]
+]
+
+{ #category : #actions }
+WDELevelEditorSelection >> duplicateSelectedItemsInSession: levelSession [
+	| duplicatedItems placeableElements |
+	selectedItems ifEmpty: [ ^ self ].
+
+	placeableElements := selectedItems select: [ :each | each canBeDuplicatedAndPlaced ].
+	placeableElements ifEmpty: [ ^ self ].
+	
+	duplicatedItems := placeableElements collect: [ :each |
+		| copy |
+		copy := each copy setupForNewInstance; yourself.
+		each parent addChild: copy.
+		copy
+	].
+
+	levelSession startPlacingDuplicatedItems: duplicatedItems
+]
+
 { #category : #initialization }
 WDELevelEditorSelection >> initialize [
 	super initialize.
@@ -50,7 +88,7 @@ WDELevelEditorSelection >> selectedItems: anObject [
 	selectedItems := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #actions }
 WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
 	| affectedElements subtractingItems remainingElements affectedElementSet actuallyAffectedElementsSet newElements affectedOriginals originalsWithParents |
 	selectedItems ifEmpty: [ ^ self ].

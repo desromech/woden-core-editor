@@ -42,6 +42,11 @@ WDEEntity >> brushes [
 	^ brushes
 ]
 
+{ #category : #testing }
+WDEEntity >> canBeDuplicatedAndPlaced [
+	^ self isWorldEntity not
+]
+
 { #category : #accessing }
 WDEEntity >> className [
 	^ className
@@ -157,7 +162,8 @@ WDEEntity >> removeBrush: aBrush [
 	sceneNode ifNotNil: [ 
 		aBrush removeFromScene: self level editorScene
 	].
-	aBrush parent: nil
+	aBrush parent: nil.
+	self level ifNotNil: [ :l | l addedOrRemovedElement ].
 ]
 
 { #category : #removing }

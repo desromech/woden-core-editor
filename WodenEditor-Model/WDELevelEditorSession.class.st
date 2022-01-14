@@ -10,18 +10,11 @@ Class {
 		'activeToolModeOrEditionModeName',
 		'activeLevelElementTemplate',
 		'undoOperationHistory',
-		'redoOperationHistory'
+		'redoOperationHistory',
+		'whenStartingToPlaceDuplicatedItems'
 	],
 	#category : #'WodenEditor-Model-Session'
 }
-
-{ #category : #action }
-WDELevelEditorSession >> actionOpenFile [
-]
-
-{ #category : #action }
-WDELevelEditorSession >> actionSaveFile [
-]
 
 { #category : #accessing }
 WDELevelEditorSession >> activeLevelElementTemplate [
@@ -69,6 +62,7 @@ WDELevelEditorSession >> decreaseGridSize [
 
 { #category : #action }
 WDELevelEditorSession >> deleteSelectedItems [
+	self selection deleteSelectedItemsInSession: self
 ]
 
 { #category : #'undo - redo' }
@@ -82,6 +76,7 @@ WDELevelEditorSession >> doWith: doBlock undoWith: undoBlock [
 
 { #category : #action }
 WDELevelEditorSession >> duplicateSelectedItems [
+	self selection duplicateSelectedItemsInSession: self
 ]
 
 { #category : #accessing }
@@ -130,6 +125,7 @@ WDELevelEditorSession >> initialize [
 	statusMessage := '' asValueHolder.
 	selection := WDELevelEditorSelection empty asValueHolder.
 	gridSize := 10.0 asValueHolder.
+	whenStartingToPlaceDuplicatedItems := [].
 	undoOperationHistory := OrderedCollection new.
 	redoOperationHistory := OrderedCollection new.
 ]
@@ -191,6 +187,11 @@ WDELevelEditorSession >> snapToSubGrid: vector [
 	^ vector roundWithQuantum: self subGridSize
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> startPlacingDuplicatedItems: duplicatedItems [
+	whenStartingToPlaceDuplicatedItems cull: duplicatedItems cull: self selection
+]
+
 { #category : #accessing }
 WDELevelEditorSession >> statusMessage [
 	^ statusMessage value
@@ -208,6 +209,7 @@ WDELevelEditorSession >> subGridSize [
 
 { #category : #action }
 WDELevelEditorSession >> subtractSelectedItems [
+	self selection subtractSelectedItemsInSession: self
 ]
 
 { #category : #selection }
@@ -286,6 +288,11 @@ WDELevelEditorSession >> whenLevelChangedDoNow: aBlock [
 { #category : #events }
 WDELevelEditorSession >> whenSelectionChangedDo: aBlock [
 	selection whenChangedDo: aBlock
+]
+
+{ #category : #events }
+WDELevelEditorSession >> whenStartingToPlaceDuplicatedItemsDo: aBlock [
+	whenStartingToPlaceDuplicatedItems := aBlock
 ]
 
 { #category : #events }

@@ -43,6 +43,11 @@ WDELevelElement >> buildContextMenuForEditorSession: levelSession on: menuPresen
 ]
 
 { #category : #'constructive solid geometry' }
+WDELevelElement >> canBeDuplicatedAndPlaced [
+	^ false
+]
+
+{ #category : #'constructive solid geometry' }
 WDELevelElement >> canBeSubtracted [
 	^ false
 ]

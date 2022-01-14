@@ -47,6 +47,21 @@ WDELevelEditorContentView class >> initialize [
 	OrthographicFarDistance := 1000.0.
 ]
 
+{ #category : #actions }
+WDELevelEditorContentView >> actionOpenFile [
+	self inform: 'TODO: open file'.
+]
+
+{ #category : #actions }
+WDELevelEditorContentView >> actionSaveFile [
+	self inform: 'TODO: save file'.
+]
+
+{ #category : #actions }
+WDELevelEditorContentView >> actionSaveFileAs [
+	self inform: 'TODO: save file as'.
+]
+
 { #category : #shading }
 WDELevelEditorContentView >> activateFlatColor [
 	camera viewMode: WDFlatColorViewMode.
@@ -470,6 +485,9 @@ WDELevelEditorContentView >> modelChanged [
 			whenActiveLevelElementTemplateChangedDo: [ :template | self levelElementTemplateSelected: template ];
 			whenGridSizeChangedDo: [ self updateCameraAndGrid ];
 			whenLevelChangedDoNow: [ self levelSceneChanged ];
+			whenStartingToPlaceDuplicatedItemsDo: [ :duplicatedItems :oldSelection |
+				self startPlacingDuplicatedElements: duplicatedItems oldSelection: oldSelection
+			];
 			whenSelectionChangedDo: [ :newSelection | self applyNewSelection: newSelection ].
 	].
 ]
@@ -694,6 +712,14 @@ WDELevelEditorContentView >> session [
 { #category : #initialization }
 WDELevelEditorContentView >> setSelectedElements: elements [
 	^ self levelEditorSession setSelectedElements: elements
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> startPlacingDuplicatedElements: duplicatedElements oldSelection: oldSelection [
+	self activeToolMode: ((WDELevelEditorDuplicatePlacementToolMode for: self)
+		duplicatedElements: duplicatedElements;
+		oldSelection: oldSelection;
+		yourself)
 ]
 
 { #category : #'camera views' }
