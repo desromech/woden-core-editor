@@ -7,7 +7,10 @@ Class {
 	#instVars : [
 		'entities',
 		'addedOrRemovedElementsBlock',
-		'invalidSceneElements'
+		'invalidSceneElements',
+		'usedMaterials',
+		'usedMaterialSet',
+		'geometryChangedBlock'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -56,9 +59,14 @@ WDEEntityBasedLevel >> elements [
 	^ entities
 ]
 
-{ #category : #accessing }
+{ #category : #serialization }
 WDEEntityBasedLevel >> encodeJsonKeyValues [
+	usedMaterials := OrderedCollection new.
+	usedMaterialSet := IdentityDictionary new.
+	entities do: [ :each | each prepareForSerializationInLevel: self ].
+	
 	^ {
+		#materials . usedMaterials collect: [ :each | each encodeForJSON ].
 		#entities . entities collect: [ :each | each encodeForJSON ]
 	}
 ]
@@ -71,6 +79,16 @@ WDEEntityBasedLevel >> entities [
 { #category : #'as yet unclassified' }
 WDEEntityBasedLevel >> findVolumeElementsThatIntersectElements: aSetOfElements [
 	^ self worldEntity findVolumeElementsThatIntersectElements: aSetOfElements
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel >> geometryChanged [
+	geometryChangedBlock value
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel >> getMaterialWithIndex: materialIndex [
+	^ usedMaterials at: materialIndex + 1
 ]
 
 { #category : #accessing }
@@ -88,6 +106,8 @@ WDEEntityBasedLevel >> initialize [
 
 { #category : #serialization }
 WDEEntityBasedLevel >> loadFromJson: jsonData [
+	usedMaterials := (jsonData at: #materials ifAbsent: [ #() ]) collect: [ :each | WDEMaterialInfo new loadFromJson: each ].
+	
 	entities := (jsonData at: #entities ifAbsent: [nil]) collect: [ :each |
 		WDEEntity new
 			loadFromJson: each inLevel: self;
@@ -110,7 +130,18 @@ WDEEntityBasedLevel >> rayCastAllAlong: ray [
 
 { #category : #'as yet unclassified' }
 WDEEntityBasedLevel >> recordElementWithInvalidScene: anElement [
-	invalidSceneElements add: anElement
+	| changed |
+	changed := invalidSceneElements isEmpty.
+	invalidSceneElements add: anElement.
+	changed ifTrue: [ self geometryChanged ].
+
+]
+
+{ #category : #serialization }
+WDEEntityBasedLevel >> recordMaterialInfo: material [
+	(material isNil or: [ usedMaterialSet includesKey: material ]) ifTrue: [ ^ self ].
+	usedMaterialSet at: material put: usedMaterials size.
+	usedMaterials add: material
 ]
 
 { #category : #removing }
@@ -143,6 +174,11 @@ WDEEntityBasedLevel >> validateScene [
 { #category : #enumerating }
 WDEEntityBasedLevel >> whenAddedOrRemovedElementDo: aBlock [
 	addedOrRemovedElementsBlock := aBlock
+]
+
+{ #category : #enumerating }
+WDEEntityBasedLevel >> whenGeometryChangedDo: aBlock [
+	geometryChangedBlock := aBlock
 ]
 
 { #category : #'as yet unclassified' }

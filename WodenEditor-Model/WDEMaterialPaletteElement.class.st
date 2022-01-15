@@ -33,9 +33,7 @@ WDEMaterialPaletteElement class >> metallicBaseColor: albedo roughness: roughnes
 { #category : #'single color materials' }
 WDEMaterialPaletteElement class >> referencePath: path [
 	^ self new 
-		material: (WDEFileReferenceMaterial new
-			path: path;
-			yourself);
+		material: path asFileReference;
 		yourself
 ]
 
@@ -65,8 +63,7 @@ WDEMaterialPaletteElement >> material [
 
 { #category : #accessing }
 WDEMaterialPaletteElement >> material: anObject [
-
-	material := anObject
+	material := anObject asWDEMaterialInfo
 ]
 
 { #category : #accessing }

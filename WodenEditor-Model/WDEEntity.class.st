@@ -169,6 +169,11 @@ WDEEntity >> postCopy [
 	transform := transform copy.
 ]
 
+{ #category : #serialization }
+WDEEntity >> prepareForSerializationInLevel: level [
+	brushes do: [ :each | each prepareForSerializationInLevel: level ]
+]
+
 { #category : #accessing }
 WDEEntity >> rayCastAllAlong: ray [
 	| localRay result |

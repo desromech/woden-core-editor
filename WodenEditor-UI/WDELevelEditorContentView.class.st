@@ -72,7 +72,7 @@ WDELevelEditorContentView >> actionSaveFileAs [
 	dialog := self createLevelFileDialog.
 	dialog
 		title: 'Select the location to save the level';
-		fileNameText: 'level.wtlevel';
+		fileNameText: 'level.' , self level validExtensions first;
 		answerSaveFile.
 	self model levelFileReference ifNotNil: [ :fileRef |
 		dialog
@@ -464,7 +464,10 @@ WDELevelEditorContentView >> level [
 
 { #category : #initialization }
 WDELevelEditorContentView >> levelChanged [
-	self level ifNotNil: [ :l | l whenAddedOrRemovedElementDo: [ self refresh ] ].
+	self level ifNotNil: [ :l |
+		l whenAddedOrRemovedElementDo: [ self refresh ].
+		l whenGeometryChangedDo: [ self refresh ].
+	].
 	self levelSceneChanged
 ]
 
@@ -515,7 +518,7 @@ WDELevelEditorContentView >> modelChanged [
 		session
 			whenActiveLevelElementTemplateChangedDo: [ :template | self levelElementTemplateSelected: template ];
 			whenGridSizeChangedDo: [ self updateCameraAndGrid ];
-			whenLevelChangedDoNow: [ self levelSceneChanged ];
+			whenLevelChangedDoNow: [ self levelChanged ];
 			whenStartingToPlaceDuplicatedItemsDo: [ :duplicatedItems :oldSelection |
 				self startPlacingDuplicatedElements: duplicatedItems oldSelection: oldSelection
 			];

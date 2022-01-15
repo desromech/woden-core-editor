@@ -6,7 +6,10 @@ Class {
 		'indices',
 		'boundingBox',
 		'material',
-		'vertices'
+		'vertices',
+		'textureScale',
+		'textureOffset',
+		'textureRotation'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -48,7 +51,8 @@ WDEBrushFace >> buildSolidFaceMeshWith: builder [
 WDEBrushFace >> buildTexturedFaceMeshWith: builder [
 	| normal brushVertices |
 	builder
-		currentMaterial: (material ifNil: [WDELevelEditorMeshes uniqueInstance defaultMaterial]);
+		currentMaterial: ((material ifNotNil: [ material validMaterial ])
+			ifNil: [WDELevelEditorMeshes uniqueInstance defaultMaterial]);
 		beginTriangles.
 	normal := plane normal.
 	brushVertices := parent vertices.
@@ -103,7 +107,11 @@ WDEBrushFace >> editorTreeDisplayName [
 { #category : #serialization }
 WDEBrushFace >> encodeJsonKeyValues [
 	^ {
-		#plane . plane encodeForJSON
+		#plane . plane encodeForJSON.
+		#material . material ifNotNil: [ material index ].
+		#textureScale . textureScale encodeForJSON.
+		#textureOffset . textureOffset encodeForJSON.
+		#textureRotation . textureRotation.
 	}
 ]
 
@@ -116,6 +124,9 @@ WDEBrushFace >> indices [
 WDEBrushFace >> initialize [
 	super initialize.
 	boundingBox := AABox empty.
+	textureScale := Vector2 ones.
+	textureOffset := Vector2 zeros.
+	textureRotation := 0.
 ]
 
 { #category : #'as yet unclassified' }
@@ -130,7 +141,14 @@ WDEBrushFace >> instantiateForPlacingInLevel: level point: placementPoint [
 
 { #category : #serialization }
 WDEBrushFace >> loadFromJson: jsonData inLevel: level [
-	plane := Plane loadFromJson: (jsonData at: #plane)
+	plane := Plane loadFromJson: (jsonData at: #plane).
+	(jsonData at: #material ifAbsent: [nil]) ifNotNil: [ :materialIndex |
+		material := level getMaterialWithIndex: materialIndex
+	].
+	textureScale := Vector2 loadFromJson: (jsonData at: #textureScale).
+	textureOffset := Vector2 loadFromJson: (jsonData at: #textureOffset).
+	textureRotation := jsonData at: #textureRotation.
+
 ]
 
 { #category : #accessing }
@@ -140,9 +158,10 @@ WDEBrushFace >> material [
 
 { #category : #accessing }
 WDEBrushFace >> material: aMaterial [
-	| changed |
-	changed := material ~~ aMaterial.
-	material := aMaterial.
+	| changed newMaterial |
+	newMaterial := aMaterial asWDEMaterialInfo.
+	changed := material ~~ newMaterial.
+	material := newMaterial.
 	(changed and: [parent isNotNil]) ifTrue: [ parent faceTexturesChanged ].
 ]
 
@@ -169,6 +188,11 @@ WDEBrushFace >> postCopy [
 	indices := nil.
 	vertices := nil.
 	boundingBox := AABox empty.
+]
+
+{ #category : #serialization }
+WDEBrushFace >> prepareForSerializationInLevel: level [
+	level recordMaterialInfo: material.
 ]
 
 { #category : #printing }

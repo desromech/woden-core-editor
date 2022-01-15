@@ -104,3 +104,7 @@ WDELevel >> visibleInEditor: aBoolean [
 { #category : #hooks }
 WDELevel >> whenAddedOrRemovedElementDo: aBlock [
 ]
+
+{ #category : #hooks }
+WDELevel >> whenGeometryChangedDo: aBlock [
+]

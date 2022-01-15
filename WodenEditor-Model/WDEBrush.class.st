@@ -278,7 +278,6 @@ WDEBrush >> invalidateMeshes [
 	wireframeMesh := nil.
 	solidMesh := nil.
 	solidLitMesh := nil.
-	self level ifNotNil: [ :level | level recordElementWithInvalidScene: self ].
 	self invalidateTexturedMeshes
 ]
 
@@ -286,6 +285,8 @@ WDEBrush >> invalidateMeshes [
 WDEBrush >> invalidateTexturedMeshes [
 	texturedLitMesh := nil.
 	texturedMesh := nil.
+	meshWithAlternatives := nil.
+	self level ifNotNil: [ :level | level recordElementWithInvalidScene: self ].
 ]
 
 { #category : #caching }
@@ -370,6 +371,12 @@ WDEBrush >> postCopy [
 	texturedMesh := nil.
 	texturedLitMesh := nil.
 	editorColorMaterial := nil.
+]
+
+{ #category : #serialization }
+WDEBrush >> prepareForSerializationInLevel: level [
+	faces do: [ :each | each prepareForSerializationInLevel: level ].
+	
 ]
 
 { #category : #'as yet unclassified' }
@@ -520,7 +527,8 @@ WDEBrush >> transform: aTransform [
 
 { #category : #accessing }
 WDEBrush >> transformChanged [
-	sceneNode ifNotNil: [ sceneNode transform: transform ]
+	sceneNode ifNotNil: [ sceneNode transform: transform ].
+	self invalidateTexturedMeshes.
 ]
 
 { #category : #memento }
