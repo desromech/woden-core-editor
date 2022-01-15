@@ -10,6 +10,11 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #comparing }
+WDEMaterialInfo >> = other [
+	^ self class == other class and: [ fileReference = other fileReference and: [ definition = other definition ] ]
+]
+
 { #category : #converting }
 WDEMaterialInfo >> asWDEMaterialInfo [
 	^ self
@@ -46,6 +51,11 @@ WDEMaterialInfo >> fileReference: anObject [
 	fileReference := anObject
 ]
 
+{ #category : #comparing }
+WDEMaterialInfo >> hash [
+	^ self class identityHash class bitXor: (fileReference hash bitXor: definition hash)
+]
+
 { #category : #accessing }
 WDEMaterialInfo >> index [
 
@@ -60,6 +70,15 @@ WDEMaterialInfo >> index: anObject [
 
 { #category : #serialization }
 WDEMaterialInfo >> loadFromJson: jsonData [
+	jsonData at: #path ifPresent: [ :found |
+		fileReference := found asFileReference.
+		^ self
+	].
+
+	jsonData at: #type ifPresent: [ :found |
+		definition := WDMaterial loadFromJson: jsonData.
+		^ self
+	].
 ]
 
 { #category : #'as yet unclassified' }

@@ -305,7 +305,7 @@ WDEBrush >> loadFromJson: jsonData inLevel: level [
 	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
 	self faces: ((jsonData at: #faces ifAbsent: [ #() ]) collect: [ :each |
 		WDEBrushFace new
-			loadFromJson: each inLevel: self
+			loadFromJson: each inLevel: level
 	])
 ]
 

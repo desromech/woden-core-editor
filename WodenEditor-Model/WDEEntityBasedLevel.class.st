@@ -140,6 +140,7 @@ WDEEntityBasedLevel >> recordElementWithInvalidScene: anElement [
 { #category : #serialization }
 WDEEntityBasedLevel >> recordMaterialInfo: material [
 	(material isNil or: [ usedMaterialSet includesKey: material ]) ifTrue: [ ^ self ].
+	material index: usedMaterials size.
 	usedMaterialSet at: material put: usedMaterials size.
 	usedMaterials add: material
 ]

@@ -156,7 +156,7 @@ WDEEntity >> loadFromJson: jsonData inLevel: level [
 	properties := properties at: #properties ifAbsent: [ Dictionary new ].
 	brushes := (jsonData at: #brushes ifAbsent: [ #() ]) collect: [ :each |
 		WDEBrush new
-			loadFromJson: each inLevel: self;
+			loadFromJson: each inLevel: level;
 			parent: self;
 			yourself
 	] as: OrderedCollection.
