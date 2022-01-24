@@ -580,12 +580,13 @@ WDEBrush >> validSolidMesh [
 
 { #category : #caching }
 WDEBrush >> validTexturedLitMesh [
-	| builder |
+	| builder globalTransform |
 	texturedLitMesh ifNotNil: [ ^ texturedLitMesh ].
 	self validateTopology.
 	builder := WDMeshBuilder new.
+	globalTransform := self globalTransform.
 	faces do: [ :face |
-		face buildTexturedFaceMeshWith: builder
+		face buildTexturedFaceMeshWith: builder transform: globalTransform
 	].
 
 	^ texturedLitMesh := builder mesh

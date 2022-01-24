@@ -31,9 +31,9 @@ WDEMaterialPaletteElement class >> metallicBaseColor: albedo roughness: roughnes
 ]
 
 { #category : #'single color materials' }
-WDEMaterialPaletteElement class >> referencePath: path [
+WDEMaterialPaletteElement class >> path: path [
 	^ self new 
-		material: path asFileReference;
+		material: (WDEMaterialInfo new path: path);
 		yourself
 ]
 
@@ -68,5 +68,5 @@ WDEMaterialPaletteElement >> material: anObject [
 
 { #category : #accessing }
 WDEMaterialPaletteElement >> thumbnailFor: levelEditorSession [
-	^ thumbnail ifNil: [ thumbnail := material ifNotNil: [ material makeThumbnail ] ]
+	^ thumbnail ifNil: [ thumbnail := material ifNotNil: [ material thumbnailFor: levelEditorSession ] ]
 ]

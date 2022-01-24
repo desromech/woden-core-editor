@@ -77,6 +77,11 @@ WDELevelElement >> encodeJsonKeyValues [
 	^ self subclassResponsibility
 ]
 
+{ #category : #accessing }
+WDELevelElement >> gameSettings [
+	^ self level ifNotNil: [ :l | l gameSettings  ]
+]
+
 { #category : #initialization }
 WDELevelElement >> initialize [
 	super initialize.

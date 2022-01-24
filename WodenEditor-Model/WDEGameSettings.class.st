@@ -31,6 +31,11 @@ WDEGameSettings >> loadFromFileReference: aFileReference [
 	self subclassResponsibility
 ]
 
+{ #category : #'as yet unclassified' }
+WDEGameSettings >> loadValidMaterialFor: aMaterialInfo [
+	^ nil
+]
+
 { #category : #accessing }
 WDEGameSettings >> name [
 	self subclassResponsibility

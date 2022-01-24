@@ -11,8 +11,70 @@ Class {
 		'textureOffset',
 		'textureRotation'
 	],
+	#classVars : [
+		'BitangentAxis',
+		'NormalAxis',
+		'TangentAxis'
+	],
 	#category : #'WodenEditor-Model-Level'
 }
+
+{ #category : #'as yet unclassified' }
+WDEBrushFace class >> findAxisForNormal: normal [
+	| bestAmount best |
+	bestAmount := Float infinity negated.
+	best := 1.
+	1 to: 6 do: [ :i |
+		| axis amount |
+		axis := NormalAxis at: i.
+		amount := normal dot: axis.
+		amount > bestAmount ifTrue: [ 
+			best := i.
+			bestAmount := amount
+		].
+	].
+	^ best
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrushFace class >> getBitangentForNormalAxis: axis [
+	^ BitangentAxis at: axis
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrushFace class >> getTangentForNormalAxis: axis [
+	^ TangentAxis at: axis
+]
+
+{ #category : #initialization }
+WDEBrushFace class >> initialize [
+	NormalAxis := { 
+		Vector3 x: 1.
+		Vector3 x: -1.
+		Vector3 y: 1.
+		Vector3 y: -1.
+		Vector3 z: 1.
+		Vector3 z: -1.
+	}.
+	
+	TangentAxis := { 
+		Vector3 z: -1.
+		Vector3 z: 1.
+		Vector3 x: 1.
+		Vector3 x: 1.
+		Vector3 x: 1.
+		Vector3 x: -1.
+	}.
+	
+	BitangentAxis := {
+		Vector3 y: -1.
+		Vector3 y: -1.
+		Vector3 z: 1.
+		Vector3 z: -1.
+		Vector3 y: -1.
+		Vector3 y: -1.
+	}.
+]
 
 { #category : #accessing }
 WDEBrushFace class >> plane: aPlane [
@@ -48,18 +110,28 @@ WDEBrushFace >> buildSolidFaceMeshWith: builder [
 ]
 
 { #category : #'mesh building' }
-WDEBrushFace >> buildTexturedFaceMeshWith: builder [
-	| normal brushVertices |
+WDEBrushFace >> buildTexturedFaceMeshWith: builder transform: globalTransform [
+	| normal brushVertices textureMatrix normalAxis tangent bitangent |
 	builder
-		currentMaterial: ((material ifNotNil: [ material validMaterial ])
+		currentMaterial: ((material ifNotNil: [ material validMaterialForGameSettings: self gameSettings ])
 			ifNil: [WDELevelEditorMeshes uniqueInstance defaultMaterial]);
 		beginTriangles.
+	textureMatrix := self computeTextureMatrix.
+		
 	normal := plane normal.
+	normalAxis := self class findAxisForNormal: normal.
+	tangent := self class getTangentForNormalAxis: normalAxis.
+	bitangent := self class getBitangentForNormalAxis: normalAxis.
+
 	brushVertices := parent vertices.
 	indices do: [ :i |
-		| v |
+		| v wv tu tv  tc |
 		v := brushVertices at: i + 1.
-		builder addP: v; addN: normal
+		wv := globalTransform transformPosition: v.
+		tu := wv dot: tangent.
+		tv := wv dot: bitangent.
+		tc := textureMatrix transformVector2: (Vector2 x: tu y: tv).
+		builder addP: v; addT0: tc; addN: normal
 	].
 	2 to: indices size - 1 do: [ :i |
 		builder addTriangleI0: 0 i1: i - 1 i2: i
@@ -100,6 +172,11 @@ WDEBrushFace >> computeBoundingBox [
 ]
 
 { #category : #'as yet unclassified' }
+WDEBrushFace >> computeTextureMatrix [
+	^ Matrix3x3 texScale: textureScale offset: textureOffset
+]
+
+{ #category : #'as yet unclassified' }
 WDEBrushFace >> editorTreeDisplayName [
 	^ 'Face'
 ]
@@ -124,7 +201,7 @@ WDEBrushFace >> indices [
 WDEBrushFace >> initialize [
 	super initialize.
 	boundingBox := AABox empty.
-	textureScale := Vector2 ones.
+	textureScale := Vector2 withAll: 0.25.
 	textureOffset := Vector2 zeros.
 	textureRotation := 0.
 ]

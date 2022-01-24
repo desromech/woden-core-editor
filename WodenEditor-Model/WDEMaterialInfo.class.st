@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'index',
 		'definition',
-		'fileReference',
+		'path',
 		'material'
 	],
 	#category : #'WodenEditor-Model-Level'
@@ -12,7 +12,7 @@ Class {
 
 { #category : #comparing }
 WDEMaterialInfo >> = other [
-	^ self class == other class and: [ fileReference = other fileReference and: [ definition = other definition ] ]
+	^ self class == other class and: [ path = other path and: [ definition = other definition ] ]
 ]
 
 { #category : #converting }
@@ -34,26 +34,14 @@ WDEMaterialInfo >> definition: anObject [
 
 { #category : #accessing }
 WDEMaterialInfo >> encodeJsonKeyValues [
-	fileReference ifNotNil: [ ^ { #path . fileReference fullPath fullName } ].
+	path ifNotNil: [ ^ { #path . path } ].
 	definition ifNotNil: [ ^ definition encodeJsonKeyValues ].	
 	^ #()
 ]
 
-{ #category : #accessing }
-WDEMaterialInfo >> fileReference [
-
-	^ fileReference
-]
-
-{ #category : #accessing }
-WDEMaterialInfo >> fileReference: anObject [
-
-	fileReference := anObject
-]
-
 { #category : #comparing }
 WDEMaterialInfo >> hash [
-	^ self class identityHash class bitXor: (fileReference hash bitXor: definition hash)
+	^ self class identityHash class bitXor: (path hash bitXor: definition hash)
 ]
 
 { #category : #accessing }
@@ -71,7 +59,7 @@ WDEMaterialInfo >> index: anObject [
 { #category : #serialization }
 WDEMaterialInfo >> loadFromJson: jsonData [
 	jsonData at: #path ifPresent: [ :found |
-		fileReference := found asFileReference.
+		path := found.
 		^ self
 	].
 
@@ -79,11 +67,6 @@ WDEMaterialInfo >> loadFromJson: jsonData [
 		definition := WDMaterial loadFromJson: jsonData.
 		^ self
 	].
-]
-
-{ #category : #'as yet unclassified' }
-WDEMaterialInfo >> makeThumbnail [
-	^ self validMaterial ifNotNil: [ :mat | mat makeThumbnail ]
 ]
 
 { #category : #accessing }
@@ -99,7 +82,29 @@ WDEMaterialInfo >> material: anObject [
 ]
 
 { #category : #accessing }
-WDEMaterialInfo >> validMaterial [
+WDEMaterialInfo >> path [
+
+	^ path
+]
+
+{ #category : #accessing }
+WDEMaterialInfo >> path: anObject [
+
+	path := anObject
+]
+
+{ #category : #'as yet unclassified' }
+WDEMaterialInfo >> thumbnailFor: levelEditorSession [
+	^ (self validMaterialForGameSettings: levelEditorSession gameSettings) ifNotNil: [ :mat | mat makeThumbnail ]
+]
+
+{ #category : #accessing }
+WDEMaterialInfo >> validMaterialForGameSettings: gameSettings [
 	definition ifNotNil: [ ^ definition ].
-	^ nil
+	material ifNil: [
+		gameSettings ifNotNil: [
+			material := gameSettings loadValidMaterialFor: self
+		]
+	].
+	^ material
 ]
