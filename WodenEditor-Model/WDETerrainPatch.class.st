@@ -17,7 +17,7 @@ WDETerrainPatch >> buildPatchSolidWith: builder [
 		beginTriangles.
 	sourceIndex := 1.
 	0 to: patchSize - 1 do: [ :y |
-		vz := 1 - (y / (patchSize - 1)) + row.
+		vz := (y / (patchSize - 1)) + row.
 		0 to: patchSize - 1 do: [ :x |
 			|b t l r c|
 			vx := (x / (patchSize - 1)) + column.
@@ -39,8 +39,8 @@ WDETerrainPatch >> buildPatchSolidWith: builder [
 		rowStart := patchSize * y.
 		0 to: patchSize - 2 do: [ :x |
 			builder
-				addTriangleI0: rowStart + x i1: rowStart + x + 1 i2: rowStart + x + patchSize + 1;
-				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + patchSize i2: rowStart + x.
+				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + 1 i2: rowStart + x;
+				addTriangleI0: rowStart + x i1: rowStart + x + patchSize i2: rowStart + x + patchSize + 1.
 			sourceIndex := sourceIndex + 1.
 		].
 	].
@@ -54,7 +54,7 @@ WDETerrainPatch >> buildPatchTexturedWith: builder [
 		beginTriangles.
 	sourceIndex := 1.
 	0 to: patchSize - 1 do: [ :y |
-		vz := 1 - (y / (patchSize - 1)) + row.
+		vz := (y / (patchSize - 1)) + row.
 		0 to: patchSize - 1 do: [ :x |
 			| t b l r c |
 			vx := (x / (patchSize - 1)) + column.
@@ -76,8 +76,8 @@ WDETerrainPatch >> buildPatchTexturedWith: builder [
 		rowStart := patchSize * y.
 		0 to: patchSize - 2 do: [ :x |
 			builder
-				addTriangleI0: rowStart + x i1: rowStart + x + 1 i2: rowStart + x + patchSize + 1;
-				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + patchSize i2: rowStart + x.
+				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + 1 i2: rowStart + x;
+				addTriangleI0: rowStart + x i1: rowStart + x + patchSize i2: rowStart + x + patchSize + 1.
 			sourceIndex := sourceIndex + 1.
 		].
 	].
@@ -91,7 +91,7 @@ WDETerrainPatch >> buildPatchWireframeWith: builder [
 		beginLines.
 	sourceIndex := 1.
 	0 to: patchSize - 1 do: [ :y |
-		vz := 1 - (y / (patchSize - 1)) + row.
+		vz := (y / (patchSize - 1)) + row.
 		0 to: patchSize - 1 do: [ :x |
 			vx := (x / (patchSize - 1)) + column.
 			builder addPx: vx y: (heights at: sourceIndex) z: vz.
@@ -164,12 +164,15 @@ WDETerrainPatch >> patchSize: newPatchSize [
 
 { #category : #rendering }
 WDETerrainPatch >> renderLocalHeightWith: aBlock [
-	| newHeights destIndex |
+	| newHeights destIndex columnOffset rowOffset |
 	newHeights := FloatArray new: patchSize * patchSize.
 	destIndex := 1.
+	columnOffset := column. "column * (patchSize - 1) / patchSize".
+	rowOffset := row. "row * (patchSize - 1) / patchSize".
+	
 	0 to: patchSize - 1 do: [ :y |
 		0 to: patchSize - 1 do: [ :x |
-			newHeights at: destIndex put: (aBlock value: x / (patchSize - 1) + column value: y / (patchSize - 1) + row).
+			newHeights at: destIndex put: (aBlock value: x / (patchSize - 1) + columnOffset value: y / (patchSize - 1) + rowOffset).
 			destIndex := destIndex + 1
 		]
 	].
