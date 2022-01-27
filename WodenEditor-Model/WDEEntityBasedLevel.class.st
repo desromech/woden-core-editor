@@ -43,6 +43,11 @@ WDEEntityBasedLevel >> addEntity: anEntity [
 	self addedOrRemovedElement.
 ]
 
+{ #category : #adding }
+WDEEntityBasedLevel >> addTerrain: aTerrain [
+	self worldEntity addTerrain: aTerrain
+]
+
 { #category : #'as yet unclassified' }
 WDEEntityBasedLevel >> addedOrRemovedElement [
 	addedOrRemovedElementsBlock value

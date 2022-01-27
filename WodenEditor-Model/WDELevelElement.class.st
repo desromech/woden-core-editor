@@ -63,6 +63,11 @@ WDELevelElement >> editorTreeChildren [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelElement >> editorTreeDisplayName [
+	^ self className
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelElement >> encodeAsJSONString [
 	^ (NeoJSONWriter toStringPretty: self encodeForJSON) withUnixLineEndings
 ]
@@ -135,7 +140,7 @@ WDELevelElement >> removeFromParent [
 ]
 
 { #category : #accessing }
-WDELevelElement >> removeFromScene: aScene [
+WDELevelElement >> removedFromScene: aScene [
 ]
 
 { #category : #memento }

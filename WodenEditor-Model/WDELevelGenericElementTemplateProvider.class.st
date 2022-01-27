@@ -29,8 +29,16 @@ WDELevelGenericElementTemplateProvider >> makeCategoryNamed: categoryName withEl
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelGenericElementTemplateProvider >> terrainGeometryCategory [
+	^ self makeCategoryNamed: 'Terrain Geometry' withElements: {
+		'Terrain' . WDETerrain new.
+	}
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> topLevelPaletteCategories [
 	^ {
 		self bspGeometryCategory.
+		self terrainGeometryCategory.
 	}
 ]

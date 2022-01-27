@@ -10,7 +10,8 @@ Class {
 		'transform',
 		'sceneNode',
 		'editorColor',
-		'properties'
+		'properties',
+		'terrains'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -28,6 +29,14 @@ WDEEntity >> addChild: child [
 	child addToEntity: self
 ]
 
+{ #category : #adding }
+WDEEntity >> addTerrain: aTerrain [
+	terrains add: aTerrain.
+	aTerrain parent: self.
+	sceneNode ifNotNil: [ aTerrain addedToScene: self level editorScene ].
+	self level ifNotNil: [ :l | l addedOrRemovedElement ].
+]
+
 { #category : #accessing }
 WDEEntity >> addedToScene: aScene [
 	sceneNode := WDSceneNode new
@@ -36,6 +45,7 @@ WDEEntity >> addedToScene: aScene [
 	aScene add: sceneNode.
 	
 	brushes do: [ :each | each addedToScene: aScene ].
+	terrains do: [ :each | each addedToScene: aScene ].
 ]
 
 { #category : #accessing }
@@ -73,7 +83,7 @@ WDEEntity >> editorColor: anObject [
 
 { #category : #'as yet unclassified' }
 WDEEntity >> editorTreeChildren [
-	^ brushes
+	^ brushes , terrains
 ]
 
 { #category : #'as yet unclassified' }
@@ -121,6 +131,7 @@ WDEEntity >> globalTransform [
 WDEEntity >> initialize [
 	super initialize.
 	brushes := OrderedCollection new.
+	terrains := OrderedCollection new.
 	transform := TRSTransform3D identity.
 	properties := Dictionary new.
 	editorColor := Vector4 ones.
@@ -154,7 +165,6 @@ WDEEntity >> loadFromJson: jsonData inLevel: level [
 	className := jsonData at: #className ifAbsent: [ '' ].
 	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
 	properties := properties at: #properties ifAbsent: [ Dictionary new ].
-	jsonData at: #transform ifPresent: [ :found | self transform: (TRSTransform3D loadFromJson: found) ].
 	brushes := (jsonData at: #brushes ifAbsent: [ #() ]) collect: [ :each |
 		WDEBrush new
 			loadFromJson: each inLevel: level;
@@ -184,6 +194,9 @@ WDEEntity >> rayCastAllAlong: ray [
 	brushes do: [ :brush |
 		result addAll: (brush rayCastAllAlong: localRay)
 	].
+	terrains do: [ :terrain |
+		result addAll: (terrain rayCastAllAlong: localRay)
+	].
 	^ result
 ]
 
@@ -191,7 +204,7 @@ WDEEntity >> rayCastAllAlong: ray [
 WDEEntity >> removeBrush: aBrush [
 	brushes remove: aBrush.
 	sceneNode ifNotNil: [ 
-		aBrush removeFromScene: self level editorScene
+		aBrush removedFromScene: self level editorScene
 	].
 	aBrush parent: nil.
 	self level ifNotNil: [ :l | l addedOrRemovedElement ].
@@ -203,9 +216,20 @@ WDEEntity >> removeFromParent [
 
 ]
 
+{ #category : #removing }
+WDEEntity >> removeTerrain: aTerrain [
+	terrains remove: aTerrain.
+	sceneNode ifNotNil: [ 
+		aTerrain removedFromScene: self level editorScene
+	].
+	aTerrain parent: nil.
+	self level ifNotNil: [ :l | l addedOrRemovedElement ].
+]
+
 { #category : #accessing }
-WDEEntity >> removeFromScene: aScene [
-	brushes do: [ :each | each removeFromScene: aScene ].
+WDEEntity >> removedFromScene: aScene [
+	brushes do: [ :each | each removedFromScene: aScene ].
+	terrains do: [ :each | each removedFromScene: aScene ].
 	sceneNode ifNotNil: [ 
 		sceneNode removeFromScene.
 		sceneNode := nil.

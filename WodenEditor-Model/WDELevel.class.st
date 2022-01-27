@@ -77,7 +77,7 @@ WDELevel >> rayCastAllAlong: ray [
 ]
 
 { #category : #accessing }
-WDELevel >> removeFromScene: aScene [
+WDELevel >> removedFromScene: aScene [
 	"Added the level onto the specified scene"
 	editorScene := nil.
 ]
