@@ -154,6 +154,7 @@ WDEEntity >> loadFromJson: jsonData inLevel: level [
 	className := jsonData at: #className ifAbsent: [ '' ].
 	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
 	properties := properties at: #properties ifAbsent: [ Dictionary new ].
+	jsonData at: #transform ifPresent: [ :found | self transform: (TRSTransform3D loadFromJson: found) ].
 	brushes := (jsonData at: #brushes ifAbsent: [ #() ]) collect: [ :each |
 		WDEBrush new
 			loadFromJson: each inLevel: level;

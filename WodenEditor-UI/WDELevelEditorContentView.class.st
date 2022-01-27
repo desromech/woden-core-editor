@@ -19,7 +19,8 @@ Class {
 		'activeToolManipulator',
 		'highlightedManipulator',
 		'highlightBoxNode',
-		'lastDownEvent'
+		'lastDownEvent',
+		'cameraLight'
 	],
 	#classVars : [
 		'OrthographicFarDistance',
@@ -319,6 +320,12 @@ WDELevelEditorContentView >> createSceneNodes [
 	cameraNode
 		orientation: Quaternion lookAtBottom;
 		position: (Vector3 x: 0 y: 1 z: 3).
+	scene add: cameraNode.
+	
+	cameraLight := WDDirectionalLightSource new
+			intensity: (Vector3 x: 0.2 y: 0.2 z: 0.2);
+			yourself.
+	cameraNode add: cameraLight asSceneNode.
 	editorViewType := #top.
 	self
 		createSubGridNode;
@@ -601,13 +608,18 @@ WDELevelEditorContentView >> onSceneMouseMove: event [
 
 { #category : #event }
 WDELevelEditorContentView >> onSceneMouseUp: event [
+	| isEndingDrag |
+	isEndingDrag := false.
 	lastDragPosition ifNotNil: [
 		(event isPrimaryButton or: [event isSecondaryButton or: [event isMiddleButton] ]) ifFalse: [
 			lastDragPosition := nil.
-			self onSceneDragEnd: event
+			self onSceneDragEnd: event.
+			isEndingDrag := true.
 		].
 	].
 	self activeToolModeOrEditionMode onMouseUp: event.
+	
+	isEndingDrag ifTrue: [ ^ self ].
 	
 	lastDragPosition ifNil: [ 
 		event redButtonChanged ifTrue: [ 

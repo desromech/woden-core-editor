@@ -125,10 +125,12 @@ WDEBrush >> clipAgainstPlane: plane [
 	frontPolyhedron := self class new
 		setupForNewInstance;
 		faces: frontFaces;
+		transform: self transform;
 		yourself.
 	backPolyhedron := self class new
 		setupForNewInstance;
 		faces: backFaces;
+		transform: self transform;
 		yourself.
 	^ { frontPolyhedron . backPolyhedron }
 ]
@@ -209,6 +211,7 @@ WDEBrush >> generateEditorColor [
 
 { #category : #accessing }
 WDEBrush >> globalBoundingBox [
+	parent ifNil: [ ^ self boundingBox ].
 	^ self boundingBox transformedWith: parent transform
 ]
 
@@ -303,6 +306,7 @@ WDEBrush >> isManipulableInEditorSceneView [
 { #category : #serialization }
 WDEBrush >> loadFromJson: jsonData inLevel: level [
 	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
+	jsonData at: #transform ifPresent: [ :found | self transform: (TRSTransform3D loadFromJson: found) ].
 	self faces: ((jsonData at: #faces ifAbsent: [ #() ]) collect: [ :each |
 		WDEBrushFace new
 			loadFromJson: each inLevel: level
