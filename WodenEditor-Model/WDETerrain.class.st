@@ -201,17 +201,23 @@ WDETerrain >> validSolidMesh [
 	| builder |
 	solidMesh ifNotNil: [ ^ solidMesh ].
 	builder := WDMeshBuilder new.
-	builder currentMaterial: self editorColorMaterial.
+	builder
+		currentMaterial: self editorColorMaterial;
+		translateToX: columns / 2 negated y: 0 z: rows / 2 negated.
+	self patches do: [ :each | each buildPatchSolidWith: builder ].
 
 	^ solidMesh := builder mesh
 ]
 
 { #category : #caching }
 WDETerrain >> validTexturedLitMesh [
-	| builder globalTransform |
+	| builder |
 	texturedLitMesh ifNotNil: [ ^ texturedLitMesh ].
 	builder := WDMeshBuilder new.
-	globalTransform := self globalTransform.
+	builder
+		currentMaterial: WDELevelEditorMeshes uniqueInstance defaultMaterial;
+		translateToX: columns / 2 negated y: 0 z: rows / 2 negated.
+	self patches do: [ :each | each buildPatchTexturedWith: builder ].
 
 	^ texturedLitMesh := builder mesh
 ]

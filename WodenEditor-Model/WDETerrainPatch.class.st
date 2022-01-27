@@ -11,6 +11,80 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+WDETerrainPatch >> buildPatchSolidWith: builder [
+	| vx sourceIndex vz |
+	builder
+		beginTriangles.
+	sourceIndex := 1.
+	0 to: patchSize - 1 do: [ :y |
+		vz := 1 - (y / (patchSize - 1)) + row.
+		0 to: patchSize - 1 do: [ :x |
+			|b t l r c|
+			vx := (x / (patchSize - 1)) + column.
+			t := b := l := r := c := heights at: sourceIndex.
+			y > 0 ifTrue: [ b := heights at: sourceIndex - patchSize ].
+			y + 1 < patchSize ifTrue: [ t := heights at: sourceIndex + patchSize ].
+			x > 0 ifTrue: [ l := heights at: sourceIndex - 1 ].
+			x + 1 < patchSize ifTrue: [ r := heights at: sourceIndex + 1 ].
+			
+			builder
+				addPx: vx y: c z: vz;
+				addN: (self computeNormalWithDx: r - l dz: t - b).
+			sourceIndex := sourceIndex + 1.
+		]
+	].
+
+	0 to: patchSize - 2 do: [ :y |
+		| rowStart |
+		rowStart := patchSize * y.
+		0 to: patchSize - 2 do: [ :x |
+			builder
+				addTriangleI0: rowStart + x i1: rowStart + x + 1 i2: rowStart + x + patchSize + 1;
+				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + patchSize i2: rowStart + x.
+			sourceIndex := sourceIndex + 1.
+		].
+	].
+	
+]
+
+{ #category : #'as yet unclassified' }
+WDETerrainPatch >> buildPatchTexturedWith: builder [
+	| vx sourceIndex vz |
+	builder
+		beginTriangles.
+	sourceIndex := 1.
+	0 to: patchSize - 1 do: [ :y |
+		vz := 1 - (y / (patchSize - 1)) + row.
+		0 to: patchSize - 1 do: [ :x |
+			| t b l r c |
+			vx := (x / (patchSize - 1)) + column.
+			t := b := l := r := c := heights at: sourceIndex.
+			y > 0 ifTrue: [ b := heights at: sourceIndex - patchSize ].
+			y + 1 < patchSize ifTrue: [ t := heights at: sourceIndex + patchSize ].
+			x > 0 ifTrue: [ l := heights at: sourceIndex - 1 ].
+			x + 1 < patchSize ifTrue: [ r := heights at: sourceIndex + 1 ].
+			
+			builder
+				addPx: vx y: c z: vz;
+				addN: (self computeNormalWithDx: r - l dz: t - b).
+			sourceIndex := sourceIndex + 1.
+		]
+	].
+
+	0 to: patchSize - 2 do: [ :y |
+		| rowStart |
+		rowStart := patchSize * y.
+		0 to: patchSize - 2 do: [ :x |
+			builder
+				addTriangleI0: rowStart + x i1: rowStart + x + 1 i2: rowStart + x + patchSize + 1;
+				addTriangleI0: rowStart + x + patchSize + 1 i1: rowStart + x + patchSize i2: rowStart + x.
+			sourceIndex := sourceIndex + 1.
+		].
+	].
+	
+]
+
+{ #category : #'as yet unclassified' }
 WDETerrainPatch >> buildPatchWireframeWith: builder [
 	| vx sourceIndex vz |
 	builder
@@ -51,6 +125,14 @@ WDETerrainPatch >> column [
 WDETerrainPatch >> column: anObject [
 
 	column := anObject
+]
+
+{ #category : #'as yet unclassified' }
+WDETerrainPatch >> computeNormalWithDx: dx dz: dz [
+	| tangent bitangent |
+	tangent := Vector3 x: 1 y: dx z: 0.
+	bitangent := Vector3 x: 0 y: dz z: -1.
+	^ (tangent cross: bitangent) normalized
 ]
 
 { #category : #accessing }

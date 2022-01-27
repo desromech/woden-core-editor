@@ -19,7 +19,8 @@ Class {
 		'activeToolManipulator',
 		'highlightedManipulator',
 		'highlightBoxNode',
-		'lastDownEvent'
+		'lastDownEvent',
+		'cameraLight'
 	],
 	#classVars : [
 		'OrthographicFarDistance',
@@ -319,7 +320,12 @@ WDELevelEditorContentView >> createSceneNodes [
 	cameraNode
 		orientation: Quaternion lookAtBottom;
 		position: (Vector3 x: 0 y: 1 z: 3).
+	scene add: cameraNode.
 	editorViewType := #top.
+	cameraLight := WDDirectionalLightSource new
+		intensity: (Vector3 withAll: 0.3);
+		yourself.
+	cameraNode add: cameraLight asSceneNode.
 	self
 		createSubGridNode;
 		createGridNode;
