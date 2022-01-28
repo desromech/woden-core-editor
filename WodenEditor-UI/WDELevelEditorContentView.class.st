@@ -607,13 +607,17 @@ WDELevelEditorContentView >> onSceneMouseMove: event [
 
 { #category : #event }
 WDELevelEditorContentView >> onSceneMouseUp: event [
+	| wasDragging |
+	wasDragging := false.
 	lastDragPosition ifNotNil: [
 		(event isPrimaryButton or: [event isSecondaryButton or: [event isMiddleButton] ]) ifFalse: [
 			lastDragPosition := nil.
-			self onSceneDragEnd: event
+			self onSceneDragEnd: event.
+			wasDragging := true
 		].
 	].
 	self activeToolModeOrEditionMode onMouseUp: event.
+	wasDragging ifTrue: [ ^ self ].
 	
 	lastDragPosition ifNil: [ 
 		event redButtonChanged ifTrue: [ 

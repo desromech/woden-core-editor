@@ -303,6 +303,7 @@ WDEBrush >> isManipulableInEditorSceneView [
 { #category : #serialization }
 WDEBrush >> loadFromJson: jsonData inLevel: level [
 	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
+	jsonData at: #transform ifPresent: [ :found | transform := TRSTransform3D loadFromJson: found ].
 	self faces: ((jsonData at: #faces ifAbsent: [ #() ]) collect: [ :each |
 		WDEBrushFace new
 			loadFromJson: each inLevel: level
@@ -398,7 +399,9 @@ WDEBrush >> rayCast: ray [
 		].
 	].
 
-	^ bestDistance
+	bestDistance ifNil: [ ^ nil ].
+
+	^ ray distanceForPoint: (transform transformPosition: (localRay pointAtDistance: bestDistance))
 ]
 
 { #category : #accessing }

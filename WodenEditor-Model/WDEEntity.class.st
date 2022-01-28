@@ -95,6 +95,7 @@ WDEEntity >> editorTreeDisplayName [
 WDEEntity >> encodeJsonKeyValues [
 	^ {
 		#className . className .
+		#transform . transform encodeForJSON.
 		#editorColor . editorColor encodeForJSON.
 		#properties . properties.
 		#brushes . brushes collect: [ :each | each encodeForJSON ]
@@ -163,6 +164,7 @@ WDEEntity >> isWorldEntity [
 { #category : #serialization }
 WDEEntity >> loadFromJson: jsonData inLevel: level [
 	className := jsonData at: #className ifAbsent: [ '' ].
+	jsonData at: #transform ifPresent: [ :found | transform := TRSTransform3D loadFromJson: found ].
 	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
 	properties := properties at: #properties ifAbsent: [ Dictionary new ].
 	brushes := (jsonData at: #brushes ifAbsent: [ #() ]) collect: [ :each |
@@ -197,7 +199,10 @@ WDEEntity >> rayCastAllAlong: ray [
 	terrains do: [ :terrain |
 		result addAll: (terrain rayCastAllAlong: localRay)
 	].
-	^ result
+
+	^ result collect: [ :each |
+		(ray distanceForPoint: (transform transformPosition: (localRay pointAtDistance: each key))) -> each value
+	]
 ]
 
 { #category : #removing }

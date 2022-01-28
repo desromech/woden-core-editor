@@ -32,6 +32,11 @@ WDETerrainPatch >> addedToScene: aScene [
 	parent sceneNode add: sceneNode.
 ]
 
+{ #category : #accessing }
+WDETerrainPatch >> boundingBox [
+	^ self localBoundingBox translatedBy: self position
+]
+
 { #category : #'as yet unclassified' }
 WDETerrainPatch >> buildPatchSolidWith: builder [
 	| vx sourceIndex vz |
@@ -205,6 +210,11 @@ WDETerrainPatch >> editorColorMaterial [
 	]
 ]
 
+{ #category : #'as yet unclassified' }
+WDETerrainPatch >> generateEditorColor [
+	self editorColor: self class generateEditorColor.
+]
+
 { #category : #accessing }
 WDETerrainPatch >> globalTransform [ 
 	^ parent ifNil: [ self transform ] ifNotNil: [ parent globalTransform transformTransform: self transform ]
@@ -271,6 +281,14 @@ WDETerrainPatch >> invalidateTexturedMeshes [
 ]
 
 { #category : #accessing }
+WDETerrainPatch >> localBoundingBox [
+	localBoundingBox ifNil: [ 
+		localBoundingBox := AABox min: (Vector3 x: 0 y: heights min z: 0) max: (Vector3 x: 1 y: heights max z: 1)
+	].
+	^ localBoundingBox
+]
+
+{ #category : #accessing }
 WDETerrainPatch >> material [
 
 	^ material
@@ -305,6 +323,11 @@ WDETerrainPatch >> postCopy [
 	texturedMesh := nil.
 	texturedLitMesh := nil.
 	editorColorMaterial := nil.
+]
+
+{ #category : #accessing }
+WDETerrainPatch >> rayCast: ray [
+	^ self boundingBox intersectionWithRay: ray
 ]
 
 { #category : #accessing }
@@ -353,6 +376,11 @@ WDETerrainPatch >> rows [
 { #category : #initialization }
 WDETerrainPatch >> setMaterialRecursively: newMaterial [
 	self material: newMaterial
+]
+
+{ #category : #'as yet unclassified' }
+WDETerrainPatch >> setupForNewInstance [
+	self generateEditorColor
 ]
 
 { #category : #accessing }

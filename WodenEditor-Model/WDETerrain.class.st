@@ -25,6 +25,16 @@ WDETerrain >> addedToScene: aScene [
 ]
 
 { #category : #accessing }
+WDETerrain >> boundingBox [
+	^ self localBoundingBox transformedWith: transform
+]
+
+{ #category : #accessing }
+WDETerrain >> canBeDuplicatedAndPlaced [
+	^ true
+]
+
+{ #category : #accessing }
 WDETerrain >> columns [
 	^ columns
 ]
@@ -32,6 +42,11 @@ WDETerrain >> columns [
 { #category : #'as yet unclassified' }
 WDETerrain >> editorTreeDisplayName [
 	^ 'Terrain'
+]
+
+{ #category : #accessing }
+WDETerrain >> globalBoundingBox [
+	^ self boundingBox transformedWith: parent transform
 ]
 
 { #category : #accessing }
@@ -70,6 +85,22 @@ WDETerrain >> invalidateLocalBoundingBox [
 	localBoundingBox := nil
 ]
 
+{ #category : #accessing }
+WDETerrain >> isManipulableInEditorSceneView [
+	^ true
+]
+
+{ #category : #accessing }
+WDETerrain >> localBoundingBox [
+	localBoundingBox ifNil: [ 
+		localBoundingBox := AABox empty.
+		patches do: [ :each |
+			localBoundingBox insertBox: each boundingBox
+		]
+	].
+	^ localBoundingBox
+]
+
 { #category : #initialization }
 WDETerrain >> patchSize: newPatchSize gridExtent: gridExtent [
 	| newPatches |
@@ -93,6 +124,22 @@ WDETerrain >> patchSize: newPatchSize gridExtent: gridExtent [
 WDETerrain >> patches [
 
 	^ patches
+]
+
+{ #category : #memento }
+WDETerrain >> position [
+	^ transform translation
+]
+
+{ #category : #accessing }
+WDETerrain >> position: aPosition [
+	transform translation: aPosition.
+	self transformChanged.
+]
+
+{ #category : #memento }
+WDETerrain >> positionStateMemento [
+	^ self position
 ]
 
 { #category : #copying }
@@ -123,6 +170,32 @@ WDETerrain >> privateSetPatches: newPatches [
 ]
 
 { #category : #accessing }
+WDETerrain >> rayCast: ray [
+	| localRay bestDistance |
+	bestDistance := nil.
+	localRay := ray inverseTransformedWith: transform.
+	patches do: [ :each |
+		| intersectionDistance |
+		intersectionDistance := each rayCast: localRay.
+		intersectionDistance ifNotNil: [ 
+			(bestDistance isNil or: [intersectionDistance < bestDistance]) ifTrue: [ 
+				bestDistance := intersectionDistance
+			]
+		]
+	].
+
+	bestDistance ifNil: [ ^ nil ].
+	^ ray distanceForPoint: (transform transformPosition: (localRay pointAtDistance: bestDistance))
+]
+
+{ #category : #accessing }
+WDETerrain >> rayCastAllAlong: ray [
+	| result |
+	result := self rayCast: ray.
+	^ result ifNil: [ #() ] ifNotNil: [ {result -> self} ]
+]
+
+{ #category : #accessing }
 WDETerrain >> removeFromParent [
 	parent ifNotNil: [ parent removeTerrain: self ]
 
@@ -143,6 +216,16 @@ WDETerrain >> renderLocalHeightWith: aBlock [
 	patches do: [ :each | each renderLocalHeightWith: aBlock ]
 ]
 
+{ #category : #memento }
+WDETerrain >> restorePositionStateMemento: memento [
+	self position: memento
+]
+
+{ #category : #memento }
+WDETerrain >> restoreTransformStateMemento: memento [
+	self transform: memento
+]
+
 { #category : #accessing }
 WDETerrain >> rows [
 	^ rows
@@ -153,9 +236,19 @@ WDETerrain >> sceneNode [
 	^ sceneNode
 ]
 
+{ #category : #accessing }
+WDETerrain >> selectableGlobalBoundingBox [
+	^ self globalBoundingBox
+]
+
 { #category : #initialization }
 WDETerrain >> setMaterialRecursively: newMaterial [
 	patches do: [ :each | each setMaterialRecursively: newMaterial ]
+]
+
+{ #category : #'as yet unclassified' }
+WDETerrain >> setupForNewInstance [
+	patches do: [ :each | each setupForNewInstance ]
 ]
 
 { #category : #transforming }
@@ -170,12 +263,22 @@ WDETerrain >> transform: aTransform [
 	self transformChanged.
 ]
 
-{ #category : #transforming }
+{ #category : #accessing }
 WDETerrain >> transformChanged [
 	sceneNode ifNotNil: [ sceneNode transform: transform ].
+]
+
+{ #category : #memento }
+WDETerrain >> transformStateMemento [
+	^ transform copy
 ]
 
 { #category : #transforming }
 WDETerrain >> transformWith: newTransform [
 	self transform: (newTransform transformTransform: self transform)
+]
+
+{ #category : #transforming }
+WDETerrain >> translateBy: translation [
+	self position: self position + translation
 ]
