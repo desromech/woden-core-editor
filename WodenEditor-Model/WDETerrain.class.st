@@ -8,16 +8,7 @@ Class {
 		'patches',
 		'columns',
 		'rows',
-		'editorColor',
-		'meshWithAlternatives',
-		'wireframeMesh',
-		'editorColorMaterial',
-		'solidMesh',
-		'solidLitMesh',
-		'texturedMesh',
-		'texturedLitMesh',
-		'editorColorLitMaterial',
-		'heights'
+		'localBoundingBox'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
@@ -26,41 +17,16 @@ Class {
 WDETerrain >> addedToScene: aScene [
 	self assert: parent isNotNil.
 	
-	sceneNode := self validMeshWithAlternatives asSceneNode.
+	sceneNode := WDSceneNode new.
 	sceneNode transform: transform.
 	parent sceneNode add: sceneNode.
+	
+	patches do: [ :each | each addedToScene: aScene ].
 ]
 
 { #category : #accessing }
-WDETerrain >> editorColor [
-
-	^ editorColor
-]
-
-{ #category : #accessing }
-WDETerrain >> editorColor: anObject [
-
-	editorColor := anObject
-]
-
-{ #category : #accessing }
-WDETerrain >> editorColorLitMaterial [
-	^ editorColorLitMaterial ifNil: [
-		editorColorLitMaterial := WDMetallicRoughnessMaterial new
-			baseColorFactor: self editorColor;
-			metallicFactor: 0.0;
-			roughnessFactor: 0.7;
-			yourself
-	]
-]
-
-{ #category : #accessing }
-WDETerrain >> editorColorMaterial [
-	^ editorColorMaterial ifNil: [
-		editorColorMaterial := WDUnlitMaterial new
-		colorFactor: self editorColor;
-		yourself
-	]
+WDETerrain >> columns [
+	^ columns
 ]
 
 { #category : #'as yet unclassified' }
@@ -73,17 +39,11 @@ WDETerrain >> globalTransform [
 	^ parent ifNil: [ transform ] ifNotNil: [ parent globalTransform transformTransform: transform ]
 ]
 
-{ #category : #accessing }
-WDETerrain >> heights [
-	patchSize := 64.
-	heights := FloatArray new: patchSize*patchSize.
-]
-
 { #category : #initialization }
 WDETerrain >> initialize [
 	super initialize.
 	transform := TRSTransform3D identity.
-	editorColor := Vector4 ones.
+	patches := #().
 	self patchSize: 64 gridExtent: 1@1
 ]
 
@@ -105,6 +65,11 @@ WDETerrain >> instantiateForPlacingInLevel: level point: placementPoint [
 	^ instance
 ]
 
+{ #category : #'as yet unclassified' }
+WDETerrain >> invalidateLocalBoundingBox [
+	localBoundingBox := nil
+]
+
 { #category : #initialization }
 WDETerrain >> patchSize: newPatchSize gridExtent: gridExtent [
 	| newPatches |
@@ -121,7 +86,7 @@ WDETerrain >> patchSize: newPatchSize gridExtent: gridExtent [
 				yourself)
 		]
 	].
-	patches := newPatches
+	self privateSetPatches: newPatches
 ]
 
 { #category : #accessing }
@@ -130,10 +95,31 @@ WDETerrain >> patches [
 	^ patches
 ]
 
-{ #category : #accessing }
-WDETerrain >> patches: anObject [
+{ #category : #copying }
+WDETerrain >> postCopy [
+	parent := nil.
+	patches := #().
+	self privateSetPatches: (patches collect: [ :each | each copy ]).
+	sceneNode := nil.
+	localBoundingBox := localBoundingBox copy.
+	transform := transform copy.
 
-	patches := anObject
+]
+
+{ #category : #'as yet unclassified' }
+WDETerrain >> privateSetPatches: newPatches [
+	sceneNode ifNotNil: [ 
+		patches do: [ :each | each removedFromScene: self level editorScene ].
+	].
+	patches do: [ :each | each parent: nil ].
+
+	patches := newPatches.
+
+	patches do: [ :each | each parent: self ].
+	sceneNode ifNotNil: [ 
+		patches do: [ :each | each addedToScene: self level editorScene ].
+	].
+	
 ]
 
 { #category : #accessing }
@@ -144,6 +130,7 @@ WDETerrain >> removeFromParent [
 
 { #category : #accessing }
 WDETerrain >> removedFromScene: aScene [
+	patches do: [ :each | each removedFromScene: aScene ].
 	sceneNode ifNotNil: [ 
 		sceneNode removeFromScene.
 		sceneNode := nil.
@@ -154,6 +141,21 @@ WDETerrain >> removedFromScene: aScene [
 { #category : #rendering }
 WDETerrain >> renderLocalHeightWith: aBlock [
 	patches do: [ :each | each renderLocalHeightWith: aBlock ]
+]
+
+{ #category : #accessing }
+WDETerrain >> rows [
+	^ rows
+]
+
+{ #category : #accessing }
+WDETerrain >> sceneNode [
+	^ sceneNode
+]
+
+{ #category : #initialization }
+WDETerrain >> setMaterialRecursively: newMaterial [
+	patches do: [ :each | each setMaterialRecursively: newMaterial ]
 ]
 
 { #category : #transforming }
@@ -176,73 +178,4 @@ WDETerrain >> transformChanged [
 { #category : #transforming }
 WDETerrain >> transformWith: newTransform [
 	self transform: (newTransform transformTransform: self transform)
-]
-
-{ #category : #caching }
-WDETerrain >> validMeshWithAlternatives [
-	^ meshWithAlternatives ifNil: [ meshWithAlternatives := WDRenderableWithViewModeAlternatives new
-		wireframe: self validWireframeMesh;
-		flatColor: self validSolidMesh;
-		flatColorShaded: self validSolidLitMesh;
-		flatTextured: self validTexturedMesh;
-		fullShaded: self validTexturedLitMesh;
-		yourself
-	]
-]
-
-{ #category : #caching }
-WDETerrain >> validSolidLitMesh [
-	^ solidLitMesh ifNil: [ solidLitMesh := self validSolidMesh copyWithMaterial: self editorColorLitMaterial ]
-	
-]
-
-{ #category : #caching }
-WDETerrain >> validSolidMesh [
-	| builder |
-	solidMesh ifNotNil: [ ^ solidMesh ].
-	builder := WDMeshBuilder new.
-	builder
-		currentMaterial: self editorColorMaterial;
-		translateToX: columns / 2 negated y: 0 z: rows / 2 negated.
-	self patches do: [ :each | each buildPatchSolidWith: builder ].
-
-	^ solidMesh := builder mesh
-]
-
-{ #category : #caching }
-WDETerrain >> validTexturedLitMesh [
-	| builder |
-	texturedLitMesh ifNotNil: [ ^ texturedLitMesh ].
-	builder := WDMeshBuilder new.
-	builder
-		currentMaterial: WDELevelEditorMeshes uniqueInstance defaultMaterial;
-		translateToX: columns / 2 negated y: 0 z: rows / 2 negated.
-	self patches do: [ :each | each buildPatchTexturedWith: builder ].
-
-	^ texturedLitMesh := builder mesh
-]
-
-{ #category : #caching }
-WDETerrain >> validTexturedMesh [
-	^ texturedMesh ifNil: [ texturedMesh := self validTexturedLitMesh copyTransformingMaterialsWith: [ :mat | mat asUnlitMaterial ] ]
-]
-
-{ #category : #caching }
-WDETerrain >> validWireframeMesh [
-	| builder |
-	wireframeMesh ifNotNil: [ ^ wireframeMesh ].
-	builder := WDMeshBuilder new.
-	builder
-		currentMaterial: self editorColorMaterial;
-		translateToX: columns / 2 negated y: 0 z: rows / 2 negated.
-	self patches do: [ :each | each buildPatchWireframeWith: builder ].
-	^ wireframeMesh := builder mesh
-]
-
-{ #category : #caching }
-WDETerrain >> validateScene [
-	sceneNode ifNotNil: [ 
-		sceneNode renderables: { self validMeshWithAlternatives }
-	].
-	
 ]

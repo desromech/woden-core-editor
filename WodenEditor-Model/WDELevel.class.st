@@ -68,7 +68,10 @@ WDELevel >> level [
 
 { #category : #'instance creation' }
 WDELevel >> newEditorSession [
-	^ WDELevelEditorSession new level: self; yourself
+	^ WDELevelEditorSession new
+		gameSettings: (gameSettings ifNil: [WDEGameSettings default]);
+		level: self;
+		yourself
 ]
 
 { #category : #'as yet unclassified' }

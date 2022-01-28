@@ -42,10 +42,10 @@ WDELevelEditorContentView class >> defaultSpec [
 { #category : #initialization }
 WDELevelEditorContentView class >> initialize [
 	PerspectiveNearDistance := 0.1.
-	PerspectiveFarDistance := 100.0.
+	PerspectiveFarDistance := 10000.0.
 	
-	OrthographicNearDistance := -1000.0.
-	OrthographicFarDistance := 1000.0.
+	OrthographicNearDistance := -10000.0.
+	OrthographicFarDistance := 10000.0.
 ]
 
 { #category : #actions }
