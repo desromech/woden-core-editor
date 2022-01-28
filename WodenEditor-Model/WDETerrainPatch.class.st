@@ -327,7 +327,38 @@ WDETerrainPatch >> postCopy [
 
 { #category : #accessing }
 WDETerrainPatch >> rayCast: ray [
-	^ self boundingBox intersectionWithRay: ray
+	| position bbox boxHit entryPoint exitPoint previousPointHeight previousHeightSample |
+	position := self position.
+	bbox := self boundingBox.
+	boxHit := bbox intersectionsWithRay: ray.
+	boxHit ifNil: [ ^ nil ].
+	
+	entryPoint := (ray pointAtDistance: boxHit first) - position.
+	exitPoint := (ray pointAtDistance: boxHit second) - position.
+
+	previousPointHeight := entryPoint y.
+	previousHeightSample := self sampleHeightAtX: entryPoint x z: entryPoint z.
+	0 to: 1 by: (1 / patchSize) do: [ :alpha |
+		| testPoint heightSample testPointHeight minHeightSample maxHeightSample minPointHeight maxPointHeight |
+		testPoint := entryPoint interpolateTo: exitPoint at: alpha.
+		heightSample := self sampleHeightAtX: testPoint x z: testPoint z.
+		testPointHeight := testPoint y.
+		
+		minHeightSample := previousHeightSample min: heightSample.
+		maxHeightSample := previousHeightSample max: heightSample.
+
+		minPointHeight := previousPointHeight min: testPointHeight.
+		maxPointHeight := previousPointHeight max: testPointHeight.
+		
+		(maxPointHeight < minHeightSample or: [ maxHeightSample < minPointHeight ]) ifFalse: [
+			^ boxHit first interpolateTo: boxHit second at: alpha
+		].
+		
+		previousPointHeight := testPointHeight.
+		previousHeightSample := heightSample.
+	].
+	
+	^ nil
 ]
 
 { #category : #accessing }
@@ -371,6 +402,14 @@ WDETerrainPatch >> row: anObject [
 { #category : #accessing }
 WDETerrainPatch >> rows [
 	^ parent ifNil: [ 1 ] ifNotNil: [ parent rows ]
+]
+
+{ #category : #'as yet unclassified' }
+WDETerrainPatch >> sampleHeightAtX: x z: z [
+	| sampleColumn sampleRow |
+	sampleColumn := (x * patchSize) floor min: patchSize - 1 max: 0.
+	sampleRow := (z * patchSize) floor min: patchSize - 1 max: 0.
+	^ heights at: sampleRow*patchSize + sampleColumn + 1
 ]
 
 { #category : #initialization }
