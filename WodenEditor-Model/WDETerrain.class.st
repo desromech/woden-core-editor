@@ -13,6 +13,11 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #initialization }
+WDETerrain class >> patchSize: patchSize gridExtent: gridExtent [
+	^ self new patchSize: patchSize gridExtent: gridExtent; yourself
+]
+
 { #category : #accessing }
 WDETerrain >> addedToScene: aScene [
 	self assert: parent isNotNil.
@@ -70,7 +75,7 @@ WDETerrain >> initialize [
 	super initialize.
 	transform := TRSTransform3D identity.
 	patches := #().
-	self patchSize: 64 gridExtent: 1@1
+	self patchSize: 32 gridExtent: 1@1
 ]
 
 { #category : #'as yet unclassified' }
@@ -172,9 +177,11 @@ WDETerrain >> positionStateMemento [
 
 { #category : #copying }
 WDETerrain >> postCopy [
+	| oldPatches |
 	parent := nil.
+	oldPatches := patches.
 	patches := #().
-	self privateSetPatches: (patches collect: [ :each | each copy ]).
+	self privateSetPatches: (oldPatches collect: [ :each | each copy ]).
 	sceneNode := nil.
 	localBoundingBox := localBoundingBox copy.
 	transform := transform copy.

@@ -125,10 +125,12 @@ WDEBrush >> clipAgainstPlane: plane [
 	frontPolyhedron := self class new
 		setupForNewInstance;
 		faces: frontFaces;
+		transform: transform;
 		yourself.
 	backPolyhedron := self class new
 		setupForNewInstance;
 		faces: backFaces;
+		transform: transform;
 		yourself.
 	^ { frontPolyhedron . backPolyhedron }
 ]

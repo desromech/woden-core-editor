@@ -217,6 +217,7 @@ WDETerrainPatch >> encodeJsonKeyValues [
 	ByteArray adoptInstance: heightBytes.
 	encodedHeights := heightBytes base64Encoded.
 	^ {
+		#editorColor . editorColor encodeForJSON.
 		#heights . encodedHeights.
 		#material . material ifNotNil: [ material index ].
 		#textureScale . textureScale encodeForJSON.
@@ -299,6 +300,7 @@ WDETerrainPatch >> invalidateTexturedMeshes [
 WDETerrainPatch >> loadFromJson: jsonData inLevel: level [
 	| encodedHeights |
 	encodedHeights := jsonData at: #heights.
+	jsonData at: #editorColor ifPresent: [ :found | editorColor := Vector4 loadFromJson: found ].
 	heights := encodedHeights base64Decoded shallowCopy.
 	FloatArray adoptInstance: heights.
 	(jsonData at: #material ifAbsent: [nil]) ifNotNil: [ :materialIndex |
