@@ -732,6 +732,16 @@ WDELevelEditorContentView >> rotateCameraToAngles: newAngles withFocalPoint: foc
 
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> rotateSelectedElements [
+	^ self startActionDraggingOnCurrentSelectionWith: WDELevelEditorRotateToolMode
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> scaleSelectedElements [
+	^ self startActionDraggingOnCurrentSelectionWith: WDELevelEditorScaleToolMode
+]
+
 { #category : #accessing }
 WDELevelEditorContentView >> scene [
 	^ scene
@@ -748,6 +758,11 @@ WDELevelEditorContentView >> screenToLocal: aPosition depth: aDepth [
 	^ self windowToLocal: aPosition - self windowOrigin depth: aDepth
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> selectedItemsBoundingBoxChanged [
+	activeToolManipulator ifNotNil: [activeToolManipulator selectedItemsBoundingBoxChanged]
+]
+
 { #category : #accessing }
 WDELevelEditorContentView >> session [
 	^ self model
@@ -756,6 +771,17 @@ WDELevelEditorContentView >> session [
 { #category : #initialization }
 WDELevelEditorContentView >> setSelectedElements: elements [
 	^ self levelEditorSession setSelectedElements: elements
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> startActionDraggingOnCurrentSelectionWith: toolModeClass [
+	| currentSelection |
+	currentSelection := self model selection.
+	currentSelection selectedItems ifEmpty: [ ^ self ].
+	
+	self activeToolMode: ((toolModeClass for: self)
+		elements: currentSelection selectedItems;
+		yourself)
 ]
 
 { #category : #'as yet unclassified' }
@@ -784,6 +810,11 @@ WDELevelEditorContentView >> topView [
 WDELevelEditorContentView >> translateCameraBy: translation [
 	cameraNode translateBy: translation.
 	self updateCameraAndGrid.
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> translateSelectedElements [
+	^ self startActionDraggingOnCurrentSelectionWith: WDELevelEditorTranslateToolMode
 ]
 
 { #category : #'editor modes' }

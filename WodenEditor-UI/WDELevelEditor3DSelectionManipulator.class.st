@@ -87,6 +87,11 @@ WDELevelEditor3DSelectionManipulator >> selectedElements: anObject [
 	self computeBoundingBoxes
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditor3DSelectionManipulator >> selectedItemsBoundingBoxChanged [
+	self computeBoundingBoxes
+]
+
 { #category : #memento }
 WDELevelEditor3DSelectionManipulator >> transformStateMemento [
 	^ {

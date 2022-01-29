@@ -42,13 +42,6 @@ WDELevelEditorViewActionMoveToolMode >> initialize [
 ]
 
 { #category : #event }
-WDELevelEditorViewActionMoveToolMode >> onKeyDown: event [
-	(event asKeyCombination matches: Character escape asKeyCombination) ifTrue: [ 
-		self dragCancelled
-	]
-]
-
-{ #category : #event }
 WDELevelEditorViewActionMoveToolMode >> onLeftClick: event [
 	endPosition := currentPosition := event position.
 	self dragFinished
@@ -68,6 +61,13 @@ WDELevelEditorViewActionMoveToolMode >> onMouseMove: event [
 { #category : #event }
 WDELevelEditorViewActionMoveToolMode >> onRightClick: event [
 	self dragCancelled
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewActionMoveToolMode >> shortcuts [
+	^ super shortcuts , {
+		KeyboardKey escape asKeyCombination . [ self dragCancelled ].
+	}
 ]
 
 { #category : #accessing }

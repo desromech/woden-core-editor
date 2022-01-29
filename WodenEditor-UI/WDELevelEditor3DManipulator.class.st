@@ -144,6 +144,10 @@ WDELevelEditor3DManipulator >> restoreMementoForDragging: memento [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelEditor3DManipulator >> selectedItemsBoundingBoxChanged [
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditor3DManipulator >> sizeScaleFactorForPosition: position [
 	^ view isPerspective
 		ifTrue: [ (position - view cameraPosition) length max: 1.0 ]

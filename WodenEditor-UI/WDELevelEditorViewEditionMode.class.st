@@ -124,6 +124,10 @@ WDELevelEditorViewEditionMode >> shortcuts [
 		(KeyboardKey named: #KP_ADD) asKeyCombination asKeyCombination . [ self levelEditorSession increaseGridSize ].
 		(KeyboardKey named: #KP_SUBTRACT) asKeyCombination asKeyCombination . [ self levelEditorSession decreaseGridSize ].
 
+		$g asKeyCombination . [ view translateSelectedElements ].
+		$r asKeyCombination . [ view rotateSelectedElements ].
+		$s asKeyCombination . [ view scaleSelectedElements ].
+
 		$z asKeyCombination . [ view openShadingMenu ].
 		$z command mac | $z control unix | $z control win . [ self levelEditorSession undo ].
 		$z command shift mac | $z control shift unix | $z control shift win . [ self levelEditorSession redo ].
