@@ -98,7 +98,8 @@ WDEEntity >> encodeJsonKeyValues [
 		#transform . transform encodeForJSON.
 		#editorColor . editorColor encodeForJSON.
 		#properties . properties.
-		#brushes . brushes collect: [ :each | each encodeForJSON ]
+		#brushes . brushes collect: [ :each | each encodeForJSON ].
+		#terrains . terrains collect: [ :each | each encodeForJSON ].
 	}
 ]
 
@@ -173,6 +174,12 @@ WDEEntity >> loadFromJson: jsonData inLevel: level [
 			parent: self;
 			yourself
 	] as: OrderedCollection.
+	terrains := (jsonData at: #terrains ifAbsent: [ #() ]) collect: [ :each |
+		WDETerrain new
+			loadFromJson: each inLevel: level;
+			parent: self;
+			yourself
+	] as: OrderedCollection.
 ]
 
 { #category : #copying }
@@ -184,7 +191,8 @@ WDEEntity >> postCopy [
 
 { #category : #serialization }
 WDEEntity >> prepareForSerializationInLevel: level [
-	brushes do: [ :each | each prepareForSerializationInLevel: level ]
+	brushes do: [ :each | each prepareForSerializationInLevel: level ].
+	terrains do: [ :each | each prepareForSerializationInLevel: level ].
 ]
 
 { #category : #accessing }

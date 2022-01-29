@@ -44,6 +44,17 @@ WDETerrain >> editorTreeDisplayName [
 	^ 'Terrain'
 ]
 
+{ #category : #serialization }
+WDETerrain >> encodeJsonKeyValues [
+	^ {
+		#transform . transform encodeForJSON.
+		#patchSize . patchSize.
+		#rows . rows.
+		#columns . columns.
+		#patches . patches collect: [ :each | each encodeForJSON ].
+	}
+]
+
 { #category : #accessing }
 WDETerrain >> globalBoundingBox [
 	^ self boundingBox transformedWith: parent transform
@@ -88,6 +99,23 @@ WDETerrain >> invalidateLocalBoundingBox [
 { #category : #accessing }
 WDETerrain >> isManipulableInEditorSceneView [
 	^ true
+]
+
+{ #category : #serialization }
+WDETerrain >> loadFromJson: jsonData inLevel: level [
+	patchSize := jsonData at: #patchSize.
+	rows := jsonData at: #rows.
+	columns := jsonData at: #columns.
+	jsonData at: #transform ifPresent: [ :found | transform := TRSTransform3D loadFromJson: found ].
+	patches := (jsonData at: #patches ifAbsent: [ #() ]) collectWithIndex: [ :each :index |
+		WDETerrainPatch new
+			patchSize: patchSize;
+			row: (index - 1) // columns;
+			column: (index - 1) % columns;
+			loadFromJson: each inLevel: level;
+			parent: self;
+			yourself
+	]
 ]
 
 { #category : #accessing }
@@ -151,6 +179,11 @@ WDETerrain >> postCopy [
 	localBoundingBox := localBoundingBox copy.
 	transform := transform copy.
 
+]
+
+{ #category : #serialization }
+WDETerrain >> prepareForSerializationInLevel: level [
+	patches do: [ :each | each prepareForSerializationInLevel: level ].
 ]
 
 { #category : #'as yet unclassified' }

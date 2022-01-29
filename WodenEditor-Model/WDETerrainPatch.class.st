@@ -210,6 +210,21 @@ WDETerrainPatch >> editorColorMaterial [
 	]
 ]
 
+{ #category : #serialization }
+WDETerrainPatch >> encodeJsonKeyValues [
+	| heightBytes encodedHeights |
+	heightBytes := heights shallowCopy.
+	ByteArray adoptInstance: heightBytes.
+	encodedHeights := heightBytes base64Encoded.
+	^ {
+		#heights . encodedHeights.
+		#material . material ifNotNil: [ material index ].
+		#textureScale . textureScale encodeForJSON.
+		#textureOffset . textureOffset encodeForJSON.
+		#textureRotation . textureRotation.
+	} 
+]
+
 { #category : #'as yet unclassified' }
 WDETerrainPatch >> generateEditorColor [
 	self editorColor: self class generateEditorColor.
@@ -280,6 +295,20 @@ WDETerrainPatch >> invalidateTexturedMeshes [
 	self level ifNotNil: [ :level | level recordElementWithInvalidScene: self ].
 ]
 
+{ #category : #serialization }
+WDETerrainPatch >> loadFromJson: jsonData inLevel: level [
+	| encodedHeights |
+	encodedHeights := jsonData at: #heights.
+	heights := encodedHeights base64Decoded shallowCopy.
+	FloatArray adoptInstance: heights.
+	(jsonData at: #material ifAbsent: [nil]) ifNotNil: [ :materialIndex |
+		material := level getMaterialWithIndex: materialIndex
+	].
+	textureScale := Vector2 loadFromJson: (jsonData at: #textureScale).
+	textureOffset := Vector2 loadFromJson: (jsonData at: #textureOffset).
+	textureRotation := jsonData at: #textureRotation.
+]
+
 { #category : #accessing }
 WDETerrainPatch >> localBoundingBox [
 	localBoundingBox ifNil: [ 
@@ -323,6 +352,11 @@ WDETerrainPatch >> postCopy [
 	texturedMesh := nil.
 	texturedLitMesh := nil.
 	editorColorMaterial := nil.
+]
+
+{ #category : #serialization }
+WDETerrainPatch >> prepareForSerializationInLevel: level [
+	level recordMaterialInfo: material.
 ]
 
 { #category : #accessing }
