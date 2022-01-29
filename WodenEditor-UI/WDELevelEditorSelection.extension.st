@@ -28,6 +28,11 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 			item
 				name: 'Duplicate';
 				action: [ self duplicateSelectedItemsInSession: levelSession ]
+		];
+		addItem: [ :item |
+			item
+				name: 'Inspect elements';
+				action: [ selectedItems size = 1 ifTrue: [selectedItems first inspect] ifFalse: [ selectedItems inspect ]]
 		].
 
 	(selectedItems anySatisfy: [ :each | each canBeUsedForVolumeSubtractionInEditor]) ifTrue: [ 
