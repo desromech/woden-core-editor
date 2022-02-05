@@ -10,9 +10,10 @@ BaselineOfWodenEditor >> baseline: spec [
 	spec for: #'common' do: [
 		spec
 			baseline: #'WodenGameFramework' with: [ spec repository: 'github://ronsaldo/woden-core-game-framework' ];
+			baseline: #'WodenCoreModeling' with: [ spec repository: 'github://ronsaldo/woden-core-modeling' ];
 			baseline: #'WodenRoassal' with: [ spec repository: 'github://ronsaldo/woden-core-roassal' ];
 			package: #'WodenEditor-Model' with: [
-				spec requires: #( #'WodenGameFramework' ).
+				spec requires: #( #'WodenCoreModeling' #'WodenGameFramework' ).
 			];
 			package: #'WodenEditor-UI' with: [
 				spec requires: #( #'WodenEditor-Model' ).
