@@ -176,11 +176,6 @@ WDEBrushFace >> computeTextureMatrix [
 	^ Matrix3x3 texScale: textureScale offset: textureOffset
 ]
 
-{ #category : #'as yet unclassified' }
-WDEBrushFace >> editorTreeDisplayName [
-	^ 'Face'
-]
-
 { #category : #serialization }
 WDEBrushFace >> encodeJsonKeyValues [
 	^ {
@@ -305,6 +300,11 @@ WDEBrushFace >> sortIndices [
 		v := centroid - (brushVertices at: b + 1).
 		((u cross: v) dot: n) >= 0
 	]
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrushFace >> treeDisplayName [
+	^ 'Face'
 ]
 
 { #category : #accessing }

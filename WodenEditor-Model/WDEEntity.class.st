@@ -58,6 +58,11 @@ WDEEntity >> canBeDuplicatedAndPlaced [
 	^ self isWorldEntity not
 ]
 
+{ #category : #'as yet unclassified' }
+WDEEntity >> children [
+	^ brushes , terrains
+]
+
 { #category : #accessing }
 WDEEntity >> className [
 	^ className
@@ -79,16 +84,6 @@ WDEEntity >> editorColor [
 WDEEntity >> editorColor: anObject [
 
 	editorColor := anObject
-]
-
-{ #category : #'as yet unclassified' }
-WDEEntity >> editorTreeChildren [
-	^ brushes , terrains
-]
-
-{ #category : #'as yet unclassified' }
-WDEEntity >> editorTreeDisplayName [
-	^ className asString
 ]
 
 { #category : #serialization }
@@ -269,4 +264,9 @@ WDEEntity >> transform [
 WDEEntity >> transform: anObject [
 
 	transform := anObject
+]
+
+{ #category : #'as yet unclassified' }
+WDEEntity >> treeDisplayName [
+	^ className asString
 ]

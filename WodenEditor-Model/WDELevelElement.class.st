@@ -52,19 +52,9 @@ WDELevelElement >> canBeSubtracted [
 	^ false
 ]
 
-{ #category : #testing }
-WDELevelElement >> canBeUsedForVolumeSubtractionInEditor [
-	^ false
-]
-
 { #category : #'as yet unclassified' }
-WDELevelElement >> editorTreeChildren [
+WDELevelElement >> children [
 	^ #()
-]
-
-{ #category : #'as yet unclassified' }
-WDELevelElement >> editorTreeDisplayName [
-	^ self className
 ]
 
 { #category : #'as yet unclassified' }
@@ -160,18 +150,23 @@ WDELevelElement >> subtract: otherElement withTransform: otherElementTransform [
 	^ { self }
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelElement >> treeDisplayName [
+	^ self className
+]
+
 { #category : #caching }
 WDELevelElement >> validateScene [
 ]
 
 { #category : #accessing }
-WDELevelElement >> visibleInEditor [
+WDELevelElement >> visible [
 
 	^ visibleInEditor
 ]
 
 { #category : #accessing }
-WDELevelElement >> visibleInEditor: anObject [
+WDELevelElement >> visible: anObject [
 
 	visibleInEditor := anObject
 ]

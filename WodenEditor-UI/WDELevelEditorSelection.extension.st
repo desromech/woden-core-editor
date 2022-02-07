@@ -35,7 +35,7 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 				action: [ selectedItems size = 1 ifTrue: [selectedItems first inspect] ifFalse: [ selectedItems inspect ]]
 		].
 
-	(selectedItems anySatisfy: [ :each | each canBeUsedForVolumeSubtractionInEditor]) ifTrue: [ 
+	(selectedItems anySatisfy: [ :each | each canBeSubtracted]) ifTrue: [ 
 		menuPresenter
 			addItem: [ :item |
 				item

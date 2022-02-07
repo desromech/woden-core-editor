@@ -93,7 +93,7 @@ WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
 	| affectedElements subtractingItems remainingElements affectedElementSet actuallyAffectedElementsSet newElements affectedOriginals originalsWithParents |
 	selectedItems ifEmpty: [ ^ self ].
 	
-	subtractingItems := selectedItems select: [ :each | each canBeUsedForVolumeSubtractionInEditor ].
+	subtractingItems := selectedItems select: [ :each | each canBeSubtracted ].
 	subtractingItems ifEmpty: [ ^ self ].
 
 	affectedElements := levelSession level findVolumeElementsThatIntersectElements: subtractingItems.

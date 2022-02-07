@@ -44,11 +44,6 @@ WDETerrain >> columns [
 	^ columns
 ]
 
-{ #category : #'as yet unclassified' }
-WDETerrain >> editorTreeDisplayName [
-	^ 'Terrain'
-]
-
 { #category : #serialization }
 WDETerrain >> encodeJsonKeyValues [
 	^ {
@@ -321,4 +316,9 @@ WDETerrain >> transformWith: newTransform [
 { #category : #transforming }
 WDETerrain >> translateBy: translation [
 	self position: self position + translation
+]
+
+{ #category : #'as yet unclassified' }
+WDETerrain >> treeDisplayName [
+	^ 'Terrain'
 ]

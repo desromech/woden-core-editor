@@ -384,16 +384,16 @@ WDELevelEditor >> initializePresenters [
 	levelTreeView
 		addColumn: (SpCompositeTableColumn new
 			title: 'Element';
-			addColumn: (SpStringTableColumn evaluated: [ :node | node editorTreeDisplayName ]);
+			addColumn: (SpStringTableColumn evaluated: [ :node | node treeDisplayName ]);
 			yourself
 		);
-		addColumn: ((SpCheckBoxTableColumn title: 'Visible' evaluated: [ :node | node visibleInEditor ])
-			onActivation: [ :node | node visibleInEditor: true ];
-			onDeactivation: [ :node | node visibleInEditor: false ];
+		addColumn: ((SpCheckBoxTableColumn title: 'Visible' evaluated: [ :node | node visible ])
+			onActivation: [ :node | node visible: true ];
+			onDeactivation: [ :node | node visible: false ];
 			yourself
 		);
 		hideColumnHeaders;
-		children: [ :node | node editorTreeChildren ];
+		children: [ :node | node children ];
 		beMultipleSelection;
 		whenSelectionChangedDo: [ :selection |
 			self model selection: (WDELevelEditorSelection for: selection selectedItems)

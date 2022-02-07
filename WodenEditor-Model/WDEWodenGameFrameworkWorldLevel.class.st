@@ -14,11 +14,6 @@ WDEWodenGameFrameworkWorldLevel class >> empty [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
-WDEWodenGameFrameworkWorldLevel >> editorTreeDisplayName [
-	^ world editorTreeDisplayName
-]
-
 { #category : #accessing }
 WDEWodenGameFrameworkWorldLevel >> elements [
 	^ world actors
@@ -27,6 +22,11 @@ WDEWodenGameFrameworkWorldLevel >> elements [
 { #category : #accessing }
 WDEWodenGameFrameworkWorldLevel >> scene [
 	^ (world getOrCreateSubsystemWithClass: WDGFSceneSubsystem) scene
+]
+
+{ #category : #'as yet unclassified' }
+WDEWodenGameFrameworkWorldLevel >> treeDisplayName [
+	^ world treeDisplayName
 ]
 
 { #category : #accessing }

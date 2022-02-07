@@ -67,9 +67,9 @@ WDEBrush >> canBeSubtracted [
 	^ true
 ]
 
-{ #category : #testing }
-WDEBrush >> canBeUsedForVolumeSubtractionInEditor [
-	^ true
+{ #category : #'as yet unclassified' }
+WDEBrush >> children [
+	^ faces
 ]
 
 { #category : #'as yet unclassified' }
@@ -165,16 +165,6 @@ WDEBrush >> editorColorMaterial [
 		colorFactor: self editorColor;
 		yourself
 	]
-]
-
-{ #category : #'as yet unclassified' }
-WDEBrush >> editorTreeChildren [
-	^ faces
-]
-
-{ #category : #'as yet unclassified' }
-WDEBrush >> editorTreeDisplayName [
-	^ 'Brush'
 ]
 
 { #category : #serialization }
@@ -548,6 +538,11 @@ WDEBrush >> transformWith: newTransform [
 { #category : #transforming }
 WDEBrush >> translateBy: translation [
 	self position: self position + translation
+]
+
+{ #category : #'as yet unclassified' }
+WDEBrush >> treeDisplayName [
+	^ 'Brush'
 ]
 
 { #category : #caching }

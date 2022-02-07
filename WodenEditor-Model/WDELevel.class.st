@@ -17,6 +17,11 @@ WDELevel >> addedToScene: aScene [
 	editorScene := aScene.
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevel >> children [
+	^ self elements
+]
+
 { #category : #accessing }
 WDELevel >> editorScene [
 
@@ -27,16 +32,6 @@ WDELevel >> editorScene [
 WDELevel >> editorScene: anObject [
 
 	editorScene := anObject
-]
-
-{ #category : #'as yet unclassified' }
-WDELevel >> editorTreeChildren [
-	^ self elements
-]
-
-{ #category : #'as yet unclassified' }
-WDELevel >> editorTreeDisplayName [
-	^ 'Level'
 ]
 
 { #category : #accessing }
@@ -91,17 +86,22 @@ WDELevel >> scene [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevel >> treeDisplayName [
+	^ 'Level'
+]
+
+{ #category : #'as yet unclassified' }
 WDELevel >> validExtensions [
 	self subclassResponsibility
 ]
 
 { #category : #'as yet unclassified' }
-WDELevel >> visibleInEditor [
+WDELevel >> visible [
 	^ true
 ]
 
 { #category : #'as yet unclassified' }
-WDELevel >> visibleInEditor: aBoolean [
+WDELevel >> visible: aBoolean [
 ]
 
 { #category : #hooks }
