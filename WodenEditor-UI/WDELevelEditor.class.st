@@ -239,7 +239,7 @@ WDELevelEditor >> cameraMenu [
 
 { #category : #initialization }
 WDELevelEditor >> connectForNewLevel: level [
-	levelTreeView roots: {level}.
+	levelTreeView roots: {level modelingTree}.
 	level whenAddedOrRemovedElementDo: [	levelTreeView roots: {level} ]
 ]
 

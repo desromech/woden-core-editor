@@ -154,11 +154,6 @@ WDELevelEditorSession >> levelFileReference: aFileReference [
 ]
 
 { #category : #'as yet unclassified' }
-WDELevelEditorSession >> levelScene [
-	^ self level ifNotNil: [ :l | l scene ]
-]
-
-{ #category : #'as yet unclassified' }
 WDELevelEditorSession >> openFrom: aFileReference [
 	| loadedLevel |
 	aFileReference exists ifFalse: [ ^ self ].

@@ -7,7 +7,7 @@ Class {
 { #category : #'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> bspGeometryCategory [
 	^ self makeCategoryNamed: 'CSG (BSP style)' withElements: {
-		'Box' . (WDEBrush forBox: AABox unit).
+		'Box' . (WDMBSPBrush forBox: AABox unit).
 	}
 ]
 
@@ -31,10 +31,10 @@ WDELevelGenericElementTemplateProvider >> makeCategoryNamed: categoryName withEl
 { #category : #'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> terrainGeometryCategory [
 	^ self makeCategoryNamed: 'Terrain Geometry' withElements: {
-		'Terrain 32 1x1' . WDETerrain patchSize: 32 gridExtent: 1@1.
-		'Terrain 32 2x2' . WDETerrain patchSize: 32 gridExtent: 2@2.
-		'Terrain 32 3x3' . WDETerrain patchSize: 32 gridExtent: 3@3.
-		'Terrain 32 4x4' . WDETerrain patchSize: 32 gridExtent: 4@4.
+		'Terrain 32 1x1' . WDMTerrain patchSize: 32 gridExtent: 1@1.
+		'Terrain 32 2x2' . WDMTerrain patchSize: 32 gridExtent: 2@2.
+		'Terrain 32 3x3' . WDMTerrain patchSize: 32 gridExtent: 3@3.
+		'Terrain 32 4x4' . WDMTerrain patchSize: 32 gridExtent: 4@4.
 	}
 ]
 

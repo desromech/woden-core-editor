@@ -20,7 +20,8 @@ Class {
 		'highlightedManipulator',
 		'highlightBoxNode',
 		'lastDownEvent',
-		'cameraLight'
+		'cameraLight',
+		'levelPresentationHandle'
 	],
 	#classVars : [
 		'OrthographicFarDistance',
@@ -185,7 +186,7 @@ WDELevelEditorContentView >> activeToolModeOrEditionMode [
 WDELevelEditorContentView >> applyNewSelection: newSelection [
 	| selectedElements |
 	self activeToolManipulator: nil.
-	selectedElements := newSelection selectedItems select: [:item | item isManipulableInEditorSceneView ].
+	selectedElements := newSelection selectedItems select: [:item | item isSceneSelectableObject ].
 	selectedElements ifNotEmpty: [
 		self activeToolManipulator: ((WDELevelEditor3DSelectionManipulator for: self)
 			selectedElements: selectedElements;
@@ -470,10 +471,6 @@ WDELevelEditorContentView >> level [
 
 { #category : #initialization }
 WDELevelEditorContentView >> levelChanged [
-	self level ifNotNil: [ :l |
-		l whenAddedOrRemovedElementDo: [ self refresh ].
-		l whenGeometryChangedDo: [ self refresh ].
-	].
 	self levelSceneChanged
 ]
 
@@ -493,18 +490,11 @@ WDELevelEditorContentView >> levelElementTemplateSelected: template [
 ]
 
 { #category : #initialization }
-WDELevelEditorContentView >> levelScene [
-	^ self model ifNotNil: [ :m | m levelScene ]
-]
-
-{ #category : #initialization }
 WDELevelEditorContentView >> levelSceneChanged [
-	self levelScene ifNil: [
-		self createScene.
-		self level ifNotNil: [ :level | level addedToScene: scene ].
-	] ifNotNil: [ :levelScene |
-		scene := levelScene.
-		self createSceneNodes
+	self createScene.
+	self level ifNotNil: [ :level |
+		levelPresentationHandle := level modelingTree presentInScene: scene.
+		
 	].
 ]
 
@@ -700,7 +690,6 @@ WDELevelEditorContentView >> rayPickManipulator: ray [
 
 { #category : #accessing }
 WDELevelEditorContentView >> refresh [
-	self level ifNotNil: [ :l | l validateScene ].
 	sceneView refresh
 ]
 

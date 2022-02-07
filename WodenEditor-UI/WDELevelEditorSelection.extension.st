@@ -15,7 +15,7 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 		^ levelSession buildUnselectedElementContextMenuOn: menuPresenter
 	].
 	selectedItems size = 1 ifTrue: [ 
-		selectedItems first buildContextMenuForEditorSession: levelSession on: menuPresenter
+		"selectedItems first buildContextMenuForEditorSession: levelSession on: menuPresenter"
 	].
 
 	menuPresenter

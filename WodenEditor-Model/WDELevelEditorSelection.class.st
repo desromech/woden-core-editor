@@ -48,7 +48,7 @@ WDELevelEditorSelection >> duplicateSelectedItemsInSession: levelSession [
 	duplicatedItems := placeableElements collect: [ :each |
 		| copy |
 		copy := each copy setupForNewInstance; yourself.
-		each parent addChild: copy.
+		each parent add: copy.
 		copy
 	].
 
@@ -96,7 +96,7 @@ WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
 	subtractingItems := selectedItems select: [ :each | each canBeSubtracted ].
 	subtractingItems ifEmpty: [ ^ self ].
 
-	affectedElements := levelSession level findVolumeElementsThatIntersectElements: subtractingItems.
+	affectedElements := subtractingItems first modelingTreeRoot findVolumeElementsThatIntersectElements: subtractingItems.
 	affectedElements ifEmpty: [ ^ self ].
 	
 	originalsWithParents := affectedElements collect: [:each | {each parent . each} ] as: Array.
@@ -127,11 +127,11 @@ WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
 	levelSession
 		doWith: [ 
 			affectedOriginals do: [ :each | each second removeFromParent ].
-			newElements do: [ :each | each first addChild: each second ].
+			newElements do: [ :each | each first add: each second ].
 			levelSession selection: self.
 		] undoWith: [ 
 			newElements do: [ :each | each second removeFromParent ].
-			affectedOriginals do: [ :each | each first addChild: each second ].
+			affectedOriginals do: [ :each | each first add: each second ].
 			levelSession selection: self.
 		]
 

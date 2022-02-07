@@ -3,45 +3,17 @@ I provide an abstract interface for connecting the level editor with an actual g
 "
 Class {
 	#name : #WDELevel,
-	#superclass : #WDELevelElement,
+	#superclass : #Object,
 	#instVars : [
 		'gameSettings',
-		'editorScene'
+		'modelingTree'
 	],
 	#category : #'WodenEditor-Model-Level'
 }
 
-{ #category : #accessing }
-WDELevel >> addedToScene: aScene [
-	self assert: editorScene isNil.
-	editorScene := aScene.
-]
-
 { #category : #'as yet unclassified' }
-WDELevel >> children [
-	^ self elements
-]
-
-{ #category : #accessing }
-WDELevel >> editorScene [
-
-	^ editorScene
-]
-
-{ #category : #accessing }
-WDELevel >> editorScene: anObject [
-
-	editorScene := anObject
-]
-
-{ #category : #accessing }
-WDELevel >> elements [
-	^ self subclassResponsibility
-]
-
-{ #category : #'as yet unclassified' }
-WDELevel >> findVolumeElementsThatIntersectElements: aSetOfElements [
-	^ #()
+WDELevel >> activeGroup [
+	^ self modelingTree
 ]
 
 { #category : #accessing }
@@ -56,9 +28,20 @@ WDELevel >> gameSettings: anObject [
 	gameSettings := anObject
 ]
 
+{ #category : #initialization }
+WDELevel >> initialize [
+	super initialize.
+	modelingTree := WDModelingTree new.
+]
+
 { #category : #accessing }
 WDELevel >> level [
 	^ self
+]
+
+{ #category : #accessing }
+WDELevel >> modelingTree [
+	^ modelingTree
 ]
 
 { #category : #'instance creation' }
@@ -71,23 +54,10 @@ WDELevel >> newEditorSession [
 
 { #category : #'as yet unclassified' }
 WDELevel >> rayCastAllAlong: ray [
-	^ #()
-]
-
-{ #category : #accessing }
-WDELevel >> removedFromScene: aScene [
-	"Added the level onto the specified scene"
-	editorScene := nil.
-]
-
-{ #category : #accessing }
-WDELevel >> scene [
-	^ nil
-]
-
-{ #category : #'as yet unclassified' }
-WDELevel >> treeDisplayName [
-	^ 'Level'
+	| picker |
+	picker := WDMRayPicker ray: ray.
+	modelingTree rayPickElements: picker.
+	^ picker sortedDistancesWithResults
 ]
 
 { #category : #'as yet unclassified' }
@@ -95,19 +65,7 @@ WDELevel >> validExtensions [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
-WDELevel >> visible [
-	^ true
-]
-
-{ #category : #'as yet unclassified' }
-WDELevel >> visible: aBoolean [
-]
-
 { #category : #hooks }
 WDELevel >> whenAddedOrRemovedElementDo: aBlock [
-]
-
-{ #category : #hooks }
-WDELevel >> whenGeometryChangedDo: aBlock [
+	modelingTree whenAddedOrRemovedElementDo: aBlock
 ]

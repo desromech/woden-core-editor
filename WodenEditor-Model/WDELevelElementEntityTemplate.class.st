@@ -13,7 +13,7 @@ WDELevelElementEntityTemplate >> instantiateInLevel: level placingInBox: placeme
 	oldSelection := session selection.
 	session
 		doWith: [
-			element := prototype instantiateForPlacingInLevel: level box: placementBox.
+			element := prototype instantiateForPlacingIn: level activeGroup box: placementBox.
 			session selection: (WDELevelEditorSelection for: {element}).
 		]
 		undoWith: [

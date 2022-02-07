@@ -51,7 +51,7 @@ WDELevelEditorDuplicatePlacementToolMode >> dragFinished [
 	editorSession
 		doWith: [
 			duplicatedElements doWithIndex: [ :each :index |
-				(parents at: index) addChild: each
+				(parents at: index) add: each
 			].
 			editorSession selection: newSelection.
 		] undoWith: undoBlock.
