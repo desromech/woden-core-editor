@@ -24,7 +24,7 @@ WDELevelEditorRotateToolMode >> applyTransformToElements [
 		axis := selectedAxis
 	].
 	
-	transform := TRSTransform3D rotation: (Quaternion axis: axis angle: angle).
+	transform := TRSTransform3D rotation: (Quaternion axis: axis angle: angle) around: pivot.
 	self restoreMementos.
 	elements do: [ :each | each transformWith: transform ].
 	view selectedItemsBoundingBoxChanged; refresh.

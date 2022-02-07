@@ -350,8 +350,7 @@ WDEBrush >> position [
 
 { #category : #accessing }
 WDEBrush >> position: aPosition [
-	transform translation: aPosition.
-	self transformChanged.
+	self transform: (transform copy translation: aPosition; yourself)
 ]
 
 { #category : #memento }

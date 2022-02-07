@@ -21,7 +21,7 @@ WDELevelEditorScaleToolMode >> applyTransformToElements [
 		scaleFactorVector := scaleFactor * selectedAxis + (Vector3 ones - selectedAxis)
 	].
 	
-	transform := TRSTransform3D scale: scaleFactorVector.
+	transform := TRSTransform3D scale: scaleFactorVector around: pivot.
 	self restoreMementos.
 	elements do: [ :each | each transformWith: transform ].
 	view selectedItemsBoundingBoxChanged; refresh.
