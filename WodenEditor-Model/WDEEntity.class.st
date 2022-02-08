@@ -11,6 +11,11 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #serialization }
+WDEEntity class >> jsonObjectTypeName [
+	^ self name withoutPrefix: 'WDE'
+]
+
 { #category : #testing }
 WDEEntity >> canBeDuplicatedAndPlaced [
 	^ self isWorldEntity not
@@ -28,8 +33,8 @@ WDEEntity >> className: anObject [
 ]
 
 { #category : #serialization }
-WDEEntity >> encodeJsonKeyValues [
-	^ super encodeJsonKeyValues , {
+WDEEntity >> encodeJsonKeyValuesWithContext: serializationContext [
+	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#className . className .
 		#properties . properties.
 	}
@@ -52,8 +57,8 @@ WDEEntity >> isWorldEntity [
 ]
 
 { #category : #serialization }
-WDEEntity >> loadFromJson: jsonData inLevel: level [
-	super loadFromJson: jsonData inLevel: level.
+WDEEntity >> loadFromJson: jsonData withContext: level [
+	super loadFromJson: jsonData withContext: level.
 	className := jsonData at: #className ifAbsent: [ '' ].
 	properties := properties at: #properties ifAbsent: [ Dictionary new ].
 

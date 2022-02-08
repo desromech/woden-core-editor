@@ -1,6 +1,8 @@
 Class {
 	#name : #WDEGameSettings,
 	#superclass : #Object,
+	#traits : 'TWDMModelingMaterialInfoResolver',
+	#classTraits : 'TWDMModelingMaterialInfoResolver classTrait',
 	#category : #'WodenEditor-Model-GameSettings'
 }
 
@@ -29,11 +31,6 @@ WDEGameSettings >> emptyLevel [
 { #category : #'as yet unclassified' }
 WDEGameSettings >> loadFromFileReference: aFileReference [
 	self subclassResponsibility
-]
-
-{ #category : #'as yet unclassified' }
-WDEGameSettings >> loadValidMaterialFor: aMaterialInfo [
-	^ nil
 ]
 
 { #category : #accessing }

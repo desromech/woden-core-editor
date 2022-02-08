@@ -24,14 +24,16 @@ WDELevel >> gameSettings [
 
 { #category : #accessing }
 WDELevel >> gameSettings: anObject [
-
-	gameSettings := anObject
+	gameSettings := anObject.
+	modelingTree ifNotNil: [ modelingTree materialResolver: gameSettings ]
+	
 ]
 
 { #category : #initialization }
 WDELevel >> initialize [
 	super initialize.
 	modelingTree := WDModelingTree new.
+	modelingTree materialResolver: gameSettings.
 ]
 
 { #category : #accessing }
@@ -58,6 +60,13 @@ WDELevel >> rayCastAllAlong: ray [
 	picker := WDMRayPicker ray: ray.
 	modelingTree rayPickElements: picker.
 	^ picker sortedDistancesWithResults
+]
+
+{ #category : #fileout }
+WDELevel >> saveTo: aFileReference [
+	| encodedLevel |
+	encodedLevel := modelingTree encodeAsJSONString.
+	aFileReference writeStreamDo: [ :out | out truncate; nextPutAll: encodedLevel ].
 ]
 
 { #category : #'as yet unclassified' }
