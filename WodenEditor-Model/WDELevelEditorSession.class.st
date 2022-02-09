@@ -202,7 +202,9 @@ WDELevelEditorSession >> selection [
 
 { #category : #accessing }
 WDELevelEditorSession >> selection: newSelection [
+	selection value ifNotNil: [ :s | s notifySelectedStatus: false ].
 	selection value: newSelection.
+	selection value ifNotNil: [ :s | s notifySelectedStatus: true ].
 
 ]
 

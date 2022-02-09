@@ -66,6 +66,11 @@ WDELevelEditorSelection >> materialStateMemento [
 	^ selectedItems collect: [ :each | each materialStateMemento ]
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSelection >> notifySelectedStatus: status [
+	selectedItems do: [ :each | each selected: status ]
+]
+
 { #category : #memento }
 WDELevelEditorSelection >> restoreMaterialStateMemento: memento [
 	selectedItems doWithIndex: [ :each :index | each restoreMaterialStateMemento: (memento at: index) ]
