@@ -357,6 +357,7 @@ WDELevelEditorContentView >> depthAtCameraDistance: distance [
 
 { #category : #'as yet unclassified' }
 WDELevelEditorContentView >> dragToolScreenOverlay: overlay [
+	sceneView overlay: overlay
 ]
 
 { #category : #'as yet unclassified' }

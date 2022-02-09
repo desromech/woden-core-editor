@@ -23,3 +23,12 @@ WDELevelEditorRectangleSelectionDragToolMode >> finishDraggingWith: event [
 WDELevelEditorRectangleSelectionDragToolMode >> modeName [
 	^ 'Rectangle selection'
 ]
+
+{ #category : #event }
+WDELevelEditorRectangleSelectionDragToolMode >> onMouseDrag: event delta: delta [
+	super onMouseDrag: event delta: delta.
+	view dragToolScreenOverlay: (WDELevelEditorDragRectangleOverlay new
+		color: Color blue muchLighter;
+		rectangle: (dragStartPosition - view windowOrigin corner: event position - view windowOrigin);
+		yourself)
+]
