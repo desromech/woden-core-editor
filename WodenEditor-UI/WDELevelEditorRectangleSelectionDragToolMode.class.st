@@ -10,10 +10,10 @@ WDELevelEditorRectangleSelectionDragToolMode >> finishDraggingWith: event [
 	super finishDraggingWith: event.
 	elements := view elementsInScreenRectangle: (dragStartPosition corner: dragEndPosition).
 
-	event modifiers shift ifTrue: [
+	event shiftPressed ifTrue: [
 		^ self levelEditorSession addElementsToSelection: elements
 	].
-	event modifiers ctrl ifTrue: [ 
+	event controlKeyPressed ifTrue: [ 
 		^ self levelEditorSession toggleElementsFromSelection: elements
 	].
 	^ self levelEditorSession setSelectedElements: elements

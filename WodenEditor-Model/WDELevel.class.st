@@ -16,6 +16,11 @@ WDELevel >> activeGroup [
 	^ self modelingTree
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevel >> elementsInFrustum: frustum [
+	^ modelingTree findVolumeElementsThatIntersectFrustum: frustum
+]
+
 { #category : #accessing }
 WDELevel >> gameSettings [
 

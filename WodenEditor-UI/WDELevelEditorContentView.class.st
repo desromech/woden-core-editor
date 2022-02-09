@@ -381,6 +381,20 @@ WDELevelEditorContentView >> elementsInScreenPosition: aPoint [
 
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> elementsInScreenRectangle: screenRectangle [
+	| originPosition cornerPosition normalizedScreenRectangleMin normalizedScreenRectangleMax selectionFrustum |
+	originPosition := (self normalizeGlobalScreenPosition: screenRectangle origin) asVector2.
+	cornerPosition := (self normalizeGlobalScreenPosition: screenRectangle corner) asVector2.
+	normalizedScreenRectangleMin := originPosition min: cornerPosition.
+	normalizedScreenRectangleMax := originPosition max: cornerPosition.
+	
+	selectionFrustum := ((self cameraFrustum splitAtLeftLambda: normalizedScreenRectangleMin x rightLambda: normalizedScreenRectangleMax x)
+			splitAtBottomLambda: normalizedScreenRectangleMin y topLambda: normalizedScreenRectangleMax y)
+			transformedWith: cameraNode globalTransform.
+	^ self level elementsInFrustum: selectionFrustum
+]
+
 { #category : #'camera views' }
 WDELevelEditorContentView >> freePerspectiveView [
 	gridOrientation := Quaternion lookAtBottom.
@@ -520,6 +534,11 @@ WDELevelEditorContentView >> modelChanged [
 			];
 			whenSelectionChangedDo: [ :newSelection | self applyNewSelection: newSelection ].
 	].
+]
+
+{ #category : #camera }
+WDELevelEditorContentView >> normalizeGlobalScreenPosition: aPoint [
+	^ self normalizeScreenPosition: aPoint - self windowOrigin
 ]
 
 { #category : #camera }
