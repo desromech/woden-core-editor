@@ -387,8 +387,8 @@ WDELevelEditorContentView >> elementsInScreenRectangle: screenRectangle [
 	| originPosition cornerPosition normalizedScreenRectangleMin normalizedScreenRectangleMax selectionFrustum |
 	originPosition := (self normalizeGlobalScreenPosition: screenRectangle origin) asVector2.
 	cornerPosition := (self normalizeGlobalScreenPosition: screenRectangle corner) asVector2.
-	normalizedScreenRectangleMin := originPosition min: cornerPosition.
-	normalizedScreenRectangleMax := originPosition max: cornerPosition.
+	normalizedScreenRectangleMin := ((originPosition min: cornerPosition) min: Vector2 ones) max: Vector2 zeros.
+	normalizedScreenRectangleMax := ((originPosition max: cornerPosition) min: Vector2 ones) max: Vector2 zeros.
 	
 	selectionFrustum := ((self cameraFrustum splitAtLeftLambda: normalizedScreenRectangleMin x rightLambda: normalizedScreenRectangleMax x)
 			splitAtBottomLambda: normalizedScreenRectangleMin y topLambda: normalizedScreenRectangleMax y)
