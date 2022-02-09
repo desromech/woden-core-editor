@@ -23,6 +23,11 @@ WDELevelEditorViewMode >> levelEditorSession [
 	^ view levelEditorSession
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewMode >> manipulatorForSelection: selection [
+	^ nil
+]
+
 { #category : #accessing }
 WDELevelEditorViewMode >> modeName [
 	self subclassResponsibility

@@ -24,6 +24,21 @@ WDELevelEditorViewEditionMode >> currentModelingEditionMode [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelEditorViewEditionMode >> manipulatorForSelection: selection [
+	(self supportsElementSelection and: [ self supportsManipulators ]) ifTrue: [ 
+		| selectedElements |
+		selectedElements := selection selectedItems select: [:item | item isSceneSelectableObject ].
+		selectedElements ifNotEmpty: [
+			^ (WDELevelEditor3DSelectionManipulator for: view)
+				selectedElements: selectedElements;
+				yourself
+		].
+	].
+
+	^ nil
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditorViewEditionMode >> nextValidClickSelectionWheelFor: clickPosition [
 	(clickSelectionWheel isNotNil and: [ clickSelectionWheel isValidForPosition: clickPosition ]) ifFalse: [
 		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new

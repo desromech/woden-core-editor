@@ -157,7 +157,7 @@ WDELevelEditorContentView >> activeEditionMode [
 { #category : #'editor modes' }
 WDELevelEditorContentView >> activeEditionMode: newEditionMode [
 	activeEditionMode := newEditionMode.
-	self updateActiveToolStatusBarIndicator.
+	self activeToolModeOrEditionModeChanged.
 ]
 
 { #category : #enumerating }
@@ -189,7 +189,7 @@ WDELevelEditorContentView >> activeToolManipulator: newManipulator [
 { #category : #'editor modes' }
 WDELevelEditorContentView >> activeToolMode: anObject [
 	activeToolMode := anObject.
-	self updateActiveToolStatusBarIndicator.
+	self activeToolModeOrEditionModeChanged.
 ]
 
 { #category : #'editor modes' }
@@ -197,16 +197,15 @@ WDELevelEditorContentView >> activeToolModeOrEditionMode [
 	^ activeToolMode ifNil: [ self activeEditionMode ]
 ]
 
+{ #category : #'editor modes' }
+WDELevelEditorContentView >> activeToolModeOrEditionModeChanged [
+	self updateActiveToolStatusBarIndicator.
+	self applyNewSelection: self model selection.
+]
+
 { #category : #'as yet unclassified' }
 WDELevelEditorContentView >> applyNewSelection: newSelection [
-	| selectedElements |
-	self activeToolManipulator: nil.
-	selectedElements := newSelection selectedItems select: [:item | item isSceneSelectableObject ].
-	selectedElements ifNotEmpty: [
-		self activeToolManipulator: ((WDELevelEditor3DSelectionManipulator for: self)
-			selectedElements: selectedElements;
-			yourself)
-	].
+	self activeToolManipulator: (self activeToolModeOrEditionMode ifNotNil: [:mode | mode manipulatorForSelection: newSelection])
 
 ]
 
