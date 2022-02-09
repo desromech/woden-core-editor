@@ -19,11 +19,16 @@ WDELevelEditorViewEditionMode >> cancelAction [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelEditorViewEditionMode >> currentModelingEditionMode [
+	^ WDObjectEditionMode
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditorViewEditionMode >> nextValidClickSelectionWheelFor: clickPosition [
 	(clickSelectionWheel isNotNil and: [ clickSelectionWheel isValidForPosition: clickPosition ]) ifFalse: [
 		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new
 			clickPosition: clickPosition;
-			elements: (view elementsInScreenPosition: clickPosition);
+			elements: (view elementsInPositionWithRayPicking: clickPosition mode: self currentModelingEditionMode);
 			yourself.
 	].
 
@@ -68,7 +73,7 @@ WDELevelEditorViewEditionMode >> onMouseMove: event [
 		
 		(self supportsElementSelection and: [self levelEditorSession selection selectedItems isNotEmpty]) ifTrue: [ 
 			elementBeingPointed := self supportsElementSelection
-				ifTrue: [view elementInScreenPosition: event position]
+				ifTrue: [view elementInPositionWithRayPicking: event position mode: self currentModelingEditionMode]
 				ifFalse: [nil].
 			view
 				highlightElement: elementBeingPointed;
@@ -198,7 +203,7 @@ WDELevelEditorViewEditionMode >> validRightClickSelectionWheelFor: clickPosition
 	(clickSelectionWheel isNotNil and: [ clickSelectionWheel isValidForPositionForRightClick: clickPosition view: view ]) ifFalse: [
 		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new
 			clickPosition: clickPosition;
-			elements: (view elementsInScreenPosition: clickPosition);
+			elements: (view elementsInPositionWithRayPicking: clickPosition mode: self currentModelingEditionMode);
 			yourself.
 	].
 

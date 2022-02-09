@@ -167,6 +167,18 @@ WDELevelEditor >> buildMainToolbar [
 			action: [ contentView activatePlacementMode ];
 			yourself);
 		addItem: (SpToolbarButtonPresenter new
+			label: 'Face Texturing';
+			action: [ contentView activateFaceTexturingMode ];
+			yourself);
+		addItem: (SpToolbarButtonPresenter new
+			label: 'Topology Edition';
+			action: [ contentView activateTopologyEditionMode ];
+			yourself);
+		addItem: (SpToolbarButtonPresenter new
+			label: 'Sculpting';
+			action: [ contentView activateSculptingMode ];
+			yourself);
+		addItem: (SpToolbarButtonPresenter new
 			icon: (self iconNamed: #glamorousGo);
 			action: [ self actionPlayLevel ];
 			yourself);

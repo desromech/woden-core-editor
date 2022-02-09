@@ -168,8 +168,13 @@ WDELevelEditorSession >> playLevel [
 ]
 
 { #category : #'as yet unclassified' }
-WDELevelEditorSession >> rayCastAllAlong: ray [
-	^ self level ifNil: [ #() ] ifNotNil: [ :l | l rayCastAllAlong: ray ]
+WDELevelEditorSession >> rayPickElement: ray mode: modelingEditionMode [
+	^ self level ifNil: [ #() ] ifNotNil: [ :l | l rayPickElement: ray mode: modelingEditionMode ]
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorSession >> rayPickElements: ray mode: modelingEditionMode [
+	^ self level ifNil: [ #() ] ifNotNil: [ :l | l rayPickElements: ray mode: modelingEditionMode ]
 ]
 
 { #category : #'undo - redo' }

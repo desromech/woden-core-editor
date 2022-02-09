@@ -60,9 +60,17 @@ WDELevel >> newEditorSession [
 ]
 
 { #category : #'as yet unclassified' }
-WDELevel >> rayCastAllAlong: ray [
+WDELevel >> rayPickElement: ray mode: modelingEditionMode [
 	| picker |
-	picker := WDMRayPicker ray: ray.
+	picker := WDMFirstRayPicker ray: ray editionMode: modelingEditionMode.
+	modelingTree rayPickElements: picker.
+	^ picker result
+]
+
+{ #category : #'as yet unclassified' }
+WDELevel >> rayPickElements: ray mode: modelingEditionMode [
+	| picker |
+	picker := WDMRayPicker ray: ray editionMode: modelingEditionMode.
 	modelingTree rayPickElements: picker.
 	^ picker sortedDistancesWithResults
 ]

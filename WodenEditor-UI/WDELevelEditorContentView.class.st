@@ -87,6 +87,11 @@ WDELevelEditorContentView >> actionSaveFileAs [
 	self model saveTo: result asFileReference
 ]
 
+{ #category : #'editor modes' }
+WDELevelEditorContentView >> activateFaceTexturingMode [
+	self activeEditionMode: (WDELevelEditorViewFaceTexturingMode for: self)
+]
+
 { #category : #shading }
 WDELevelEditorContentView >> activateFlatColor [
 	camera viewMode: WDFlatColorViewMode.
@@ -121,10 +126,20 @@ WDELevelEditorContentView >> activatePlacementMode [
 	self activeEditionMode: (WDELevelEditorViewPlacementMode for: self)
 ]
 
+{ #category : #'editor modes' }
+WDELevelEditorContentView >> activateSculptingMode [
+	self activeEditionMode: (WDELevelEditorViewSculptingMode for: self)
+]
+
 { #category : #shading }
 WDELevelEditorContentView >> activateShadedColor [
 	camera viewMode: WDFlatColorShadedViewMode.
 	self refresh
+]
+
+{ #category : #'editor modes' }
+WDELevelEditorContentView >> activateTopologyEditionMode [
+	self activeEditionMode: (WDELevelEditorViewTopologyEditionMode for: self)
 ]
 
 { #category : #shading }
@@ -361,25 +376,13 @@ WDELevelEditorContentView >> dragToolScreenOverlay: overlay [
 ]
 
 { #category : #'as yet unclassified' }
-WDELevelEditorContentView >> elementInPositionWithRayPicking: aPoint [
-	^ (self rayPickElement: (self rayForScreenPosition: aPoint))
+WDELevelEditorContentView >> elementInPositionWithRayPicking: aPoint mode: modelingEditionMode [
+	^ (self rayPickElement: (self rayForScreenPosition: aPoint) mode: modelingEditionMode)
 ]
 
 { #category : #'as yet unclassified' }
-WDELevelEditorContentView >> elementInScreenPosition: aPoint [
-	^ self elementInPositionWithRayPicking: aPoint
-
-]
-
-{ #category : #'as yet unclassified' }
-WDELevelEditorContentView >> elementsInPositionWithRayPicking: aPoint [
-	^ (self rayPickElements: (self rayForScreenPosition: aPoint)) collect: [ :each | each value ]
-]
-
-{ #category : #'as yet unclassified' }
-WDELevelEditorContentView >> elementsInScreenPosition: aPoint [
-	^ self elementsInPositionWithRayPicking: aPoint
-
+WDELevelEditorContentView >> elementsInPositionWithRayPicking: aPoint mode: modelingEditionMode [
+	^ (self rayPickElements: (self rayForScreenPosition: aPoint) mode: modelingEditionMode) collect: [ :each | each value ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -509,7 +512,7 @@ WDELevelEditorContentView >> levelSceneChanged [
 	self createScene.
 	self level ifNotNil: [ :level |
 		levelPresentationHandle := level modelingTree presentInScene: scene.
-		
+		levelPresentationHandle whenPresentationIsInvalidatedDo: [ self refresh ].
 	].
 ]
 
@@ -690,15 +693,13 @@ WDELevelEditorContentView >> rayForScreenPosition: aPoint [
 ]
 
 { #category : #'as yet unclassified' }
-WDELevelEditorContentView >> rayPickElement: ray [
-	| result |
-	result := self rayPickElements: ray.
-	^ result size >= 1 ifTrue: [ result first ] ifFalse: [ nil ]
+WDELevelEditorContentView >> rayPickElement: ray mode: modelingEditionMode [
+	^ self model ifNil: [ nil ] ifNotNil: [ :m | m rayPickElement: ray mode: modelingEditionMode ]
 ]
 
 { #category : #'as yet unclassified' }
-WDELevelEditorContentView >> rayPickElements: ray [
-	^ self model ifNil: [ #() ] ifNotNil: [ :m | m rayCastAllAlong: ray ]
+WDELevelEditorContentView >> rayPickElements: ray mode: modelingEditionMode [
+	^ self model ifNil: [ #() ] ifNotNil: [ :m | m rayPickElements: ray mode: modelingEditionMode ]
 ]
 
 { #category : #manipulators }
