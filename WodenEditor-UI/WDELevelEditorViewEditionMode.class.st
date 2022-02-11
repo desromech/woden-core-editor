@@ -24,6 +24,11 @@ WDELevelEditorViewEditionMode >> currentModelingEditionMode [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelEditorViewEditionMode >> elementInPositionWithRayPicking: position mode: modelingEditionMode [
+	^ view elementInPositionWithRayPicking: position mode: modelingEditionMode
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditorViewEditionMode >> manipulatorForSelection: selection [
 	(self supportsElementSelection and: [ self supportsManipulators ]) ifTrue: [ 
 		| selectedElements |
@@ -88,7 +93,7 @@ WDELevelEditorViewEditionMode >> onMouseMove: event [
 		
 		(self supportsElementSelection and: [self levelEditorSession selection selectedItems isNotEmpty]) ifTrue: [ 
 			elementBeingPointed := self supportsElementSelection
-				ifTrue: [view elementInPositionWithRayPicking: event position mode: self currentModelingEditionMode]
+				ifTrue: [self elementInPositionWithRayPicking: event position mode: self currentModelingEditionMode]
 				ifFalse: [nil].
 			view
 				highlightElement: elementBeingPointed;

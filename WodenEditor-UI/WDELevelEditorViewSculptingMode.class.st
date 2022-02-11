@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+WDELevelEditorViewSculptingMode >> commitModeChanges [
+	view model activeEditionElements do: [ :each | each commitSculptingChanges ]
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditorViewSculptingMode >> currentModelingEditionMode [
 	^ WDSculptEditionMode
 ]

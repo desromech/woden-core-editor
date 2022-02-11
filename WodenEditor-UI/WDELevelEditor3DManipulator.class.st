@@ -143,6 +143,11 @@ WDELevelEditor3DManipulator >> removeFromScene [
 WDELevelEditor3DManipulator >> restoreMementoForDragging: memento [
 ]
 
+{ #category : #accessing }
+WDELevelEditor3DManipulator >> sceneNode [
+	^ sceneNode
+]
+
 { #category : #'as yet unclassified' }
 WDELevelEditor3DManipulator >> selectedItemsBoundingBoxChanged [
 ]

@@ -12,10 +12,21 @@ Class {
 		'undoOperationHistory',
 		'redoOperationHistory',
 		'whenStartingToPlaceDuplicatedItems',
-		'levelFileReference'
+		'levelFileReference',
+		'activeEditionElements'
 	],
 	#category : #'WodenEditor-Model-Session'
 }
+
+{ #category : #accessing }
+WDELevelEditorSession >> activeEditionElements [
+	^ activeEditionElements
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> activeEditionElements: aValue [
+	activeEditionElements value: aValue
+]
 
 { #category : #accessing }
 WDELevelEditorSession >> activeLevelElementTemplate [
@@ -125,6 +136,7 @@ WDELevelEditorSession >> initialize [
 	levelFileReference := nil asValueHolder.
 	activeLevelElementTemplate := nil asValueHolder.
 	statusMessage := '' asValueHolder.
+	activeEditionElements := #() asValueHolder.
 	selection := WDELevelEditorSelection empty asValueHolder.
 	gridSize := 10.0 asValueHolder.
 	whenStartingToPlaceDuplicatedItems := [].
@@ -192,6 +204,11 @@ WDELevelEditorSession >> saveTo: aFileReference [
 	self level ifNil: [ ^ self ].
 	self level saveTo: aFileReference.
 	self levelFileReference: aFileReference.
+]
+
+{ #category : #accessing }
+WDELevelEditorSession >> selectedItemsThatSupportModelingEditionMode: aMode [
+	^ self selection selectedItems select: [ :each | each supportsModelingEditionMode: aMode ]
 ]
 
 { #category : #accessing }
@@ -293,6 +310,11 @@ WDELevelEditorSession >> undo [
 { #category : #accessing }
 WDELevelEditorSession >> updateStatusMessage [
 	self statusMessage: self activeToolModeOrEditionModeName
+]
+
+{ #category : #events }
+WDELevelEditorSession >> whenActiveEditionElementsChangedDo: aBlock [
+	activeEditionElements whenChangedDo: aBlock
 ]
 
 { #category : #events }

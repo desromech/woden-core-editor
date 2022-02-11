@@ -21,7 +21,8 @@ Class {
 		'highlightBoxNode',
 		'lastDownEvent',
 		'cameraLight',
-		'levelPresentationHandle'
+		'levelPresentationHandle',
+		'activeToolEditionElementsManipulator'
 	],
 	#classVars : [
 		'OrthographicFarDistance',
@@ -128,7 +129,7 @@ WDELevelEditorContentView >> activatePlacementMode [
 
 { #category : #'editor modes' }
 WDELevelEditorContentView >> activateSculptingMode [
-	self activeEditionMode: (WDELevelEditorViewSculptingMode for: self)
+	self activeEditionMode: (WDELevelEditorViewSculptingMode for: self) withElements: (self model selectedItemsThatSupportModelingEditionMode: WDSculptEditionMode)
 ]
 
 { #category : #shading }
@@ -139,7 +140,7 @@ WDELevelEditorContentView >> activateShadedColor [
 
 { #category : #'editor modes' }
 WDELevelEditorContentView >> activateTopologyEditionMode [
-	self activeEditionMode: (WDELevelEditorViewTopologyEditionMode for: self)
+	self activeEditionMode: (WDELevelEditorViewTopologyEditionMode for: self) withElements: (self model selectedItemsThatSupportModelingEditionMode: WDTopologyEditionMode)
 ]
 
 { #category : #shading }
@@ -156,13 +157,46 @@ WDELevelEditorContentView >> activeEditionMode [
 
 { #category : #'editor modes' }
 WDELevelEditorContentView >> activeEditionMode: newEditionMode [
+	activeEditionMode ifNotNil: [ activeEditionMode commitModeChanges ].
 	activeEditionMode := newEditionMode.
 	self activeToolModeOrEditionModeChanged.
+]
+
+{ #category : #'editor modes' }
+WDELevelEditorContentView >> activeEditionMode: newEditionMode withElements: newActiveEditionElements [
+	activeEditionMode ifNotNil: [ activeEditionMode commitModeChanges ].
+	newActiveEditionElements ifEmpty: [ ^ self ].
+	self model
+		activeEditionElements: newActiveEditionElements;
+		selection: WDELevelEditorSelection empty.
+	self activeEditionMode: newEditionMode
 ]
 
 { #category : #enumerating }
 WDELevelEditorContentView >> activeManipulatorsDo: aBlock [
 	activeToolManipulator ifNotNil: [ aBlock value: activeToolManipulator ].
+	activeToolEditionElementsManipulator ifNotNil: [ aBlock value: activeToolEditionElementsManipulator ].
+]
+
+{ #category : #accessing }
+WDELevelEditorContentView >> activeToolEditionElementsManipulator [
+	^ activeToolEditionElementsManipulator
+]
+
+{ #category : #accessing }
+WDELevelEditorContentView >> activeToolEditionElementsManipulator: newManipulator [
+	activeToolEditionElementsManipulator ifNotNil: [
+		activeToolEditionElementsManipulator removeFromScene.
+		activeToolEditionElementsManipulator := nil.
+	].
+
+	activeToolEditionElementsManipulator := newManipulator.
+	activeToolEditionElementsManipulator ifNotNil: [
+		activeToolEditionElementsManipulator addToScene: scene.
+		self highlightManipulator: nil; highlightElement: nil.
+		activeToolEditionElementsManipulator updateForViewCamera
+	].
+	sceneView refresh.
 ]
 
 { #category : #accessing }
@@ -201,6 +235,13 @@ WDELevelEditorContentView >> activeToolModeOrEditionMode [
 WDELevelEditorContentView >> activeToolModeOrEditionModeChanged [
 	self updateActiveToolStatusBarIndicator.
 	self applyNewSelection: self model selection.
+	self applyNewActiveEditionElements: self model activeEditionElements.
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorContentView >> applyNewActiveEditionElements: newEditionElements [
+	self activeToolEditionElementsManipulator: (self activeToolModeOrEditionMode ifNotNil: [:mode | mode manipulatorForActiveEditionElements: newEditionElements])
+
 ]
 
 { #category : #'as yet unclassified' }
@@ -535,6 +576,7 @@ WDELevelEditorContentView >> modelChanged [
 			whenStartingToPlaceDuplicatedItemsDo: [ :duplicatedItems :oldSelection |
 				self startPlacingDuplicatedElements: duplicatedItems oldSelection: oldSelection
 			];
+			whenActiveEditionElementsChangedDo: [ :newActiveEditionElements | self applyNewActiveEditionElements: newActiveEditionElements ];
 			whenSelectionChangedDo: [ :newSelection | self applyNewSelection: newSelection ].
 	].
 ]

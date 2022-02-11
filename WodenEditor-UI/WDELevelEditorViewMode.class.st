@@ -13,6 +13,10 @@ WDELevelEditorViewMode class >> for: aView [
 	^ self new view: aView; yourself
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewMode >> commitModeChanges [
+]
+
 { #category : #testing }
 WDELevelEditorViewMode >> isPlacementMode [
 	^ false
@@ -21,6 +25,11 @@ WDELevelEditorViewMode >> isPlacementMode [
 { #category : #accessing }
 WDELevelEditorViewMode >> levelEditorSession [
 	^ view levelEditorSession
+]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewMode >> manipulatorForActiveEditionElements: selection [
+	^ nil
 ]
 
 { #category : #'as yet unclassified' }
