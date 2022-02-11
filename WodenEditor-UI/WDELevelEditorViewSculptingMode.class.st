@@ -18,3 +18,11 @@ WDELevelEditorViewSculptingMode >> currentModelingEditionMode [
 WDELevelEditorViewSculptingMode >> modeName [
 	^ 'Sculpt Mode'
 ]
+
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewSculptingMode >> startActionDraggingWith: event [
+	view activeToolMode: ((WDELevelEditorSculptDrawDragToolMode for: view)
+		dragStartedWith: event;
+		yourself)
+	
+]
