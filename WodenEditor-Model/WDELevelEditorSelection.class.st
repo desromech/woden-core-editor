@@ -71,6 +71,12 @@ WDELevelEditorSelection >> notifySelectedStatus: status [
 	selectedItems do: [ :each | each selected: status ]
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorSelection >> propertyPages [
+	selectedItems size = 1 ifTrue: [ ^ selectedItems first propertyPages ].
+	^ #()
+]
+
 { #category : #memento }
 WDELevelEditorSelection >> restoreMaterialStateMemento: memento [
 	selectedItems doWithIndex: [ :each :index | each restoreMaterialStateMemento: (memento at: index) ]
