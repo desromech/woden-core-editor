@@ -37,6 +37,15 @@ WDELevelEditor3DSelectionManipulator >> computeBoundingBoxes [
 	self boundingBoxChanged.
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditor3DSelectionManipulator >> computeManipulationPoints [
+	(selectedElements size = 1 and: [ selectedElements first isPointModelingElement ]) ifTrue: [ 
+		^ #()
+	].
+	
+	^ super computeManipulationPoints
+]
+
 { #category : #accessing }
 WDELevelEditor3DSelectionManipulator >> displayBoundingBox [
 	^ displayBoundingBox

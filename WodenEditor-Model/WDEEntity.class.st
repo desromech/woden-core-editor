@@ -47,6 +47,16 @@ WDEEntity >> initialize [
 ]
 
 { #category : #testing }
+WDEEntity >> isPointEntity [
+	^ self children isEmpty
+]
+
+{ #category : #testing }
+WDEEntity >> isPointModelingElement [
+	^ self isPointEntity
+]
+
+{ #category : #testing }
 WDEEntity >> isSceneSelectableObject [
 	^ self isWorldEntity not
 ]
@@ -65,6 +75,24 @@ WDEEntity >> loadFromJson: jsonData withContext: level [
 ]
 
 { #category : #accessing }
+WDEEntity >> localBoundingBox [
+	self isPointEntity ifTrue: [
+		^ WDModelingCommonMeshes uniqueInstance pointObjectBoundingBox
+	].
+	^ super localBoundingBox
+]
+
+{ #category : #accessing }
 WDEEntity >> objectTypeName [
 	^ 'Entity'
+]
+
+{ #category : #'scene presentation' }
+WDEEntity >> updateScenePresentationHandle: aHandle [
+	super updateScenePresentationHandle: aHandle.
+	self isPointEntity ifTrue: [
+		aHandle sceneNode renderables: {
+			WDModelingCommonMeshes uniqueInstance pointObjectDisplayBox copyWithMaterial: WDModelingCommonMeshes uniqueInstance greenPointObjectDisplayMaterial
+		}
+	].
 ]
