@@ -16,6 +16,13 @@ WDEEntity class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDE'
 ]
 
+{ #category : #'property pages' }
+WDEEntity >> buildModelingElementMainPropertyPageWith: builder [
+	super buildModelingElementMainPropertyPageWith: builder.
+	builder
+		stringPropertyNamed: 'Class Name' selector: #className
+]
+
 { #category : #testing }
 WDEEntity >> canBeDuplicatedAndPlaced [
 	^ self isWorldEntity not
