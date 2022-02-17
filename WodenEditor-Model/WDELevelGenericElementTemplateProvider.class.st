@@ -5,6 +5,13 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+WDELevelGenericElementTemplateProvider >> basicEntities [
+	^ self makeCategoryNamed: 'Basic Entities' withElements: {
+		'Point Entity' . WDEEntity new.
+	}
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> bspGeometryCategory [
 	^ self makeCategoryNamed: 'CSG (BSP style)' withElements: {
 		'Box' . (WDMBSPBrush forBox: AABox unit).
@@ -53,5 +60,6 @@ WDELevelGenericElementTemplateProvider >> topLevelPaletteCategories [
 		self lightsCategory.
 		self bspGeometryCategory.
 		self terrainGeometryCategory.
+		self basicEntities.
 	}
 ]
