@@ -1,5 +1,5 @@
 Class {
-	#name : #WDELevelElementEntityTemplate,
+	#name : #WDELevelElementPrototypeTemplate,
 	#superclass : #WDELevelElementTemplate,
 	#instVars : [
 		'prototype'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-WDELevelElementEntityTemplate >> instantiateInLevel: level placingInBox: placementBox session: session [
+WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInBox: placementBox session: session [
 	| oldSelection element |
 	oldSelection := session selection.
 	session
@@ -24,12 +24,12 @@ WDELevelElementEntityTemplate >> instantiateInLevel: level placingInBox: placeme
 ]
 
 { #category : #'as yet unclassified' }
-WDELevelElementEntityTemplate >> instantiateInLevel: level placingInPoint: placementPoint session: session [
+WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInPoint: placementPoint session: session [
 	| oldSelection element |
 	oldSelection := session selection.
 	session
 		doWith: [
-			element := prototype instantiateForPlacingInLevel: level point: placementPoint.
+			element := prototype instantiateForPlacingIn: level activeGroup point: placementPoint.
 			session selection: (WDELevelEditorSelection for: {element}).
 		]
 		undoWith: [
@@ -40,16 +40,16 @@ WDELevelElementEntityTemplate >> instantiateInLevel: level placingInPoint: place
 ]
 
 { #category : #testing }
-WDELevelElementEntityTemplate >> isPointElementTemplate [
-	^ false
+WDELevelElementPrototypeTemplate >> isPointElementTemplate [
+	^ prototype isPointModelingElement
 ]
 
 { #category : #accessing }
-WDELevelElementEntityTemplate >> prototype [
+WDELevelElementPrototypeTemplate >> prototype [
 	^ prototype
 ]
 
 { #category : #accessing }
-WDELevelElementEntityTemplate >> prototype: anObject [
+WDELevelElementPrototypeTemplate >> prototype: anObject [
 	prototype := anObject
 ]

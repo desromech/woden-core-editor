@@ -12,6 +12,15 @@ WDELevelGenericElementTemplateProvider >> bspGeometryCategory [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevelGenericElementTemplateProvider >> lightsCategory [
+	^ self makeCategoryNamed: 'Light Sources' withElements: {
+		'Point Light' . WDModelingPointLightSource new.
+		'Spot Light' . WDModelingSpotLightSource new.
+		'Directional Light' . WDModelingDirectionalLightSource new.
+	}
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> makeCategoryNamed: categoryName withElements: elements [
 	| category |
 	category :=  WDEPaletteCategory new
@@ -19,7 +28,7 @@ WDELevelGenericElementTemplateProvider >> makeCategoryNamed: categoryName withEl
 		
 	elements pairsDo: [ :templateName :prototype |
 		category addTemplate: (
-		WDELevelElementEntityTemplate new
+		WDELevelElementPrototypeTemplate new
 			name: templateName;
 			prototype: prototype;
 			yourself
@@ -41,6 +50,7 @@ WDELevelGenericElementTemplateProvider >> terrainGeometryCategory [
 { #category : #'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> topLevelPaletteCategories [
 	^ {
+		self lightsCategory.
 		self bspGeometryCategory.
 		self terrainGeometryCategory.
 	}

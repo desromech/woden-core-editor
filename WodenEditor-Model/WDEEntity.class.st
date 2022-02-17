@@ -55,7 +55,7 @@ WDEEntity >> initialize [
 
 { #category : #testing }
 WDEEntity >> isPointEntity [
-	^ self children isEmpty
+	^ self children isEmpty and: [ self isWorldEntity not ]
 ]
 
 { #category : #testing }

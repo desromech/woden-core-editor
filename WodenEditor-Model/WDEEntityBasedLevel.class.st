@@ -35,6 +35,7 @@ WDEEntityBasedLevel >> initialize [
 
 { #category : #serialization }
 WDEEntityBasedLevel >> loadFromJson: jsonData [
+	modelingTree := WDModelingTree new.
 	modelingTree loadFromJson: jsonData
 ]
 

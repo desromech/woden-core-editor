@@ -19,6 +19,19 @@ WDELevelEditorViewPlacementMode >> modeName [
 	^ 'Placement Mode'
 ]
 
+{ #category : #event }
+WDELevelEditorViewPlacementMode >> onLeftClick: event [
+	self levelEditorSession activeLevelElementTemplate ifNotNil: [ :elementTemplate |
+		elementTemplate isPointElementTemplate ifTrue: [
+			| entityLocation |
+			entityLocation := self levelEditorSession snapToSubGrid: (view cameraXYToWorld: event position).
+			elementTemplate instantiateInLevel: self levelEditorSession level placingInPoint: entityLocation session: self levelEditorSession.
+			view activateObjectMode
+		]
+	]
+
+]
+
 { #category : #'as yet unclassified' }
 WDELevelEditorViewPlacementMode >> startActionDraggingWith: event [
 	| manipulator |
