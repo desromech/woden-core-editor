@@ -291,6 +291,13 @@ WDELevelEditorContentView >> cameraPosition [
 ]
 
 { #category : #camera }
+WDELevelEditorContentView >> cameraProjectionMatrix [
+	| sceneExtent |
+	sceneExtent := sceneView adapter extent.
+	^ camera projectionMatrixWithAspect: sceneExtent x asFloat / (sceneExtent y max: 1)
+]
+
+{ #category : #camera }
 WDELevelEditorContentView >> cameraXYDeltaToWorld: screenDelta [
 	^ self cameraXYDeltaToWorld: screenDelta distance: self cameraFocalPointDistance
 ]
@@ -333,6 +340,19 @@ WDELevelEditorContentView >> cameraXZDeltaToWorld: screenDelta distance: screenD
 { #category : #camera }
 WDELevelEditorContentView >> computeScreenDistanceForPoint: aPoint [
 	^ (cameraNode transform inverseTransformPosition: aPoint) z negated
+]
+
+{ #category : #camera }
+WDELevelEditorContentView >> computeScreenPositionForPoint: aPoint [
+	| viewPoint ndcPoint projectedPoint sceneExtent sceneScreenPosition |
+	sceneExtent := sceneView adapter extent.
+	viewPoint := cameraNode transform inverseTransformPosition: aPoint.
+	projectedPoint := self cameraProjectionMatrix * (Vector4 xyz: viewPoint w: 1.0).
+	projectedPoint w = 0 ifTrue: [ ^ nil ].
+	
+	ndcPoint := (projectedPoint xyz / projectedPoint w) * 0.5 + 0.5.
+	sceneScreenPosition := (ndcPoint x * sceneExtent x) @ ((1.0 - ndcPoint) y * sceneExtent y).
+	^ sceneScreenPosition + self windowOrigin
 ]
 
 { #category : #initialization }

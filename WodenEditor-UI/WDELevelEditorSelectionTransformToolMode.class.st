@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'elements',
 		'pivot',
-		'selectedAxis'
+		'selectedAxis',
+		'screenPivot'
 	],
 	#category : #'WodenEditor-UI-ViewMode'
 }
@@ -49,7 +50,8 @@ WDELevelEditorSelectionTransformToolMode >> dragStarted [
 	pivot := Vector3 zeros.
 	bbox isEmpty ifFalse: [
 		pivot := bbox center.
-		screenDistance := view computeScreenDistanceForPoint: pivot
+		screenPivot := view computeScreenPositionForPoint: pivot.
+		screenDistance := view computeScreenDistanceForPoint: pivot.
 	].
 
 ]

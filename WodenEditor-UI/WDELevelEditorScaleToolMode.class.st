@@ -9,13 +9,11 @@ Class {
 
 { #category : #'as yet unclassified' }
 WDELevelEditorScaleToolMode >> applyTransformToElements [
-	| transform worldStartPosition worldEndPosition scaleFactor scaleFactorVector |
+	| transform scaleFactor scaleFactorVector |
 	currentPosition ifNil: [ ^ self ].
+	screenPivot ifNil: [ ^ self ].
 	
-	worldStartPosition := view cameraXYToWorld: startPosition distance: screenDistance.
-	worldEndPosition := view cameraXYToWorld: currentPosition distance: screenDistance.
-	
-	scaleFactor := (worldEndPosition - pivot) length / ((worldStartPosition - pivot) length max: 0.0001).
+	scaleFactor := (currentPosition - screenPivot) asVector2 length / ((startPosition - screenPivot) asVector2 length max: 0.0001).
 	scaleFactorVector := Vector3 withAll: scaleFactor.
 	selectedAxis ifNotNil: [
 		scaleFactorVector := scaleFactor * selectedAxis + (Vector3 ones - selectedAxis)

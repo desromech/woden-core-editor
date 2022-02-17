@@ -12,7 +12,7 @@ WDELevelEditorTranslateToolMode >> applyTransformToElements [
 	| translation |
 	currentPosition ifNil: [ ^ self ].
 	
-	translation := self levelEditorSession snapToSubGrid: (view cameraXYDeltaToWorld: currentPosition - startPosition distance: screenDistance).
+	translation := view cameraXYDeltaToWorld: currentPosition - startPosition distance: screenDistance.
 	selectedAxis ifNotNil: [ 
 		translation := translation * selectedAxis
 	].

@@ -9,21 +9,19 @@ Class {
 
 { #category : #'as yet unclassified' }
 WDELevelEditorRotateToolMode >> applyTransformToElements [
-	| transform worldStartPosition worldEndPosition u v axis angle |
+	| transform su sv axis angle |
 	currentPosition ifNil: [ ^ self ].
+	screenPivot ifNil: [ ^ self ].
+
+	su := (startPosition - screenPivot) asComplex normalized.
+	sv := (currentPosition - screenPivot) asComplex normalized.
 	
-	worldStartPosition := view cameraXYToWorld: startPosition distance: screenDistance.
-	worldEndPosition := view cameraXYToWorld: currentPosition distance: screenDistance.
-	
-	u := (worldStartPosition - pivot) normalized.
-	v := (worldEndPosition - pivot) normalized.
-	
-	axis := (u cross: v) normalized.
-	angle := (u dot: v) arcCos.
+	axis := view zDragDirection.
+	angle := (sv * su inverse) arg.
 	selectedAxis ifNotNil: [
 		axis := selectedAxis
 	].
-	
+
 	transform := TRSTransform3D rotation: (Quaternion axis: axis angle: angle) around: pivot.
 	self restoreMementos.
 	elements do: [ :each | each transformWith: transform ].
