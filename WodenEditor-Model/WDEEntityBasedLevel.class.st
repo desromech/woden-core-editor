@@ -27,6 +27,12 @@ WDEEntityBasedLevel >> activeGroup [
 	^ self modelingTree children first
 ]
 
+{ #category : #'as yet unclassified' }
+WDEEntityBasedLevel >> activeGroupForInstantiating: aPrototype [
+	(aPrototype isKindOf: WDEEntity) ifTrue: [ ^ modelingTree ].
+	^ self activeGroup
+]
+
 { #category : #initialization }
 WDEEntityBasedLevel >> initialize [
 	super initialize.

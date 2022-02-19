@@ -13,7 +13,7 @@ WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInBox: plac
 	oldSelection := session selection.
 	session
 		doWith: [
-			element := prototype instantiateForPlacingIn: level activeGroup box: placementBox.
+			element := prototype instantiateForPlacingIn: (level activeGroupForInstantiating: prototype) box: placementBox.
 			session selection: (WDELevelEditorSelection for: {element}).
 		]
 		undoWith: [
@@ -29,7 +29,7 @@ WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInPoint: pl
 	oldSelection := session selection.
 	session
 		doWith: [
-			element := prototype instantiateForPlacingIn: level activeGroup point: placementPoint.
+			element := prototype instantiateForPlacingIn: (level activeGroupForInstantiating: prototype) point: placementPoint.
 			session selection: (WDELevelEditorSelection for: {element}).
 		]
 		undoWith: [

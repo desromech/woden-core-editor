@@ -17,6 +17,12 @@ WDELevel >> activeGroup [
 ]
 
 { #category : #'as yet unclassified' }
+WDELevel >> activeGroupForInstantiating: aPrototype [
+	^ self activeGroup
+	
+]
+
+{ #category : #'as yet unclassified' }
 WDELevel >> elementsInFrustum: frustum [
 	^ modelingTree findVolumeElementsThatIntersectFrustum: frustum
 ]
