@@ -17,6 +17,11 @@ WDELevelEditorViewMode class >> for: aView [
 WDELevelEditorViewMode >> commitModeChanges [
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewMode >> doNotAffectManipulators [
+	^ false
+]
+
 { #category : #testing }
 WDELevelEditorViewMode >> isPlacementMode [
 	^ false

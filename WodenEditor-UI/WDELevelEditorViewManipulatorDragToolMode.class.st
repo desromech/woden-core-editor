@@ -9,6 +9,11 @@ Class {
 	#category : #'WodenEditor-UI-ViewMode'
 }
 
+{ #category : #'as yet unclassified' }
+WDELevelEditorViewManipulatorDragToolMode >> doNotAffectManipulators [
+	^ true
+]
+
 { #category : #initialization }
 WDELevelEditorViewManipulatorDragToolMode >> dragStartedWith: startEvent [
 	super dragStartedWith: startEvent.

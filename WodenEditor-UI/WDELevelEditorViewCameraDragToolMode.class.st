@@ -5,6 +5,11 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+WDELevelEditorViewCameraDragToolMode >> doNotAffectManipulators [
+	^ true
+]
+
+{ #category : #'as yet unclassified' }
 WDELevelEditorViewCameraDragToolMode >> modeName [
 	^ 'Camera dragging'
 ]

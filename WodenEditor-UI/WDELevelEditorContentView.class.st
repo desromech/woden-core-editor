@@ -157,9 +157,20 @@ WDELevelEditorContentView >> activeEditionMode [
 
 { #category : #'editor modes' }
 WDELevelEditorContentView >> activeEditionMode: newEditionMode [
-	activeEditionMode ifNotNil: [ activeEditionMode commitModeChanges ].
+	| suppressManipulatorChanges |
+	suppressManipulatorChanges := false.
+	activeEditionMode ifNotNil: [
+		activeEditionMode commitModeChanges.
+		suppressManipulatorChanges := activeEditionMode doNotAffectManipulators
+	].
+
 	activeEditionMode := newEditionMode.
-	self activeToolModeOrEditionModeChanged.
+	suppressManipulatorChanges ifTrue: [ 
+		self updateActiveToolStatusBarIndicator
+	] ifFalse: [ 
+		self activeToolModeOrEditionModeChanged.
+	].
+
 ]
 
 { #category : #'editor modes' }
@@ -222,8 +233,19 @@ WDELevelEditorContentView >> activeToolManipulator: newManipulator [
 
 { #category : #'editor modes' }
 WDELevelEditorContentView >> activeToolMode: anObject [
+	| suppressManipulatorChanges |
+	suppressManipulatorChanges := false.
+	activeToolMode ifNotNil: [
+		suppressManipulatorChanges := activeToolMode doNotAffectManipulators
+	].
+
 	activeToolMode := anObject.
-	self activeToolModeOrEditionModeChanged.
+	suppressManipulatorChanges ifTrue: [ 
+		self updateActiveToolStatusBarIndicator
+	] ifFalse: [ 
+		self activeToolModeOrEditionModeChanged.
+	].
+
 ]
 
 { #category : #'editor modes' }
@@ -240,12 +262,18 @@ WDELevelEditorContentView >> activeToolModeOrEditionModeChanged [
 
 { #category : #'as yet unclassified' }
 WDELevelEditorContentView >> applyNewActiveEditionElements: newEditionElements [
+	self activeToolModeOrEditionMode ifNotNil: [ :toolMode |
+		toolMode doNotAffectManipulators ifTrue: [ ^ self ]
+	].
 	self activeToolEditionElementsManipulator: (self activeToolModeOrEditionMode ifNotNil: [:mode | mode manipulatorForActiveEditionElements: newEditionElements])
 
 ]
 
 { #category : #'as yet unclassified' }
 WDELevelEditorContentView >> applyNewSelection: newSelection [
+	self activeToolModeOrEditionMode ifNotNil: [ :toolMode |
+		toolMode doNotAffectManipulators ifTrue: [ ^ self ]
+	].
 	self activeToolManipulator: (self activeToolModeOrEditionMode ifNotNil: [:mode | mode manipulatorForSelection: newSelection])
 
 ]
