@@ -26,7 +26,8 @@ WDELevelEditor3DControlPointManipulator >> applyHighlightingEffect [
 
 { #category : #'element manipulation' }
 WDELevelEditor3DControlPointManipulator >> applyTransform: transform [
-	controlPoint transformWith: (parent transform inverseTransformTransform: transform)
+	controlPoint transformWith: (parent transform inverseTransformTransform: transform).
+	self controlPointChanged.
 ]
 
 { #category : #'element manipulation' }
@@ -34,7 +35,7 @@ WDELevelEditor3DControlPointManipulator >> applyTransformForTranslationDelta: tr
 	| localTranslation |
 	localTranslation := (parent transform inverseTransformVector3: translation).
 	controlPoint translateBy: localTranslation.
-	boundingBox := boundingBox translatedBy: localTranslation
+	self controlPointChanged.
 ]
 
 { #category : #accessing }
@@ -118,10 +119,9 @@ WDELevelEditor3DControlPointManipulator >> restoreMementoForDragging: memento [
 
 { #category : #'as yet unclassified' }
 WDELevelEditor3DControlPointManipulator >> sizeScaleFactorForPosition: position [
-	| transform worldScale |
-	transform := parent transform.
-	worldScale := super sizeScaleFactorForPosition: (transform transformPosition: position).
-	^ worldScale / parent transform scale max * 2.0
+	| worldScale |
+	worldScale := super sizeScaleFactorForPosition: self position.
+	^ worldScale * 2.0
 ]
 
 { #category : #'as yet unclassified' }
