@@ -50,6 +50,7 @@ WDEEntity >> encodeJsonKeyValuesWithContext: serializationContext [
 { #category : #initialization }
 WDEEntity >> initialize [
 	super initialize.
+	className := ''.
 	properties := Dictionary new.
 ]
 

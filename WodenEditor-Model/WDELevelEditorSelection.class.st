@@ -55,6 +55,59 @@ WDELevelEditorSelection >> duplicateSelectedItemsInSession: levelSession [
 	levelSession startPlacingDuplicatedItems: duplicatedItems
 ]
 
+{ #category : #actions }
+WDELevelEditorSelection >> groupInEntitySelectedItemsInSession: levelSession [
+	| originalParent entity entityParent oldSelection |
+	selectedItems ifEmpty: [ ^ self ].
+	originalParent := selectedItems first parent.
+	entityParent := levelSession level activeGroupForInstantiating: WDEEntity new .
+	(selectedItems allSatisfy: [ :each | each parent == originalParent ]) ifFalse: [ ^ self ].
+	oldSelection := self.
+
+	levelSession doWith: [
+		entity := WDEEntity new lockedGroup: true; yourself.
+		selectedItems do: [ :each |
+			each removeFromParent.
+			entity add: each
+		].
+		entityParent add: entity.
+		levelSession selection: (WDELevelEditorSelection for: {entity})
+	] undoWith: [ 
+		entity removeFromParent.
+		entity := nil.
+		selectedItems do: [ :each |
+			originalParent add: each
+		].
+		levelSession selection: oldSelection
+	]
+]
+
+{ #category : #actions }
+WDELevelEditorSelection >> groupSelectedItemsInSession: levelSession [
+	| group groupParent oldSelection |
+	selectedItems ifEmpty: [ ^ self ].
+	groupParent := selectedItems first parent.
+	(selectedItems allSatisfy: [ :each | each parent == groupParent ]) ifFalse: [ ^ self ].
+	oldSelection := self.
+
+	levelSession doWith: [
+		group := WDModelingGroup new lockedGroup: true; yourself.
+		selectedItems do: [ :each |
+			each removeFromParent.
+			group add: each
+		].
+		groupParent add: group.
+		levelSession selection: (WDELevelEditorSelection for: {group})
+	] undoWith: [ 
+		group removeFromParent.
+		group := nil.
+		selectedItems do: [ :each |
+			groupParent add: each
+		].
+		levelSession selection: oldSelection
+	]
+]
+
 { #category : #initialization }
 WDELevelEditorSelection >> initialize [
 	super initialize.

@@ -11,6 +11,7 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession [
 
 { #category : #'*WodenEditor-UI' }
 WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
+	| firstParent |
 	selectedItems ifEmpty: [
 		^ levelSession buildUnselectedElementContextMenuOn: menuPresenter
 	].
@@ -34,6 +35,21 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 				name: 'Inspect elements';
 				action: [ selectedItems size = 1 ifTrue: [selectedItems first inspect] ifFalse: [ selectedItems inspect ]]
 		].
+	
+	firstParent := selectedItems first parent.
+	(firstParent isNotNil and: [ selectedItems allSatisfy: [ :each | each parent == firstParent ] ]) ifTrue: [ 
+		menuPresenter 
+			addItem: [ :item |
+				item
+					name: 'Make Entity';
+					action: [ self groupInEntitySelectedItemsInSession: levelSession ]
+			];
+			addItem: [ :item |
+				item
+					name: 'Make Group';
+					action: [ self groupSelectedItemsInSession: levelSession ]
+			]
+	].
 
 	(selectedItems anySatisfy: [ :each | each canBeSubtracted]) ifTrue: [ 
 		menuPresenter
@@ -41,6 +57,15 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 				item
 					name: 'Subtract volumes';
 					action: [ self subtractSelectedItemsInSession: levelSession ]
+			].
+	].
+
+	(selectedItems anySatisfy: [ :each | each isGroup ]) ifTrue: [ 
+		menuPresenter
+			addItem: [ :item |
+				item
+					name: 'Ungroup';
+					action: [ self ungroupSelectedItemsInSession: levelSession ]
 			].
 	].
 ]

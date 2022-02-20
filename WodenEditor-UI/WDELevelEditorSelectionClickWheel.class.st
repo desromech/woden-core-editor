@@ -87,6 +87,6 @@ WDELevelEditorSelectionClickWheel >> isValidForPositionForRightClick: testPositi
 	(self isValidForPosition: testPosition) ifTrue: [ ^ true ].
 	
 	ray := aView rayForScreenPosition: testPosition.
-	^ (testElement rayCast: ray) isNotNil
+	^ testElement isHitByGlobalRay: ray
 
 ]
