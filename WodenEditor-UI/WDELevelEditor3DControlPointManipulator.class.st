@@ -32,7 +32,7 @@ WDELevelEditor3DControlPointManipulator >> applyTransform: transform [
 { #category : #'element manipulation' }
 WDELevelEditor3DControlPointManipulator >> applyTransformForTranslationDelta: translation [
 	| localTranslation |
-	localTranslation := (parent transform inverseTransformPosition: translation).
+	localTranslation := (parent transform inverseTransformVector3: translation).
 	controlPoint translateBy: localTranslation.
 	boundingBox := boundingBox translatedBy: localTranslation
 ]
@@ -58,7 +58,7 @@ WDELevelEditor3DControlPointManipulator >> controlPoint: anObject [
 
 { #category : #accessing }
 WDELevelEditor3DControlPointManipulator >> controlPointChanged [
-	boundingBox := AABox center: controlPoint position halfExtent: currentHalfExtent.
+	boundingBox := AABox center: self position halfExtent: currentHalfExtent.
 	self boundingBoxChanged
 ]
 
@@ -71,7 +71,7 @@ WDELevelEditor3DControlPointManipulator >> createSceneNode [
 		colorFactor: self currentColor;
 		yourself.
 	^ (WDELevelEditorMeshes uniqueInstance flatShadedTranslucentUnitCubeMesh copyWithMaterial: material) asSceneNode
-		transform: (TRSTransform3D translation: controlPoint position);
+		transform: (TRSTransform3D translation: self position);
 		yourself
 ]
 
@@ -106,7 +106,8 @@ WDELevelEditor3DControlPointManipulator >> mementoForDragging [
 
 { #category : #accessing }
 WDELevelEditor3DControlPointManipulator >> position [
-	^ controlPoint position
+	parent ifNil: [ ^ controlPoint position ].
+	^ parent transform transformPosition: controlPoint position
 ]
 
 { #category : #memento }

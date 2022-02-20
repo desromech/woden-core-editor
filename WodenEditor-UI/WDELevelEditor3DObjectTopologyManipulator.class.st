@@ -10,19 +10,16 @@ Class {
 { #category : #scene }
 WDELevelEditor3DObjectTopologyManipulator >> createSceneNode [
 	^ WDSceneNode new
-		transform: transform;
-		yourself
 ]
 
 { #category : #accessing }
 WDELevelEditor3DObjectTopologyManipulator >> rayCast: ray [
-	| localRay bestResult |
+	| bestResult |
 	self visible ifFalse: [ ^ nil ].
 
 	bestResult := nil.
-	localRay := ray inverseTransformedWith: transform.
 	children do: [ :each |
-		(each rayCast: localRay) ifNotNil: [:childResult |
+		(each rayCast: ray) ifNotNil: [:childResult |
 			(bestResult isNil or: [childResult < bestResult]) ifTrue: [
 				bestResult := childResult
 			]
