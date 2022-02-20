@@ -74,12 +74,6 @@ WDELevelEditorSelectionClickWheel >> isValidForPosition: testPosition [
 ]
 
 { #category : #testing }
-WDELevelEditorSelectionClickWheel >> isValidForPositionForRightClick: testPosition [
-	^ self isValidForPosition: testPosition
-
-]
-
-{ #category : #testing }
 WDELevelEditorSelectionClickWheel >> isValidForPositionForRightClick: testPosition view: aView [
 	| testElement ray |
 	testElement := self currentElement.
