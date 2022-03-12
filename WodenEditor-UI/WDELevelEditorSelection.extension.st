@@ -11,7 +11,7 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession [
 
 { #category : #'*WodenEditor-UI' }
 WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
-	| firstParent |
+	| firstParent elementsWithTextureMapping |
 	selectedItems ifEmpty: [
 		^ levelSession buildUnselectedElementContextMenuOn: menuPresenter
 	].
@@ -66,6 +66,17 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 				item
 					name: 'Ungroup';
 					action: [ self ungroupSelectedItemsInSession: levelSession ]
+			].
+	].
+
+	elementsWithTextureMapping := OrderedCollection new.
+	selectedItems do: [ :each | each collectElementsWithTextureMappingSettingsOnto: elementsWithTextureMapping ].
+	elementsWithTextureMapping ifNotEmpty: [
+		menuPresenter
+			addItem: [ :item |
+				item
+					name: 'Texture mapping...';
+					action: [ (WDELevelElementTextureMappingEditor on: elementsWithTextureMapping) openWithSpec]
 			].
 	].
 ]
