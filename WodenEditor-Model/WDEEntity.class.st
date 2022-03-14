@@ -77,8 +77,8 @@ WDEEntity >> isWorldEntity [
 { #category : #serialization }
 WDEEntity >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
-	className := jsonData at: #className ifAbsent: [ '' ].
-	properties := properties at: #properties ifAbsent: [ Dictionary new ].
+	className := jsonData at: #className ifAbsent: [ className ].
+	properties := jsonData at: #properties ifAbsent: [ properties ].
 
 ]
 
