@@ -175,8 +175,13 @@ WDELevelEditorSession >> openFrom: aFileReference [
 		levelFileReference: aFileReference
 ]
 
-{ #category : #action }
+{ #category : #accessing }
 WDELevelEditorSession >> playLevel [
+	| tempFileName |
+	self level ifNil: [ ^ self ].
+	tempFileName := (FileSystem workingDirectory / 'test-level.tmp') fullName.
+	self level saveTo: tempFileName asFileReference.
+	self gameSettings playLevelWithFileName: tempFileName
 ]
 
 { #category : #'as yet unclassified' }

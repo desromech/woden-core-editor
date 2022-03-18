@@ -38,6 +38,11 @@ WDEGameSettings >> name [
 	self subclassResponsibility
 ]
 
+{ #category : #'as yet unclassified' }
+WDEGameSettings >> playLevelWithFileName: fileName [
+	self inform: 'TODO: playMapWithFileName ' , fileName
+]
+
 { #category : #palette }
 WDEGameSettings >> topLevelElementTemplateCategories [
 	^ #()

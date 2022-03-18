@@ -120,6 +120,11 @@ WDELevelEditor class >> openEditorWorldMenuCommand [
 
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditor >> actionPlayLevel [
+	^ self model playLevel
+]
+
 { #category : #menu }
 WDELevelEditor >> buildMainMenuBar [
 	^ self newMenuBar
