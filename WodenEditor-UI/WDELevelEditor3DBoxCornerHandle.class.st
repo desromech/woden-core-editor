@@ -123,7 +123,7 @@ WDELevelEditor3DBoxCornerHandle >> updateForViewCamera [
 		] ifFalse: [
 			| viewCorner |
 			viewCorner := view validCameraOrientation conjugated rotateVector: self manipulatedBoxCornerAxis.
-			self visible: viewCorner z = 0
+			self visible: (viewCorner z closeTo: 0)
 		].
 	]
 
