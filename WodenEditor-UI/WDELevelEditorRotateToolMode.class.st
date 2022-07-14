@@ -13,8 +13,8 @@ WDELevelEditorRotateToolMode >> applyTransformToElements [
 	currentPosition ifNil: [ ^ self ].
 	screenPivot ifNil: [ ^ self ].
 
-	su := (startPosition - screenPivot) asComplex normalized.
-	sv := (currentPosition - screenPivot) asComplex normalized.
+	su := (startPosition - screenPivot) asWMComplex normalized.
+	sv := (currentPosition - screenPivot) asWMComplex normalized.
 	
 	axis := view zDragDirection.
 	angle := (sv * su inverse) arg.
