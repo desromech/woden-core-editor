@@ -21,7 +21,7 @@ WDELevelEditorSelection class >> for: selectedItems [
 WDELevelEditorSelection >> deleteSelectedItemsInSession: levelSession [
 	| oldParents |
 	oldParents := selectedItems collect: [ :each | each parent ].
-	self assert: (oldParents allSatisfy: [ :each | each isNotNil ]).
+	self assert: (oldParents allSatisfy: [ :each | each notNil ]).
 	levelSession
 		doWith: [
 			levelSession selection: self class empty.

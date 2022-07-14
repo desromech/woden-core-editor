@@ -45,7 +45,7 @@ WDELevelEditorViewEditionMode >> manipulatorForSelection: selection [
 
 { #category : #'as yet unclassified' }
 WDELevelEditorViewEditionMode >> nextValidClickSelectionWheelFor: clickPosition [
-	(clickSelectionWheel isNotNil and: [ clickSelectionWheel isValidForPosition: clickPosition ]) ifFalse: [
+	(clickSelectionWheel notNil and: [ clickSelectionWheel isValidForPosition: clickPosition ]) ifFalse: [
 		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new
 			clickPosition: clickPosition;
 			elements: (view elementsInPositionWithRayPicking: clickPosition mode: self currentModelingEditionMode);
@@ -220,7 +220,7 @@ WDELevelEditorViewEditionMode >> supportsManipulators [
 
 { #category : #'as yet unclassified' }
 WDELevelEditorViewEditionMode >> validRightClickSelectionWheelFor: clickPosition [
-	(clickSelectionWheel isNotNil and: [ clickSelectionWheel isValidForPositionForRightClick: clickPosition view: view ]) ifFalse: [
+	(clickSelectionWheel notNil and: [ clickSelectionWheel isValidForPositionForRightClick: clickPosition view: view ]) ifFalse: [
 		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new
 			clickPosition: clickPosition;
 			elements: (view elementsInPositionWithRayPicking: clickPosition mode: self currentModelingEditionMode);

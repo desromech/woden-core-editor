@@ -190,7 +190,7 @@ WDELevelEditor3DManipulator >> view: anObject [
 
 { #category : #accessing }
 WDELevelEditor3DManipulator >> visible [
-	^ sceneNode isNotNil and: [ sceneNode visible ]
+	^ sceneNode notNil and: [ sceneNode visible ]
 ]
 
 { #category : #accessing }

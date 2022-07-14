@@ -37,7 +37,7 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 		].
 	
 	firstParent := selectedItems first parent.
-	(firstParent isNotNil and: [ selectedItems allSatisfy: [ :each | each parent == firstParent ] ]) ifTrue: [ 
+	(firstParent notNil and: [ selectedItems allSatisfy: [ :each | each parent == firstParent ] ]) ifTrue: [ 
 		menuPresenter 
 			addItem: [ :item |
 				item

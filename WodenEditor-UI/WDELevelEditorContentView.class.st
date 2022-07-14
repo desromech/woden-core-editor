@@ -587,7 +587,7 @@ WDELevelEditorContentView >> levelEditorSession [
 
 { #category : #initialization }
 WDELevelEditorContentView >> levelElementTemplateSelected: template [
-	(template isNotNil and: [template canBePlacedInLevel]) ifTrue: [
+	(template notNil and: [template canBePlacedInLevel]) ifTrue: [
 		self activatePlacementMode
 	] ifFalse: [
 		self deactivatePlacementMode
