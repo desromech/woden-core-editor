@@ -91,7 +91,7 @@ WDELevelEditorViewEditionMode >> onMouseMove: event [
 			highlightElement: nil
 	] ifNil: [
 		
-		(self supportsElementSelection and: [self levelEditorSession selection selectedItems isNotEmpty]) ifTrue: [ 
+		(self supportsElementSelection and: [self levelEditorSession selection selectedItems isEmpty not]) ifTrue: [ 
 			elementBeingPointed := self supportsElementSelection
 				ifTrue: [self elementInPositionWithRayPicking: event position mode: self currentModelingEditionMode]
 				ifFalse: [nil].
