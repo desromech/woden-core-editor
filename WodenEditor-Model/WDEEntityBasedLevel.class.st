@@ -14,7 +14,7 @@ WDEEntityBasedLevel class >> loadFromJson: jsonData [
 
 { #category : #'as yet unclassified' }
 WDEEntityBasedLevel class >> loadFromJsonString: jsonString [
-	^ self loadFromJson: (NeoJSONReader fromString: jsonString)
+	^ self loadFromJson: (STONJSON fromString: jsonString)
 ]
 
 { #category : #'as yet unclassified' }
