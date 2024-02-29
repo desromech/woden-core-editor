@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #specs }
-WDELevelEditorPalettePresenter class >> defaultSpec [
+WDELevelEditorPalettePresenter class >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: #treeView;
 		yourself

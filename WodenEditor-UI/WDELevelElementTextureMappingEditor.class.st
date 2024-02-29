@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : #specs }
-WDELevelElementTextureMappingEditor class >> defaultSpec [
+WDELevelElementTextureMappingEditor class >> defaultLayout [
 	^ SpGridLayout new
 		add: 'Texture Scale:' at: 1@1;
 		add: #textureScaleX at: 2@1;

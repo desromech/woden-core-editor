@@ -76,7 +76,7 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 			addItem: [ :item |
 				item
 					name: 'Texture mapping...';
-					action: [ (WDELevelElementTextureMappingEditor on: elementsWithTextureMapping) openWithSpec]
+					action: [ (WDELevelElementTextureMappingEditor on: elementsWithTextureMapping) open]
 			].
 	].
 ]

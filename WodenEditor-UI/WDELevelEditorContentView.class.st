@@ -34,7 +34,7 @@ Class {
 }
 
 { #category : #specs }
-WDELevelEditorContentView class >> defaultSpec [
+WDELevelEditorContentView class >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  add: #sceneView;

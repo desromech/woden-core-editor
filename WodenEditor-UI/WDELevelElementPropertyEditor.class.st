@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #specs }
-WDELevelElementPropertyEditor class >> defaultSpec [
+WDELevelElementPropertyEditor class >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: #propertiesNotebook;
 		yourself

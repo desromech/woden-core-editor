@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : #specs }
-WDELevelEditor class >> defaultSpec [
+WDELevelEditor class >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  add: #mainMenuBar

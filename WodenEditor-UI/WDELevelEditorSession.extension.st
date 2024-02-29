@@ -6,5 +6,5 @@ WDELevelEditorSession >> buildUnselectedElementContextMenuOn: menuPresenter [
 
 { #category : #'*WodenEditor-UI' }
 WDELevelEditorSession >> openEditor [
-	^ (WDELevelEditor on: self) openWithSpec
+	^ (WDELevelEditor on: self) open
 ]
