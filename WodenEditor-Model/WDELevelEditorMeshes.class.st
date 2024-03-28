@@ -77,7 +77,7 @@ WDELevelEditorMeshes >> defaultMaterial [
 WDELevelEditorMeshes >> flatShadedTranslucentMaterial [
 	^ flatShadedTranslucentMaterial ifNil: [
 		flatShadedTranslucentMaterial := WDUnlitMaterial new
-			alphaMode: #BLEND;
+			withAlphaBlending;
 			colorFactor: (Vector4 x: 1 y: 1 z: 1 w: 0.3);
 			yourself
 	]

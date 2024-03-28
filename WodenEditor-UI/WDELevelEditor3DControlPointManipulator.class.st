@@ -68,7 +68,7 @@ WDELevelEditor3DControlPointManipulator >> createSceneNode [
 	boundingBox isEmpty ifTrue: [ ^ nil ].
 	material := WDUnlitMaterial new
 		xray: true;
-		alphaMode: #BLEND;
+		withAlphaBlending;
 		colorFactor: self currentColor;
 		yourself.
 	^ (WDELevelEditorMeshes uniqueInstance flatShadedTranslucentUnitCubeMesh copyWithMaterial: material) asSceneNode
