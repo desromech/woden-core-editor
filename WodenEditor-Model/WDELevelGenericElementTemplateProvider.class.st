@@ -60,6 +60,5 @@ WDELevelGenericElementTemplateProvider >> topLevelPaletteCategories [
 		self lightsCategory.
 		self bspGeometryCategory.
 		self terrainGeometryCategory.
-		self basicEntities.
 	}
 ]

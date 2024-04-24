@@ -20,6 +20,24 @@ WDEWodenGameFrameworkWorldLevel class >> validExtensions [
 ]
 
 { #category : #'as yet unclassified' }
+WDEWodenGameFrameworkWorldLevel >> activeGroup [
+	^ self modelingTree children first
+]
+
+{ #category : #'as yet unclassified' }
+WDEWodenGameFrameworkWorldLevel >> activeGroupForInstantiating: aPrototype [
+	(aPrototype isKindOf: WDEActor) ifTrue: [ ^ modelingTree ].
+	^ self activeGroup
+]
+
+{ #category : #initialization }
+WDEWodenGameFrameworkWorldLevel >> initialize [
+	super initialize.
+	modelingTree add: (WDEActor new name: 'LevelStatic'; className: WDGFActor jsonObjectTypeName; yourself).
+	
+]
+
+{ #category : #'as yet unclassified' }
 WDEWodenGameFrameworkWorldLevel >> validExtensions [
 	^ self class validExtensions
 ]

@@ -23,12 +23,17 @@ WDEGameSettings class >> isAbstract [
 	^ self == WDEGameSettings
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
+WDEGameSettings >> assetsFolders [
+	^ #()
+]
+
+{ #category : #'path finding' }
 WDEGameSettings >> emptyLevel [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
 WDEGameSettings >> loadFromFileReference: aFileReference [
 	self subclassResponsibility
 ]
@@ -38,7 +43,7 @@ WDEGameSettings >> name [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
 WDEGameSettings >> playLevelWithFileName: fileName [
 	self inform: 'TODO: playMapWithFileName ' , fileName
 ]
@@ -58,7 +63,7 @@ WDEGameSettings >> topMaterialPaletteCategories [
 	^ #()
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
 WDEGameSettings >> validExtensions [
 	^ self subclassResponsibility
 ]

@@ -39,12 +39,6 @@ WDEEntityBasedLevel >> initialize [
 	modelingTree add: (WDEEntity new className: #worldspawn)
 ]
 
-{ #category : #serialization }
-WDEEntityBasedLevel >> loadFromJson: jsonData [
-	modelingTree := WDModelingTree new.
-	modelingTree loadFromJson: jsonData
-]
-
 { #category : #'as yet unclassified' }
 WDEEntityBasedLevel >> validExtensions [
 	^ self class validExtensions

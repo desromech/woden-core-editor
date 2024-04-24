@@ -52,6 +52,12 @@ WDELevel >> level [
 	^ self
 ]
 
+{ #category : #serialization }
+WDELevel >> loadFromJson: jsonData [
+	modelingTree := WDModelingTree new.
+	modelingTree loadFromJson: jsonData
+]
+
 { #category : #accessing }
 WDELevel >> modelingTree [
 	^ modelingTree

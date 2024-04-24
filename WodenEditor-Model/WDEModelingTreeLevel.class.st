@@ -1,3 +1,6 @@
+"
+I am a level that exposes directly the modeling tree.
+"
 Class {
 	#name : #WDEModelingTreeLevel,
 	#superclass : #WDELevel,
