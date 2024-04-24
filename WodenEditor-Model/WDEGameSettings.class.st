@@ -102,7 +102,7 @@ WDEGameSettings >> resolveAssetFileReference: aFileReference [
 	| resolveBlock |
 	resolveBlock := [ :each |
 		| resolved |
-		resolved := each resolve: each.
+		resolved := each resolve: aFileReference.
 		resolved exists ifTrue: [ ^ resolved ]
 	].
 
