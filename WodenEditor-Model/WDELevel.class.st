@@ -11,6 +11,16 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
+{ #category : #serialization }
+WDELevel class >> loadFromJson: jsonData [
+	^ self new loadFromJson: jsonData
+]
+
+{ #category : #'as yet unclassified' }
+WDELevel class >> loadFromJsonString: jsonString [
+	^ self loadFromJson: (STONJSON fromString: jsonString)
+]
+
 { #category : #'as yet unclassified' }
 WDELevel >> activeGroup [
 	^ self modelingTree

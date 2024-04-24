@@ -35,6 +35,17 @@ WDEWodenGameFrameworkSettings >> actorCategories [
 	^ { category }
 ]
 
+{ #category : #accessing }
+WDEWodenGameFrameworkSettings >> applicationSettings [
+	^	WDGFApplicationSettings
+
+]
+
+{ #category : #'path finding' }
+WDEWodenGameFrameworkSettings >> assetsFolders [
+	^ self applicationSettings asApplicationSettings assetsLocations
+]
+
 { #category : #palette }
 WDEWodenGameFrameworkSettings >> constructPaletteForActorClass: actorClass inCategory: category [
 ]
@@ -42,6 +53,11 @@ WDEWodenGameFrameworkSettings >> constructPaletteForActorClass: actorClass inCat
 { #category : #constructing }
 WDEWodenGameFrameworkSettings >> emptyLevel [
 	^ WDEWodenGameFrameworkWorldLevel empty
+]
+
+{ #category : #'path finding' }
+WDEWodenGameFrameworkSettings >> loadFromFileReference: aFileReference [
+	^ WDEWodenGameFrameworkWorldLevel loadFromJsonString: aFileReference contents
 ]
 
 { #category : #accessing }
@@ -52,4 +68,9 @@ WDEWodenGameFrameworkSettings >> name [
 { #category : #palette }
 WDEWodenGameFrameworkSettings >> topLevelElementTemplateCategories [
 	^ super topLevelElementTemplateCategories , self actorCategories
+]
+
+{ #category : #'path finding' }
+WDEWodenGameFrameworkSettings >> validExtensions [
+	^ WDEWodenGameFrameworkWorldLevel validExtensions
 ]

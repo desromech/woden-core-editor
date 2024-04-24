@@ -30,19 +30,7 @@ WDEGameSettings >> assetsFolders [
 
 { #category : #'path finding' }
 WDEGameSettings >> editorMaterials [
-	| materials |
-	materials := OrderedCollection new.
-	
-	self specialMaterialsFolders do: [ :materialFolderAndParent |
-		| materialFolder assetsFolder |
-		materialFolder := materialFolderAndParent first.
-		assetsFolder := materialFolderAndParent second.
-		materialFolder allChildren select: [ :each | #(wdmat) includes: each extension ]
-			thenDo: [ :each | materials add: (each relativeTo: materialFolder) fullName -> (each relativeTo: assetsFolder) fullName ]
-	].
-	materials sort: [ :a :b | a key < b key ].
-	
-	^ materials
+	^ self findAssetsWithExtensions: self materialExtensions on: self specialMaterialsFolders
 ]
 
 { #category : #'path finding' }
@@ -51,20 +39,27 @@ WDEGameSettings >> emptyLevel [
 ]
 
 { #category : #'path finding' }
-WDEGameSettings >> gameMaterials [
-	| materials |
-	materials := OrderedCollection new.
+WDEGameSettings >> findAssetsWithExtensions: aListOfExtensions on: folders [
+	| assets |
+	assets := OrderedCollection new.
 	
-	self materialsFolders do: [ :materialFolderAndParent |
-		| materialFolder assetsFolder |
-		materialFolder := materialFolderAndParent first.
-		assetsFolder := materialFolderAndParent second.
-		materialFolder allChildren select: [ :each | #(wdmat) includes: each extension ]
-			thenDo: [ :each | materials add: (each relativeTo: materialFolder) fullName -> (each relativeTo: assetsFolder) fullName ]
+	folders do: [ :materialFolderAndParent |
+		| assetFolder assetsBaseFolder |
+		assetFolder := materialFolderAndParent first.
+		assetsBaseFolder := materialFolderAndParent second.
+		assetFolder exists ifTrue: [
+			assetFolder allChildren select: [ :each | #(wdmat) includes: each extension ]
+			thenDo: [ :each | assets add: (each relativeTo: assetFolder) fullName -> (each relativeTo: assetsBaseFolder) fullName ]
+		]
 	].
-	materials sort: [ :a :b | a key < b key ].
+	assets sort: [ :a :b | a key < b key ].
 	
-	^ materials
+	^ assets
+]
+
+{ #category : #'path finding' }
+WDEGameSettings >> gameMaterials [
+	^ self findAssetsWithExtensions: self materialExtensions on: self materialsFolders
 ]
 
 { #category : #'path finding' }
@@ -80,6 +75,11 @@ WDEGameSettings >> loadValidMaterialForInfo: aMaterialInfo [
 	
 	resolvedPath exists ifFalse: [ ^ nil ].
 	^ WDMaterial loadFromFileReference: resolvedPath
+]
+
+{ #category : #'as yet unclassified' }
+WDEGameSettings >> materialExtensions [
+	^	#(wdmat)
 ]
 
 { #category : #'path finding' }

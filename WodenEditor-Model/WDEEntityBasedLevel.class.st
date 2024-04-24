@@ -7,16 +7,6 @@ Class {
 	#category : #'WodenEditor-Model-Level'
 }
 
-{ #category : #serialization }
-WDEEntityBasedLevel class >> loadFromJson: jsonData [
-	^ self new loadFromJson: jsonData
-]
-
-{ #category : #'as yet unclassified' }
-WDEEntityBasedLevel class >> loadFromJsonString: jsonString [
-	^ self loadFromJson: (STONJSON fromString: jsonString)
-]
-
 { #category : #'as yet unclassified' }
 WDEEntityBasedLevel class >> validExtensions [
 	^ #(weblvl)
