@@ -179,7 +179,7 @@ WDELevelEditorSession >> openFrom: aFileReference [
 WDELevelEditorSession >> playLevel [
 	| tempFileName |
 	self level ifNil: [ ^ self ].
-	tempFileName := (FileSystem workingDirectory / 'test-level.tmp') fullName.
+	tempFileName := (FileSystem disk workingDirectory / 'test-level.tmp') fullName.
 	self level saveTo: tempFileName asFileReference.
 	self gameSettings playLevelWithFileName: tempFileName
 ]
@@ -188,7 +188,7 @@ WDELevelEditorSession >> playLevel [
 WDELevelEditorSession >> playLevelInVR [
 	| tempFileName |
 	self level ifNil: [ ^ self ].
-	tempFileName := (FileSystem workingDirectory / 'test-level.tmp') fullName.
+	tempFileName := (FileSystem disk workingDirectory / 'test-level.tmp') fullName.
 	self level saveTo: tempFileName asFileReference.
 	self gameSettings playLevelInVRWithFileName: tempFileName
 ]
