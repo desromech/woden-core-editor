@@ -436,7 +436,8 @@ WDELevelEditor >> initializePresenters [
 	paletteNotebook := self newNotebook.
 	paletteNotebook
 		addPageTitle: 'Materials' provider: [ WDELevelEditorMaterialPalettePresenter on: self model];
-		addPageTitle: 'Light Sources' provider: [ WDELevelEditorLightSourcePalettePresenter on: self model].
+		addPageTitle: 'Light Sources' provider: [ WDELevelEditorLightSourcePalettePresenter on: self model];
+		addPageTitle: 'HDRI' provider: [ WDELevelEditorHDRIPalettePresenter on: self model].
 
 	mainMenuBar addKeybindingsTo: self.
 ]

@@ -6,5 +6,5 @@ Class {
 
 { #category : #'as yet unclassified' }
 WDELevelEditorMaterialPalettePresenter >> fetchTopLevelPaletteCategories [
-	^ self model topMaterialPaletteCategories
+	^ self model topLevelMaterialPaletteCategories
 ]

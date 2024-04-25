@@ -302,13 +302,18 @@ WDELevelEditorSession >> topLevelElementTemplateCategories [
 ]
 
 { #category : #palette }
+WDELevelEditorSession >> topLevelHDRIPaletteCategories [
+	^ WDEHDRIPaletteProvider allTopLevelPaletteCategories , gameSettings topLevelHDRIPaletteCategories
+]
+
+{ #category : #palette }
 WDELevelEditorSession >> topLevelLightSourcePaletteCategories [
 	^ WDELightSourcePaletteProvider allTopLevelPaletteCategories , gameSettings topLevelLightSourcePaletteCategories
 ]
 
 { #category : #palette }
-WDELevelEditorSession >> topMaterialPaletteCategories [
-	^ WDEMaterialPaletteProvider allTopLevelPaletteCategories , gameSettings topMaterialPaletteCategories
+WDELevelEditorSession >> topLevelMaterialPaletteCategories [
+	^ WDEMaterialPaletteProvider allTopLevelPaletteCategories , gameSettings topLevelMaterialPaletteCategories
 ]
 
 { #category : #'undo - redo' }

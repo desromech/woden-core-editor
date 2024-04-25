@@ -43,12 +43,12 @@ WDEGameSettings >> findAssetsWithExtensions: aListOfExtensions on: folders [
 	| assets |
 	assets := OrderedCollection new.
 	
-	folders do: [ :materialFolderAndParent |
+	folders do: [ :assetFolderAndParent |
 		| assetFolder assetsBaseFolder |
-		assetFolder := materialFolderAndParent first.
-		assetsBaseFolder := materialFolderAndParent second.
+		assetFolder := assetFolderAndParent first.
+		assetsBaseFolder := assetFolderAndParent second.
 		assetFolder exists ifTrue: [
-			assetFolder allChildren select: [ :each | #(wdmat) includes: each extension ]
+			assetFolder allChildren select: [ :each | aListOfExtensions includes: each extension ]
 			thenDo: [ :each | assets add: (each relativeTo: assetFolder) fullName -> (each relativeTo: assetsBaseFolder) fullName ]
 		]
 	].
@@ -58,8 +58,23 @@ WDEGameSettings >> findAssetsWithExtensions: aListOfExtensions on: folders [
 ]
 
 { #category : #'path finding' }
+WDEGameSettings >> gameHDRIs [
+	^ self findAssetsWithExtensions: self hdriExtensions on: self hdriFolders
+]
+
+{ #category : #'path finding' }
 WDEGameSettings >> gameMaterials [
 	^ self findAssetsWithExtensions: self materialExtensions on: self materialsFolders
+]
+
+{ #category : #'as yet unclassified' }
+WDEGameSettings >> hdriExtensions [
+	^	#(hdr)
+]
+
+{ #category : #'path finding' }
+WDEGameSettings >> hdriFolders [
+	^ self assetsFolders collect: [ :each | {each / 'hdri' . each} ]
 ]
 
 { #category : #'path finding' }
@@ -131,13 +146,29 @@ WDEGameSettings >> topLevelElementTemplateCategories [
 	^ #()
 ]
 
+{ #category : #'path finding' }
+WDEGameSettings >> topLevelHDRIPaletteCategories [
+	| category |
+	category := WDEPaletteCategory new
+			name: 'Game HDRI'.
+	self gameHDRIs do: [ :each |
+		| subcategory |
+		subcategory := category getOrCreateSubcategoryWithPath: each key asFileReference path segments allButLast.
+		subcategory addTemplate: ((WDEHDRIPaletteElement path: each value)
+			name: each key asFileReference basenameWithoutExtension;
+			yourself)
+	].
+
+	^ {category}
+]
+
 { #category : #palette }
 WDEGameSettings >> topLevelLightSourcePaletteCategories [
 	^ #()
 ]
 
 { #category : #'path finding' }
-WDEGameSettings >> topMaterialPaletteCategories [
+WDEGameSettings >> topLevelMaterialPaletteCategories [
 	| category editorCategory |
 	category := WDEPaletteCategory new
 			name: 'Game Materials'.
