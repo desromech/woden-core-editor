@@ -69,7 +69,7 @@ WDEWodenGameFrameworkSettings >> name [
 WDEWodenGameFrameworkSettings >> playLevelWithFileName: fileName [
 	(WDGFWorld withApplicationSettings: self applicationSettings)
 		loadFromFileNamed: fileName;
-		playInMorphic
+		playInOSWindow
 ]
 
 { #category : #palette }
