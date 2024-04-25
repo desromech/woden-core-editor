@@ -31,7 +31,7 @@ WDELevelEditorSelection >> deleteSelectedItemsInSession: levelSession [
 			selectedItems doWithIndex: [:removedItem :parentIndex |
 				| oldParent |
 				oldParent := oldParents at: parentIndex.
-				oldParent addChild: removedItem
+				oldParent add: removedItem
 			].
 			levelSession selection: self
 		]
