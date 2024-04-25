@@ -65,6 +65,13 @@ WDEWodenGameFrameworkSettings >> name [
 	^ 'Woden Game Framework'
 ]
 
+{ #category : #'path finding' }
+WDEWodenGameFrameworkSettings >> playLevelWithFileName: fileName [
+	(WDGFWorld withApplicationSettings: self applicationSettings)
+		loadFromFileNamed: fileName;
+		playInMorphic
+]
+
 { #category : #palette }
 WDEWodenGameFrameworkSettings >> topLevelElementTemplateCategories [
 	^ super topLevelElementTemplateCategories , self actorCategories

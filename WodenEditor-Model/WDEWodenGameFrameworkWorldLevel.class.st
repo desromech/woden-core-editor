@@ -33,7 +33,7 @@ WDEWodenGameFrameworkWorldLevel >> activeGroupForInstantiating: aPrototype [
 { #category : #initialization }
 WDEWodenGameFrameworkWorldLevel >> initialize [
 	super initialize.
-	modelingTree add: (WDEActor new name: 'LevelStatic'; className: WDGFActor jsonObjectTypeName; yourself).
+	modelingTree add: (WDEActor new className: WDGFStaticActor jsonObjectTypeName; yourself).
 	
 ]
 

@@ -99,7 +99,9 @@ WDEEntity >> objectTypeName [
 WDEEntity >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	self isPointEntity ifTrue: [
-		aHandle sceneNode renderables: {
+		aHandle sceneNode
+			castShadows: false;
+			renderables: {
 			WDModelingCommonMeshes uniqueInstance pointObjectDisplayBox copyWithMaterial: WDModelingCommonMeshes uniqueInstance greenPointObjectDisplayMaterial
 		}
 	].
