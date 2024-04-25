@@ -46,7 +46,7 @@ WDELevel >> gameSettings [
 { #category : #accessing }
 WDELevel >> gameSettings: anObject [
 	gameSettings := anObject.
-	modelingTree ifNotNil: [ modelingTree materialResolver: gameSettings ]
+	modelingTree ifNotNil: [ modelingTree materialResolver: gameSettings; assetResolver: gameSettings ]
 	
 ]
 
@@ -54,7 +54,7 @@ WDELevel >> gameSettings: anObject [
 WDELevel >> initialize [
 	super initialize.
 	modelingTree := WDModelingTree new.
-	modelingTree materialResolver: gameSettings.
+	modelingTree materialResolver: gameSettings; assetResolver: gameSettings.
 ]
 
 { #category : #accessing }

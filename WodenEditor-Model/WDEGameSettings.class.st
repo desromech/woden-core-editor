@@ -86,7 +86,7 @@ WDEGameSettings >> loadFromFileReference: aFileReference [
 WDEGameSettings >> loadValidMaterialForInfo: aMaterialInfo [
 	| resolvedPath |
 	aMaterialInfo path ifNil: [ ^ nil ].
-	resolvedPath := self resolveAssetFileReference: aMaterialInfo path asFileReference.
+	resolvedPath := self resolveAssetPath: aMaterialInfo path asFileReference.
 	
 	resolvedPath exists ifFalse: [ ^ nil ].
 	^ WDMaterial loadFromFileReference: resolvedPath
@@ -118,7 +118,7 @@ WDEGameSettings >> playLevelWithFileName: fileName [
 ]
 
 { #category : #'path finding' }
-WDEGameSettings >> resolveAssetFileReference: aFileReference [
+WDEGameSettings >> resolveAssetPath: aFileReference [
 	| resolveBlock |
 	resolveBlock := [ :each |
 		| resolved |
