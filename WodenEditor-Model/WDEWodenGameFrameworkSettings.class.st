@@ -50,6 +50,11 @@ WDEWodenGameFrameworkSettings >> assetsFolders [
 WDEWodenGameFrameworkSettings >> constructPaletteForActorClass: actorClass inCategory: category [
 ]
 
+{ #category : #'as yet unclassified' }
+WDEWodenGameFrameworkSettings >> defaultMapsLocation [
+	^ self applicationSettings asApplicationSettings mapsLocation
+]
+
 { #category : #constructing }
 WDEWodenGameFrameworkSettings >> emptyLevel [
 	^ WDEWodenGameFrameworkWorldLevel empty

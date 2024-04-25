@@ -28,6 +28,11 @@ WDEGameSettings >> assetsFolders [
 	^ #()
 ]
 
+{ #category : #'as yet unclassified' }
+WDEGameSettings >> defaultMapsLocation [
+	^ FileLocator imageDirectory
+]
+
 { #category : #'path finding' }
 WDEGameSettings >> editorMaterials [
 	^ self findAssetsWithExtensions: self materialExtensions on: self specialMaterialsFolders

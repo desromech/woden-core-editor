@@ -402,6 +402,7 @@ WDELevelEditorContentView >> createLevelFileDialog [
 	^ FileDialogWindow basicNew
 		initialize;
 		validExtensions: self level validExtensions;
+		selectPath: self session gameSettings defaultMapsLocation;
 		yourself
 ]
 
