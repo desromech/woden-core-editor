@@ -125,6 +125,11 @@ WDELevelEditor >> actionPlayLevel [
 	^ self model playLevel
 ]
 
+{ #category : #'as yet unclassified' }
+WDELevelEditor >> actionPlayLevelInVR [
+	^ self model playLevelInVR
+]
+
 { #category : #menu }
 WDELevelEditor >> buildMainMenuBar [
 	^ self newMenuBar
@@ -186,6 +191,11 @@ WDELevelEditor >> buildMainToolbar [
 		addItem: (SpToolbarButtonPresenter new
 			icon: (self iconNamed: #glamorousGo);
 			action: [ self actionPlayLevel ];
+			yourself);
+		addItem: (SpToolbarButtonPresenter new
+			label: 'VR';
+			icon: (self iconNamed: #glamorousGo);
+			action: [ self actionPlayLevelInVR ];
 			yourself);
 		yourself
 ]
@@ -371,6 +381,11 @@ WDELevelEditor >> gameMenu [
 						name: 'Play level';
 						shortcut: $p command mac | $p control unix | $p control win;
 						action: [self actionPlayLevel].
+				];
+				addItem: [ :item |
+					item
+						name: 'Play level in VR';
+						action: [self actionPlayLevelInVR].
 				]
 		];
 		yourself

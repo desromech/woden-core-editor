@@ -184,6 +184,15 @@ WDELevelEditorSession >> playLevel [
 	self gameSettings playLevelWithFileName: tempFileName
 ]
 
+{ #category : #accessing }
+WDELevelEditorSession >> playLevelInVR [
+	| tempFileName |
+	self level ifNil: [ ^ self ].
+	tempFileName := (FileSystem workingDirectory / 'test-level.tmp') fullName.
+	self level saveTo: tempFileName asFileReference.
+	self gameSettings playLevelInVRWithFileName: tempFileName
+]
+
 { #category : #'as yet unclassified' }
 WDELevelEditorSession >> rayPickElement: ray mode: modelingEditionMode [
 	^ self level ifNil: [ #() ] ifNotNil: [ :l | l rayPickElement: ray mode: modelingEditionMode ]

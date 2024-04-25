@@ -93,8 +93,13 @@ WDEGameSettings >> name [
 ]
 
 { #category : #'path finding' }
+WDEGameSettings >> playLevelInVRWithFileName: fileName [
+	self inform: 'TODO: playLevelInVRWithFileName: ' , fileName
+]
+
+{ #category : #'path finding' }
 WDEGameSettings >> playLevelWithFileName: fileName [
-	self inform: 'TODO: playMapWithFileName ' , fileName
+	self inform: 'TODO: playLevelWithFileName: ' , fileName
 ]
 
 { #category : #'path finding' }

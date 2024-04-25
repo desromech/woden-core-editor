@@ -66,6 +66,13 @@ WDEWodenGameFrameworkSettings >> name [
 ]
 
 { #category : #'path finding' }
+WDEWodenGameFrameworkSettings >> playLevelInVRWithFileName: fileName [
+	(WDGFWorld withApplicationSettings: self applicationSettings)
+		loadFromFileNamed: fileName;
+		playInVR
+]
+
+{ #category : #'path finding' }
 WDEWodenGameFrameworkSettings >> playLevelWithFileName: fileName [
 	(WDGFWorld withApplicationSettings: self applicationSettings)
 		loadFromFileNamed: fileName;
