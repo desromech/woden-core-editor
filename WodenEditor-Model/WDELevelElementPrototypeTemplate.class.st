@@ -41,7 +41,7 @@ WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInPoint: pl
 
 { #category : #testing }
 WDELevelElementPrototypeTemplate >> isPointElementTemplate [
-	^ prototype isPointModelingElement
+	^ prototype isPointPlacedElement
 ]
 
 { #category : #accessing }

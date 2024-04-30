@@ -65,6 +65,11 @@ WDEEntity >> isPointModelingElement [
 ]
 
 { #category : #testing }
+WDEEntity >> isPointPlacedElement [
+	^ self isPointEntity
+]
+
+{ #category : #testing }
 WDEEntity >> isSceneSelectableObject [
 	^ self isWorldEntity not
 ]

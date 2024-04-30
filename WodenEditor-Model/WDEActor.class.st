@@ -59,7 +59,7 @@ WDEActor >> isLevelStatic [
 ]
 
 { #category : #testing }
-WDEActor >> isPointModelingElement [
+WDEActor >> isPointPlacedElement [
 	^ true
 ]
 
