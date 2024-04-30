@@ -4,17 +4,22 @@ Class {
 	#category : #'WodenEditor-Model-GameSettings'
 }
 
+{ #category : #testing }
+WDEEntityBaseGameSettings class >> isAbstract [
+	^ self == WDEEntityBaseGameSettings
+]
+
 { #category : #palette }
 WDEEntityBaseGameSettings >> basicEntityTemplates [
 	^ WDELevelGenericElementTemplateProvider new basicEntities
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
 WDEEntityBaseGameSettings >> emptyLevel [
 	^ WDEEntityBasedLevel new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
 WDEEntityBaseGameSettings >> loadFromFileReference: aFileReference [
 	^ WDEEntityBasedLevel loadFromJsonString: aFileReference contents
 ]
@@ -29,7 +34,7 @@ WDEEntityBaseGameSettings >> topLevelElementTemplateCategories [
 	^ super topLevelElementTemplateCategories , {self basicEntityTemplates}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
 WDEEntityBaseGameSettings >> validExtensions [
 	^ WDEEntityBasedLevel validExtensions
 ]

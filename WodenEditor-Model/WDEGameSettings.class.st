@@ -3,6 +3,9 @@ Class {
 	#superclass : #Object,
 	#traits : 'TWDMModelingMaterialInfoResolver',
 	#classTraits : 'TWDMModelingMaterialInfoResolver classTrait',
+	#instVars : [
+		'modelAssetCache'
+	],
 	#category : #'WodenEditor-Model-GameSettings'
 }
 
@@ -28,7 +31,7 @@ WDEGameSettings >> assetsFolders [
 	^ #()
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
 WDEGameSettings >> defaultMapsLocation [
 	^ FileLocator imageDirectory
 ]
@@ -72,7 +75,12 @@ WDEGameSettings >> gameMaterials [
 	^ self findAssetsWithExtensions: self materialExtensions on: self materialsFolders
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
+WDEGameSettings >> gameModels [
+	^ self findAssetsWithExtensions: self modelExtensions on: self modelsFolders
+]
+
+{ #category : #'path finding' }
 WDEGameSettings >> hdriExtensions [
 	^	#(hdr)
 ]
@@ -82,9 +90,28 @@ WDEGameSettings >> hdriFolders [
 	^ self assetsFolders collect: [ :each | {each / 'hdri' . each} ]
 ]
 
+{ #category : #initialization }
+WDEGameSettings >> initialize [
+	super initialize.
+	modelAssetCache := WeakValueDictionary new.
+]
+
 { #category : #'path finding' }
 WDEGameSettings >> loadFromFileReference: aFileReference [
 	self subclassResponsibility
+]
+
+{ #category : #'path finding' }
+WDEGameSettings >> loadModelWithPath: path [
+	| solvedPath |
+	solvedPath := self resolveAssetPath: path.
+	solvedPath exists ifFalse: [ ^ nil ].
+	
+	^ modelAssetCache at: solvedPath asAbsolute fullName ifAbsentPut: [
+		[ 
+			WDModelAssetReadWriter readFileNamed: solvedPath
+		] on: Error do: [ nil ]
+	]
 ]
 
 { #category : #'path finding' }
@@ -97,7 +124,7 @@ WDEGameSettings >> loadValidMaterialForInfo: aMaterialInfo [
 	^ WDMaterial loadFromFileReference: resolvedPath
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'path finding' }
 WDEGameSettings >> materialExtensions [
 	^	#(wdmat)
 ]
@@ -105,6 +132,35 @@ WDEGameSettings >> materialExtensions [
 { #category : #'path finding' }
 WDEGameSettings >> materialsFolders [
 	^ self assetsFolders collect: [ :each | {each / 'materials' . each} ]
+]
+
+{ #category : #'path finding' }
+WDEGameSettings >> modelCategories [
+	| category |
+	category := WDEPaletteCategory new
+			name: 'Models'.
+	self gameModels do: [ :each |
+		| subcategory |
+		subcategory := category getOrCreateSubcategoryWithPath: each key asFileReference path segments allButLast.
+		subcategory addTemplate: (WDELevelElementPrototypeTemplate new
+			name: each key asFileReference basenameWithoutExtension;
+			prototype: (WDModelingModelReference new
+				path: each value;
+				yourself);
+			yourself)
+	].
+
+	^ {category} select: [ :each | each isNotEmpty ]
+]
+
+{ #category : #'path finding' }
+WDEGameSettings >> modelExtensions [
+	^	#(obj ply gltf glb)
+]
+
+{ #category : #'path finding' }
+WDEGameSettings >> modelsFolders [
+	^ self assetsFolders collect: [ :each | {each / 'models' . each} ]
 ]
 
 { #category : #accessing }
@@ -148,7 +204,7 @@ WDEGameSettings >> specialMaterialsFolders [
 
 { #category : #palette }
 WDEGameSettings >> topLevelElementTemplateCategories [
-	^ #()
+	^ self modelCategories
 ]
 
 { #category : #'path finding' }
@@ -164,7 +220,7 @@ WDEGameSettings >> topLevelHDRIPaletteCategories [
 			yourself)
 	].
 
-	^ {category}
+	^ {category} select: [ :each | each isNotEmpty ]
 ]
 
 { #category : #palette }
@@ -196,7 +252,7 @@ WDEGameSettings >> topLevelMaterialPaletteCategories [
 			yourself)
 	].
 
-	^ {category . editorCategory}
+	^ {category . editorCategory} select: [ :each | each isNotEmpty ]
 ]
 
 { #category : #'path finding' }

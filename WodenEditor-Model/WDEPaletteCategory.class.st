@@ -69,6 +69,11 @@ WDEPaletteCategory >> isEmpty [
 	^ templates isEmpty and: [ subcategories isEmpty ]
 ]
 
+{ #category : #testing }
+WDEPaletteCategory >> isNotEmpty [
+	^ self isEmpty not
+]
+
 { #category : #accessing }
 WDEPaletteCategory >> name [
 	^ name
