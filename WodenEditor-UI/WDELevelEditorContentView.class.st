@@ -426,7 +426,7 @@ WDELevelEditorContentView >> createSceneNodes [
 		camera: cameraNode.
 	cameraNode
 		orientation: Quaternion lookAtBottom;
-		position: (Vector3 x: 0 y: 0 z: self cameraFocalPointDistance).
+		position: (Vector3 x: 0 y: 1 z: self cameraFocalPointDistance).
 	scene add: cameraNode.
 	editorViewType := #top.
 	cameraLight := WDDirectionalLightSource new
