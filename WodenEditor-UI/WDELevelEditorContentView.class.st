@@ -759,6 +759,24 @@ WDELevelEditorContentView >> perspectiveView [
 	self updateCameraAndGrid
 ]
 
+{ #category : 'camera' }
+WDELevelEditorContentView >> placementFocalPointDistance [
+	self session lastSelectionBox ifNotNil: [ :selectionBox |
+		selectionBox isEmpty ifFalse: [ 
+			| worldPlacementFocalPoint |
+			worldPlacementFocalPoint := selectionBox center.
+			^ self computeScreenDistanceForPoint: worldPlacementFocalPoint
+		]
+	].
+
+	^ self cameraFocalPointDistance
+]
+
+{ #category : 'camera' }
+WDELevelEditorContentView >> placementXYToWorld: screenPosition [
+	^ self cameraXYToWorld: screenPosition distance: self placementFocalPointDistance
+]
+
 { #category : 'manipulators' }
 WDELevelEditorContentView >> rayCastForManipulator: ray [
 	| bestResult |

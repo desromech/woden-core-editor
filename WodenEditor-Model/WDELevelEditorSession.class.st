@@ -13,7 +13,8 @@ Class {
 		'redoOperationHistory',
 		'whenStartingToPlaceDuplicatedItems',
 		'levelFileReference',
-		'activeEditionElements'
+		'activeEditionElements',
+		'lastSelectionBox'
 	],
 	#category : 'WodenEditor-Model-Session',
 	#package : 'WodenEditor-Model',
@@ -147,6 +148,11 @@ WDELevelEditorSession >> initialize [
 ]
 
 { #category : 'accessing' }
+WDELevelEditorSession >> lastSelectionBox [
+	^ lastSelectionBox
+]
+
+{ #category : 'accessing' }
 WDELevelEditorSession >> level [
 	^ level value
 ]
@@ -237,6 +243,13 @@ WDELevelEditorSession >> selection [
 WDELevelEditorSession >> selection: newSelection [
 	selection value ifNotNil: [ :s | s notifySelectedStatus: false ].
 	selection value: newSelection.
+	newSelection ifNotNil: [ 
+		| selectionBoundingBox |
+		selectionBoundingBox := newSelection boundingBox.
+		selectionBoundingBox isEmpty ifFalse: [
+			lastSelectionBox := selectionBoundingBox 
+		]
+	].
 	selection value ifNotNil: [ :s | s notifySelectedStatus: true ].
 
 ]

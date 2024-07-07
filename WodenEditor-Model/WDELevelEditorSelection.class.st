@@ -19,6 +19,14 @@ WDELevelEditorSelection class >> for: selectedItems [
 	^ self new selectedItems: selectedItems
 ]
 
+{ #category : 'accessing' }
+WDELevelEditorSelection >> boundingBox [
+	| box |
+	box := AABox empty.
+	selectedItems do: [ :each | box insertBox: each boundingBox ].
+	^ box
+]
+
 { #category : 'actions' }
 WDELevelEditorSelection >> deleteSelectedItemsInSession: levelSession [
 	| oldParents |
