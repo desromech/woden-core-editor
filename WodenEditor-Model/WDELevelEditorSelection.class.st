@@ -23,7 +23,11 @@ WDELevelEditorSelection class >> for: selectedItems [
 WDELevelEditorSelection >> boundingBox [
 	| box |
 	box := AABox empty.
-	selectedItems do: [ :each | box insertBox: each boundingBox ].
+	selectedItems do: [ :each |
+		each boundingBox ifNotNil: [ :eachBB |
+			box insertBox: eachBB
+		]
+	].
 	^ box
 ]
 
