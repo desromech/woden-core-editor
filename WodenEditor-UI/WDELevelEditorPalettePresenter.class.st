@@ -1,13 +1,15 @@
 Class {
-	#name : #WDELevelEditorPalettePresenter,
-	#superclass : #SpPresenterWithModel,
+	#name : 'WDELevelEditorPalettePresenter',
+	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'treeView'
 	],
-	#category : #'WodenEditor-UI-Spec'
+	#category : 'WodenEditor-UI-Spec',
+	#package : 'WodenEditor-UI',
+	#tag : 'Spec'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 WDELevelEditorPalettePresenter class >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: #treeView;
@@ -15,7 +17,7 @@ WDELevelEditorPalettePresenter class >> defaultLayout [
 		
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorPalettePresenter >> initializePresenters [
 	treeView := self newTreeTable.
 	treeView
@@ -37,12 +39,12 @@ WDELevelEditorPalettePresenter >> initializePresenters [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorPalettePresenter >> modelChanged [
 	treeView roots: self fetchTopLevelPaletteCategories.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorPalettePresenter >> setSelectedPaletteElement: paletteElement [
 	"By default do nothing."
 ]

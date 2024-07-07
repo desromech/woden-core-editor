@@ -1,13 +1,15 @@
 Class {
-	#name : #WDELevelEditorBrushDrawDragToolMode,
-	#superclass : #WDELevelEditorViewDragToolMode,
+	#name : 'WDELevelEditorBrushDrawDragToolMode',
+	#superclass : 'WDELevelEditorViewDragToolMode',
 	#instVars : [
 		'sceneNode'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorBrushDrawDragToolMode >> applyBoxToSceneNode: box [
 	sceneNode ifNil: [ self createSceneNode ].
 	sceneNode
@@ -15,7 +17,7 @@ WDELevelEditorBrushDrawDragToolMode >> applyBoxToSceneNode: box [
 	view refresh.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorBrushDrawDragToolMode >> computeBoxWithScreenEndPoint: screenEndPoint [
 	| dragMinDistance startPosition endPosition dragMaxDistance box |
 	dragMinDistance := view cameraFocalPointDistance - 0.5.
@@ -29,13 +31,13 @@ WDELevelEditorBrushDrawDragToolMode >> computeBoxWithScreenEndPoint: screenEndPo
 	^ box
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorBrushDrawDragToolMode >> createSceneNode [
 	sceneNode := WDELevelEditorMeshes uniqueInstance flatShadedTranslucentUnitCubeMesh asSceneNode.
 	self scene add: sceneNode
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorBrushDrawDragToolMode >> finishDraggingWith: event [
 	| box |
 	super finishDraggingWith: event.
@@ -51,12 +53,12 @@ WDELevelEditorBrushDrawDragToolMode >> finishDraggingWith: event [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorBrushDrawDragToolMode >> modeName [
 	^ 'Brush drawing'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorBrushDrawDragToolMode >> onMouseDrag: event delta: delta [
 	| box |
 	super onMouseDrag: event delta: delta.

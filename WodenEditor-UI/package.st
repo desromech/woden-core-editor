@@ -1,1 +1,1 @@
-Package { #name : #'WodenEditor-UI' }
+Package { #name : 'WodenEditor-UI' }

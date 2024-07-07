@@ -1,13 +1,15 @@
 Class {
-	#name : #WDELevelEditorRotateToolMode,
-	#superclass : #WDELevelEditorSelectionTransformToolMode,
+	#name : 'WDELevelEditorRotateToolMode',
+	#superclass : 'WDELevelEditorSelectionTransformToolMode',
 	#instVars : [
 		'transformStateMementos'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorRotateToolMode >> applyTransformToElements [
 	| transform su sv axis angle |
 	currentPosition ifNil: [ ^ self ].
@@ -28,19 +30,19 @@ WDELevelEditorRotateToolMode >> applyTransformToElements [
 	view selectedItemsBoundingBoxChanged; refresh.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorRotateToolMode >> modeName [
 	^ 'Rotate elements'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorRotateToolMode >> restoreMementos [
 	elements doWithIndex: [ :element :index |
 		element restoreTransformStateMemento: (transformStateMementos at: index)
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorRotateToolMode >> storeMementos [
 	transformStateMementos := elements collect: [ :each | each transformStateMemento ].
 ]

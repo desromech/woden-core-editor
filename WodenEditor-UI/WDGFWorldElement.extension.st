@@ -1,5 +1,5 @@
-Extension { #name : #WDGFWorldElement }
+Extension { #name : 'WDGFWorldElement' }
 
-{ #category : #'*WodenEditor-UI' }
+{ #category : '*WodenEditor-UI' }
 WDGFWorldElement >> buildContextMenuForEditorSession: levelSession on: menuPresenter [
 ]

@@ -1,20 +1,22 @@
 Class {
-	#name : #WDELevelEditorViewFaceTexturingMode,
-	#superclass : #WDELevelEditorViewEditionMode,
-	#category : #'WodenEditor-UI-ViewMode'
+	#name : 'WDELevelEditorViewFaceTexturingMode',
+	#superclass : 'WDELevelEditorViewEditionMode',
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewFaceTexturingMode >> currentModelingEditionMode [
 	^ WDFaceTexturingMode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorViewFaceTexturingMode >> modeName [
 	^ 'Texturing Mode'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewFaceTexturingMode >> supportsElementSelection [
 	^ true
 ]

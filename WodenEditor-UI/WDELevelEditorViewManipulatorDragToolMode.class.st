@@ -1,20 +1,22 @@
 Class {
-	#name : #WDELevelEditorViewManipulatorDragToolMode,
-	#superclass : #WDELevelEditorViewDragToolMode,
+	#name : 'WDELevelEditorViewManipulatorDragToolMode',
+	#superclass : 'WDELevelEditorViewDragToolMode',
 	#instVars : [
 		'manipulator',
 		'memento',
 		'dragScreenDistance'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewManipulatorDragToolMode >> doNotAffectManipulators [
 	^ true
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorViewManipulatorDragToolMode >> dragStartedWith: startEvent [
 	super dragStartedWith: startEvent.
 	memento := manipulator mementoForDragging.
@@ -23,18 +25,18 @@ WDELevelEditorViewManipulatorDragToolMode >> dragStartedWith: startEvent [
 	]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorViewManipulatorDragToolMode >> initialize [
 	super initialize.
 	dragScreenDistance := 3.0.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorViewManipulatorDragToolMode >> manipulator [
 	^ manipulator
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorViewManipulatorDragToolMode >> manipulator: aManipulator [
 	manipulator := aManipulator
 ]

@@ -1,6 +1,6 @@
 Class {
-	#name : #WDELevelEditorMeshes,
-	#superclass : #Object,
+	#name : 'WDELevelEditorMeshes',
+	#superclass : 'Object',
 	#instVars : [
 		'axisMesh',
 		'gridMaterial',
@@ -14,22 +14,24 @@ Class {
 	#classInstVars : [
 		'uniqueInstance'
 	],
-	#category : #'WodenEditor-Model-Assets'
+	#category : 'WodenEditor-Model-Assets',
+	#package : 'WodenEditor-Model',
+	#tag : 'Assets'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes class >> reset [
 	<script>
 	uniqueInstance := nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes class >> uniqueInstance [
 	uniqueInstance ifNil: [ uniqueInstance := self basicNew initialize ].
 	^ uniqueInstance
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes >> axisMesh [
 	^ axisMesh ifNil: [
 		| start end |
@@ -58,12 +60,12 @@ WDELevelEditorMeshes >> axisMesh [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorMeshes >> baseGridSize [
 	^ 10
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes >> defaultMaterial [
 	^ defaultMaterial ifNil: [ defaultMaterial := WDMetallicRoughnessMaterial new
 		baseColorFactor: 0.8;
@@ -73,7 +75,7 @@ WDELevelEditorMeshes >> defaultMaterial [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes >> flatShadedTranslucentMaterial [
 	^ flatShadedTranslucentMaterial ifNil: [
 		flatShadedTranslucentMaterial := WDUnlitMaterial new
@@ -83,21 +85,21 @@ WDELevelEditorMeshes >> flatShadedTranslucentMaterial [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes >> flatShadedTranslucentUnitCubeMesh [
 	^ flatShadedTranslucentUnitCubeMesh ifNil: [
 		flatShadedTranslucentUnitCubeMesh := self unitCube copyWithMaterial: self flatShadedTranslucentMaterial
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes >> gridMaterial [
 	^ gridMaterial ifNil: [ gridMaterial := WDUnlitMaterial new
 		background: true;
 		yourself ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes >> gridMesh [
 	^ gridMesh ifNil: [
 		| start end |
@@ -111,7 +113,7 @@ WDELevelEditorMeshes >> gridMesh [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes >> subGridMesh [
 	^ subGridMesh ifNil: [
 		| start end |
@@ -125,7 +127,7 @@ WDELevelEditorMeshes >> subGridMesh [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorMeshes >> unitCube [
 	^ unitCube ifNil: [
 		unitCube := WDMeshBuilder new

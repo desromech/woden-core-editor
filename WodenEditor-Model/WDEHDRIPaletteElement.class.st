@@ -1,18 +1,20 @@
 Class {
-	#name : #WDEHDRIPaletteElement,
-	#superclass : #WDEPaletteElement,
+	#name : 'WDEHDRIPaletteElement',
+	#superclass : 'WDEPaletteElement',
 	#instVars : [
 		'hdri'
 	],
-	#category : #'WodenEditor-Model-Palette'
+	#category : 'WodenEditor-Model-Palette',
+	#package : 'WodenEditor-Model',
+	#tag : 'Palette'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEHDRIPaletteElement class >> path: path [
 	^ self new hdri: path; yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDEHDRIPaletteElement >> activateInLevelSession: levelSession [
 	| memento |
 	memento := levelSession level modelingTree hdri.
@@ -25,13 +27,13 @@ WDEHDRIPaletteElement >> activateInLevelSession: levelSession [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEHDRIPaletteElement >> hdri [
 
 	^ hdri
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEHDRIPaletteElement >> hdri: anObject [
 
 	hdri := anObject

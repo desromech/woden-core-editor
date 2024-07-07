@@ -1,13 +1,15 @@
 Class {
-	#name : #WDELevelElementPrototypeTemplate,
-	#superclass : #WDELevelElementTemplate,
+	#name : 'WDELevelElementPrototypeTemplate',
+	#superclass : 'WDELevelElementTemplate',
 	#instVars : [
 		'prototype'
 	],
-	#category : #'WodenEditor-Model-Palette'
+	#category : 'WodenEditor-Model-Palette',
+	#package : 'WodenEditor-Model',
+	#tag : 'Palette'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInBox: placementBox session: session [
 	| oldSelection element |
 	oldSelection := session selection.
@@ -23,7 +25,7 @@ WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInBox: plac
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInPoint: placementPoint session: session [
 	| oldSelection element |
 	oldSelection := session selection.
@@ -39,17 +41,17 @@ WDELevelElementPrototypeTemplate >> instantiateInLevel: level placingInPoint: pl
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDELevelElementPrototypeTemplate >> isPointElementTemplate [
 	^ prototype isPointPlacedElement
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementPrototypeTemplate >> prototype [
 	^ prototype
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementPrototypeTemplate >> prototype: anObject [
 	prototype := anObject
 ]

@@ -1,23 +1,25 @@
 Class {
-	#name : #WDELevelEditorSelection,
-	#superclass : #Object,
+	#name : 'WDELevelEditorSelection',
+	#superclass : 'Object',
 	#instVars : [
 		'selectedItems'
 	],
-	#category : #'WodenEditor-Model-Session'
+	#category : 'WodenEditor-Model-Session',
+	#package : 'WodenEditor-Model',
+	#tag : 'Session'
 }
 
-{ #category : #requirements }
+{ #category : 'requirements' }
 WDELevelEditorSelection class >> empty [
 	^ self new
 ]
 
-{ #category : #requirements }
+{ #category : 'requirements' }
 WDELevelEditorSelection class >> for: selectedItems [
 	^ self new selectedItems: selectedItems
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorSelection >> deleteSelectedItemsInSession: levelSession [
 	| oldParents |
 	oldParents := selectedItems collect: [ :each | each parent ].
@@ -37,7 +39,7 @@ WDELevelEditorSelection >> deleteSelectedItemsInSession: levelSession [
 		]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorSelection >> duplicateSelectedItemsInSession: levelSession [
 	| duplicatedItems placeableElements |
 	selectedItems ifEmpty: [ ^ self ].
@@ -55,7 +57,7 @@ WDELevelEditorSelection >> duplicateSelectedItemsInSession: levelSession [
 	levelSession startPlacingDuplicatedItems: duplicatedItems
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorSelection >> groupInEntitySelectedItemsInSession: levelSession [
 	| originalParent entity entityParent oldSelection |
 	selectedItems ifEmpty: [ ^ self ].
@@ -82,7 +84,7 @@ WDELevelEditorSelection >> groupInEntitySelectedItemsInSession: levelSession [
 	]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorSelection >> groupSelectedItemsInSession: levelSession [
 	| group groupParent oldSelection |
 	selectedItems ifEmpty: [ ^ self ].
@@ -108,51 +110,51 @@ WDELevelEditorSelection >> groupSelectedItemsInSession: levelSession [
 	]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorSelection >> initialize [
 	super initialize.
 	selectedItems := #().
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditorSelection >> materialStateMemento [
 	^ selectedItems collect: [ :each | each materialStateMemento ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelection >> notifySelectedStatus: status [
 	selectedItems do: [ :each | each selected: status ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelection >> propertyPages [
 	selectedItems size = 1 ifTrue: [ ^ selectedItems first propertyPages ].
 	^ #()
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditorSelection >> restoreMaterialStateMemento: memento [
 	selectedItems doWithIndex: [ :each :index | each restoreMaterialStateMemento: (memento at: index) ]
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditorSelection >> restoreTransformStateMemento: memento [
 	selectedItems doWithIndex: [ :each :index | each restoreTransformStateMemento: (memento at: index) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSelection >> selectedItems [
 
 	^ selectedItems
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSelection >> selectedItems: anObject [
 
 	selectedItems := anObject
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
 	| affectedElements subtractingItems remainingElements affectedElementSet actuallyAffectedElementsSet newElements affectedOriginals originalsWithParents |
 	selectedItems ifEmpty: [ ^ self ].
@@ -201,7 +203,40 @@ WDELevelEditorSelection >> subtractSelectedItemsInSession: levelSession [
 
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditorSelection >> transformStateMemento [
 	^ selectedItems collect: [ :each | each transformStateMemento ]
+]
+
+{ #category : 'actions' }
+WDELevelEditorSelection >> ungroupSelectedItemsInSession: levelSession [
+	| oldSelection |
+	selectedItems ifEmpty: [ ^ self ].
+
+	(selectedItems allSatisfy: [ :each | each isGroup ]) ifFalse: [ ^ self ].
+	oldSelection := self.
+
+"
+	groupParent := selectedItems first parent.
+	(selectedItems allSatisfy: [ :each | each parent == groupParent ]) ifFalse: [ ^ self ].
+	oldSelection := self.
+
+	levelSession doWith: [
+		group := WDModelingGroup new lockedGroup: true; yourself.
+		selectedItems do: [ :each |
+			each removeFromParent.
+			group add: each
+		].
+		groupParent add: group.
+		levelSession selection: (WDELevelEditorSelection for: {group})
+	] undoWith: [ 
+		group removeFromParent.
+		group := nil.
+		selectedItems do: [ :each |
+			groupParent add: each
+		].
+		levelSession selection: oldSelection
+	]
+"
+
 ]

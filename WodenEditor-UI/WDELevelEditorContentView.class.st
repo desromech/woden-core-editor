@@ -1,6 +1,6 @@
 Class {
-	#name : #WDELevelEditorContentView,
-	#superclass : #SpPresenterWithModel,
+	#name : 'WDELevelEditorContentView',
+	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'sceneView',
 		'scene',
@@ -30,10 +30,12 @@ Class {
 		'PerspectiveFarDistance',
 		'PerspectiveNearDistance'
 	],
-	#category : #'WodenEditor-UI-Spec'
+	#category : 'WodenEditor-UI-Spec',
+	#package : 'WodenEditor-UI',
+	#tag : 'Spec'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 WDELevelEditorContentView class >> defaultLayout [
 
 	^ SpBoxLayout newVertical
@@ -41,7 +43,7 @@ WDELevelEditorContentView class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView class >> initialize [
 	PerspectiveNearDistance := 0.1.
 	PerspectiveFarDistance := 10000.0.
@@ -50,7 +52,7 @@ WDELevelEditorContentView class >> initialize [
 	OrthographicFarDistance := 10000.0.
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorContentView >> actionOpenFile [
 	| dialog result |
 	dialog := self createLevelFileDialog.
@@ -60,7 +62,7 @@ WDELevelEditorContentView >> actionOpenFile [
 	self model openFrom: result asFileReference
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorContentView >> actionSaveFile [
 	self model levelFileReference ifNotNil: [ :fileReference |
 		self model saveTo: fileReference
@@ -69,7 +71,7 @@ WDELevelEditorContentView >> actionSaveFile [
 	]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorContentView >> actionSaveFileAs [
 	| dialog result |
 	dialog := self createLevelFileDialog.
@@ -88,74 +90,74 @@ WDELevelEditorContentView >> actionSaveFileAs [
 	self model saveTo: result asFileReference
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activateFaceTexturingMode [
 	self activeEditionMode: (WDELevelEditorViewFaceTexturingMode for: self)
 ]
 
-{ #category : #shading }
+{ #category : 'shading' }
 WDELevelEditorContentView >> activateFlatColor [
 	camera viewMode: WDFlatColorViewMode.
 	self refresh
 ]
 
-{ #category : #shading }
+{ #category : 'shading' }
 WDELevelEditorContentView >> activateFlatTextured [
 	camera viewMode: WDFlatTexturedViewMode.
 	self refresh
 ]
 
-{ #category : #shading }
+{ #category : 'shading' }
 WDELevelEditorContentView >> activateFullShaded [
 	camera viewMode: WDFullShadedViewMode.
 	self refresh
 ]
 
-{ #category : #shading }
+{ #category : 'shading' }
 WDELevelEditorContentView >> activateMaterialValidation [
 	camera viewMode: WDMaterialValidationViewMode.
 	self refresh
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activateObjectMode [
 	self activeEditionMode: (WDELevelEditorViewObjectEditionMode for: self)
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activatePlacementMode [
 	self activeEditionMode: (WDELevelEditorViewPlacementMode for: self)
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activateSculptingMode [
 	self activeEditionMode: (WDELevelEditorViewSculptingMode for: self) withElements: (self model selectedItemsThatSupportModelingEditionMode: WDSculptEditionMode)
 ]
 
-{ #category : #shading }
+{ #category : 'shading' }
 WDELevelEditorContentView >> activateShadedColor [
 	camera viewMode: WDFlatColorShadedViewMode.
 	self refresh
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activateTopologyEditionMode [
 	self activeEditionMode: (WDELevelEditorViewTopologyEditionMode for: self) withElements: (self model selectedItemsThatSupportModelingEditionMode: WDTopologyEditionMode)
 ]
 
-{ #category : #shading }
+{ #category : 'shading' }
 WDELevelEditorContentView >> activateWireFrame [
 	camera viewMode: WDWireframeViewMode.
 	self refresh
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activeEditionMode [
 	activeEditionMode ifNil: [ self activateObjectMode ].
 	^ activeEditionMode
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activeEditionMode: newEditionMode [
 	| suppressManipulatorChanges |
 	suppressManipulatorChanges := false.
@@ -173,7 +175,7 @@ WDELevelEditorContentView >> activeEditionMode: newEditionMode [
 
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activeEditionMode: newEditionMode withElements: newActiveEditionElements [
 	activeEditionMode ifNotNil: [ activeEditionMode commitModeChanges ].
 	newActiveEditionElements ifEmpty: [ ^ self ].
@@ -183,18 +185,18 @@ WDELevelEditorContentView >> activeEditionMode: newEditionMode withElements: new
 	self activeEditionMode: newEditionMode
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 WDELevelEditorContentView >> activeManipulatorsDo: aBlock [
 	activeToolManipulator ifNotNil: [ aBlock value: activeToolManipulator ].
 	activeToolEditionElementsManipulator ifNotNil: [ aBlock value: activeToolEditionElementsManipulator ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> activeToolEditionElementsManipulator [
 	^ activeToolEditionElementsManipulator
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> activeToolEditionElementsManipulator: newManipulator [
 	activeToolEditionElementsManipulator ifNotNil: [
 		activeToolEditionElementsManipulator removeFromScene.
@@ -210,12 +212,12 @@ WDELevelEditorContentView >> activeToolEditionElementsManipulator: newManipulato
 	sceneView refresh.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> activeToolManipulator [
 	^ activeToolManipulator
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> activeToolManipulator: newManipulator [
 	activeToolManipulator ifNotNil: [
 		activeToolManipulator removeFromScene.
@@ -231,7 +233,7 @@ WDELevelEditorContentView >> activeToolManipulator: newManipulator [
 	sceneView refresh.
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activeToolMode: anObject [
 	| suppressManipulatorChanges |
 	suppressManipulatorChanges := false.
@@ -248,19 +250,19 @@ WDELevelEditorContentView >> activeToolMode: anObject [
 
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activeToolModeOrEditionMode [
 	^ activeToolMode ifNil: [ self activeEditionMode ]
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> activeToolModeOrEditionModeChanged [
 	self updateActiveToolStatusBarIndicator.
 	self applyNewSelection: self model selection.
 	self applyNewActiveEditionElements: self model activeEditionElements.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> applyNewActiveEditionElements: newEditionElements [
 	self activeToolModeOrEditionMode ifNotNil: [ :toolMode |
 		toolMode doNotAffectManipulators ifTrue: [ ^ self ]
@@ -269,7 +271,7 @@ WDELevelEditorContentView >> applyNewActiveEditionElements: newEditionElements [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> applyNewSelection: newSelection [
 	self activeToolModeOrEditionMode ifNotNil: [ :toolMode |
 		toolMode doNotAffectManipulators ifTrue: [ ^ self ]
@@ -278,7 +280,7 @@ WDELevelEditorContentView >> applyNewSelection: newSelection [
 
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> backView [
 	camera isPerspective: false.
 	gridOrientation := Quaternion lookAtBack.
@@ -286,7 +288,7 @@ WDELevelEditorContentView >> backView [
 	self rotateCameraToAngles: (Vector3 y: Float pi).
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> bottomView [
 	camera isPerspective: false.
 	gridOrientation := Quaternion lookAtBottom.
@@ -294,43 +296,43 @@ WDELevelEditorContentView >> bottomView [
 	self rotateCameraToAngles: (Vector3 x: Float halfPi).
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraFocalPoint [
 	^ self validCameraTransform transformPosition: (Vector3 z: self cameraFocalPointDistance negated)
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraFocalPointDistance [
 	| fov |
 	fov := camera fovY.
 	^ (viewScale / ((fov * 0.5) degreesToRadians tan))
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> cameraFrustum [
 	| sceneExtent |
 	sceneExtent := sceneView adapter extent.
 	^ camera frustumWithAspect: sceneExtent x asFloat / (sceneExtent y max: 1)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> cameraPosition [
 	^ cameraNode position
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraProjectionMatrix [
 	| sceneExtent |
 	sceneExtent := sceneView adapter extent.
 	^ camera projectionMatrixWithAspect: sceneExtent x asFloat / (sceneExtent y max: 1)
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraXYDeltaToWorld: screenDelta [
 	^ self cameraXYDeltaToWorld: screenDelta distance: self cameraFocalPointDistance
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraXYDeltaToWorld: screenDelta distance: screenDistance [
 	| depth cameraDelta |
 	depth := self depthAtCameraDistance: screenDistance.
@@ -338,12 +340,12 @@ WDELevelEditorContentView >> cameraXYDeltaToWorld: screenDelta distance: screenD
 	^ (cameraDelta x * self xDragDirection) + (cameraDelta y * self yDragDirection)
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraXYToWorld: screenPosition [
 	^ self cameraXYToWorld: screenPosition distance: self cameraFocalPointDistance
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraXYToWorld: screenPosition distance: screenDistance [
 	| depth cameraPosition |
 	depth := self depthAtCameraDistance: screenDistance.
@@ -352,12 +354,12 @@ WDELevelEditorContentView >> cameraXYToWorld: screenPosition distance: screenDis
 	(cameraPosition x * self xDragDirection) + (cameraPosition y * self yDragDirection) + (screenDistance * self zDragDirection)
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraXZDeltaToWorld: screenDelta [
 	^ self cameraXZDeltaToWorld: screenDelta distance: self cameraFocalPointDistance
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> cameraXZDeltaToWorld: screenDelta distance: screenDistance [
 	| depth cameraDelta |
 	depth := self depthAtCameraDistance: screenDistance.
@@ -365,12 +367,12 @@ WDELevelEditorContentView >> cameraXZDeltaToWorld: screenDelta distance: screenD
 	^ (cameraDelta x * self xDragDirection) + (cameraDelta y * self zDragDirection)
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> computeScreenDistanceForPoint: aPoint [
 	^ (cameraNode transform inverseTransformPosition: aPoint) z negated
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> computeScreenPositionForPoint: aPoint [
 	| viewPoint ndcPoint projectedPoint sceneExtent sceneScreenPosition |
 	sceneExtent := sceneView adapter extent.
@@ -383,13 +385,13 @@ WDELevelEditorContentView >> computeScreenPositionForPoint: aPoint [
 	^ sceneScreenPosition + self windowOrigin
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> createAxisNode [
 	axisNode := WDELevelEditorMeshes uniqueInstance axisMesh asSceneNode.
 	scene add: axisNode
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> createGridNode [
 	| gridMaterial |
 	gridMaterial := WDELevelEditorMeshes uniqueInstance gridMaterial copy colorFactor: Color gray lighter.
@@ -397,7 +399,7 @@ WDELevelEditorContentView >> createGridNode [
 	scene add: gridNode
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorContentView >> createLevelFileDialog [
 	^ FileDialogWindow basicNew
 		initialize;
@@ -406,13 +408,13 @@ WDELevelEditorContentView >> createLevelFileDialog [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> createScene [
 	scene := WDScene new.
 	self createSceneNodes
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> createSceneNodes [
 	camera := WDCamera new
 		isPerspective: false;
@@ -424,7 +426,7 @@ WDELevelEditorContentView >> createSceneNodes [
 		camera: cameraNode.
 	cameraNode
 		orientation: Quaternion lookAtBottom;
-		position: (Vector3 x: 0 y: 1 z: 3).
+		position: (Vector3 x: 0 y: 0 z: self cameraFocalPointDistance).
 	scene add: cameraNode.
 	editorViewType := #top.
 	cameraLight := WDDirectionalLightSource new
@@ -438,7 +440,7 @@ WDELevelEditorContentView >> createSceneNodes [
 	self updateCameraAndGrid
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> createSubGridNode [
 	| gridMaterial |
 	gridMaterial := WDELevelEditorMeshes uniqueInstance gridMaterial copy
@@ -447,34 +449,34 @@ WDELevelEditorContentView >> createSubGridNode [
 	scene add: subGridNode.
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> deactivatePlacementMode [
 	self activeEditionMode isPlacementMode ifTrue: [ 
 		self activateObjectMode
 	].
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> depthAtCameraDistance: distance [
 	^ (distance - camera nearDistance) / (camera farDistance - camera nearDistance)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> dragToolScreenOverlay: overlay [
 	sceneView overlay: overlay
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> elementInPositionWithRayPicking: aPoint mode: modelingEditionMode [
 	^ (self rayPickElement: (self rayForScreenPosition: aPoint) mode: modelingEditionMode)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> elementsInPositionWithRayPicking: aPoint mode: modelingEditionMode [
 	^ (self rayPickElements: (self rayForScreenPosition: aPoint) mode: modelingEditionMode) collect: [ :each | each value ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> elementsInScreenRectangle: screenRectangle [
 	| originPosition cornerPosition normalizedScreenRectangleMin normalizedScreenRectangleMax selectionFrustum |
 	originPosition := (self normalizeGlobalScreenPosition: screenRectangle origin) asVector2.
@@ -488,14 +490,14 @@ WDELevelEditorContentView >> elementsInScreenRectangle: screenRectangle [
 	^ self level elementsInFrustum: selectionFrustum
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> freePerspectiveView [
 	gridOrientation := Quaternion lookAtBottom.
 	editorViewType := #free.
 	self updateCameraAndGrid.
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> frontView [
 	camera isPerspective: false.
 	gridOrientation := Quaternion lookAtFront.
@@ -503,17 +505,17 @@ WDELevelEditorContentView >> frontView [
 	self rotateCameraToAngles: (Vector3 zeros).
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> gridSize [
 	^ self model ifNil: [1.0 ] ifNotNil: [:m | m gridSize]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDELevelEditorContentView >> hasFreeEditorViewType [
 	^ editorViewType == #free
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> highlightElement: anElement [
 	anElement ifNil: [
 		highlightBoxNode ifNotNil: [ 
@@ -529,14 +531,14 @@ WDELevelEditorContentView >> highlightElement: anElement [
 	sceneView refresh.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> highlightManipulator: aManipulator [
 	highlightedManipulator ifNotNil: [ highlightedManipulator highlighted: false ].
 	highlightedManipulator := aManipulator.
 	highlightedManipulator ifNotNil: [ highlightedManipulator highlighted: true ].
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> initialize [
 	cameraAngle := Vector3 zeros.
 	gridOrientation := Quaternion identity.
@@ -545,7 +547,7 @@ WDELevelEditorContentView >> initialize [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> initializePresenters [
 	sceneView := self instantiate: WDSpScenePresenter.
 	sceneView eventHandler
@@ -558,12 +560,12 @@ WDELevelEditorContentView >> initializePresenters [
 		whenMouseWheelDo: [ :event | self onSceneMouseWheel: event ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDELevelEditorContentView >> isPerspective [
 	^ camera isPerspective
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> leftView [
 	camera isPerspective: false.
 	gridOrientation := Quaternion lookAtLeft.
@@ -571,22 +573,22 @@ WDELevelEditorContentView >> leftView [
 	self rotateCameraToAngles: (Vector3 y: Float halfPi).
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> level [
 	^ self model ifNotNil: [ :m | m level ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> levelChanged [
 	self levelSceneChanged
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> levelEditorSession [
 	^ self model
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> levelElementTemplateSelected: template [
 	(template notNil and: [template canBePlacedInLevel]) ifTrue: [
 		self activatePlacementMode
@@ -596,7 +598,7 @@ WDELevelEditorContentView >> levelElementTemplateSelected: template [
 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> levelSceneChanged [
 	self createScene.
 	self level ifNotNil: [ :level |
@@ -605,17 +607,17 @@ WDELevelEditorContentView >> levelSceneChanged [
 	].
 ]
 
-{ #category : #manipulators }
+{ #category : 'manipulators' }
 WDELevelEditorContentView >> manipulatorInPositionWithRayPicking: aPoint [
 	^ self rayPickManipulator: (self rayForScreenPosition: aPoint)
 ]
 
-{ #category : #manipulators }
+{ #category : 'manipulators' }
 WDELevelEditorContentView >> manipulatorInScreenPosition: aPoint [
 	^ self manipulatorInPositionWithRayPicking: aPoint
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> modelChanged [
 	self model ifNotNil: [ :session |
 		session
@@ -630,12 +632,12 @@ WDELevelEditorContentView >> modelChanged [
 	].
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> normalizeGlobalScreenPosition: aPoint [
 	^ self normalizeScreenPosition: aPoint - self windowOrigin
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> normalizeScreenPosition: aPoint [
 	| nx ny screenExtent |
 	screenExtent := sceneView adapter extent.
@@ -644,50 +646,50 @@ WDELevelEditorContentView >> normalizeScreenPosition: aPoint [
 	^ nx @ ny
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> normalizedToLocal: aPosition depth: aDepth [
 	^ self cameraFrustum normalizedPoint: aPosition linearDepth: aDepth
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneDoubleClick: event [
 	self activeToolModeOrEditionMode onDoubleClick: event
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneDrag: event delta: delta [
 	self activeToolModeOrEditionMode onMouseDrag: event delta: delta
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneDragEnd: event [
 	self activeToolModeOrEditionMode onMouseDragEnd: event
 
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneDragStart: event [
 	self activeToolModeOrEditionMode onMouseDragStart: event
 
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneKeyDown: event [
 	self activeToolModeOrEditionMode onKeyDown: event
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneKeyUp: event [
 	self activeToolModeOrEditionMode onKeyUp: event
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneMouseDown: event [
 	lastDownEvent := event.
 	self activeToolModeOrEditionMode onMouseDown: event
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneMouseMove: event [
 	sceneView takeKeyboardFocus.
 	lastDragPosition ifNil: [
@@ -708,7 +710,7 @@ WDELevelEditorContentView >> onSceneMouseMove: event [
 	self activeToolModeOrEditionMode onMouseMove: event
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneMouseUp: event [
 	| wasDragging |
 	wasDragging := false.
@@ -732,12 +734,12 @@ WDELevelEditorContentView >> onSceneMouseUp: event [
 	].
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorContentView >> onSceneMouseWheel: event [
 	self activeToolModeOrEditionMode onMouseWheel: event
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> openShadingMenu [
 	| menu |
 	menu := SpMenuPresenter new.
@@ -745,19 +747,19 @@ WDELevelEditorContentView >> openShadingMenu [
 	^ menu openWithSpecAtPointer
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> orthographicView [
 	camera isPerspective: false.	
 	self updateCameraAndGrid
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> perspectiveView [
 	camera isPerspective: true.
 	self updateCameraAndGrid
 ]
 
-{ #category : #manipulators }
+{ #category : 'manipulators' }
 WDELevelEditorContentView >> rayCastForManipulator: ray [
 	| bestResult |
 	bestResult := nil.
@@ -772,39 +774,39 @@ WDELevelEditorContentView >> rayCastForManipulator: ray [
 	^ bestResult value
 ]
 
-{ #category : #manipulators }
+{ #category : 'manipulators' }
 WDELevelEditorContentView >> rayForNormalizedPosition: aPoint [
 	^ self worldRayAtWindowCoordinate: aPoint
 ]
 
-{ #category : #manipulators }
+{ #category : 'manipulators' }
 WDELevelEditorContentView >> rayForScreenPosition: aPoint [
 	^ self rayForNormalizedPosition: (self normalizeScreenPosition: aPoint - self windowOrigin)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> rayPickElement: ray mode: modelingEditionMode [
 	^ self model ifNil: [ nil ] ifNotNil: [ :m | m rayPickElement: ray mode: modelingEditionMode ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> rayPickElements: ray mode: modelingEditionMode [
 	^ self model ifNil: [ #() ] ifNotNil: [ :m | m rayPickElements: ray mode: modelingEditionMode ]
 ]
 
-{ #category : #manipulators }
+{ #category : 'manipulators' }
 WDELevelEditorContentView >> rayPickManipulator: ray [
 	| distanceElement |
 	distanceElement := self rayCastForManipulator: ray.
 	^ distanceElement value ifNil: [ nil ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> refresh [
 	sceneView refresh
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> rightView [
 	camera isPerspective: false.
 	gridOrientation := Quaternion lookAtRight.
@@ -812,18 +814,18 @@ WDELevelEditorContentView >> rightView [
 	self rotateCameraToAngles: (Vector3 y: Float halfPi negated).
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> rotateCameraInPlaceWithAngles: deltaAngles [
 	cameraAngle := cameraAngle + deltaAngles.
 	self updateCameraAndGrid.
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> rotateCameraToAngles: newAngles [
 	self rotateCameraToAngles: newAngles withFocalPoint: self cameraFocalPoint distance: self cameraFocalPointDistance
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> rotateCameraToAngles: newAngles withFocalPoint: focalPoint distance: focalPointDistance [
 	cameraAngle := newAngles.
 	
@@ -832,48 +834,48 @@ WDELevelEditorContentView >> rotateCameraToAngles: newAngles withFocalPoint: foc
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> rotateSelectedElements [
 	^ self startActionDraggingOnCurrentSelectionWith: WDELevelEditorRotateToolMode
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> scaleSelectedElements [
 	^ self startActionDraggingOnCurrentSelectionWith: WDELevelEditorScaleToolMode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> scene [
 	^ scene
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> sceneView [
 
 	^ sceneView
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> screenToLocal: aPosition depth: aDepth [
 	^ self windowToLocal: aPosition - self windowOrigin depth: aDepth
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> selectedItemsBoundingBoxChanged [
 	activeToolManipulator ifNotNil: [activeToolManipulator selectedItemsBoundingBoxChanged]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> session [
 	^ self model
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorContentView >> setSelectedElements: elements [
 	^ self levelEditorSession setSelectedElements: elements
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> startActionDraggingOnCurrentSelectionWith: toolModeClass [
 	| currentSelection |
 	currentSelection := self model selection.
@@ -884,7 +886,7 @@ WDELevelEditorContentView >> startActionDraggingOnCurrentSelectionWith: toolMode
 		yourself)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> startPlacingDuplicatedElements: duplicatedElements oldSelection: oldSelection [
 	self activeToolMode: ((WDELevelEditorDuplicatePlacementToolMode for: self)
 		duplicatedElements: duplicatedElements;
@@ -892,13 +894,13 @@ WDELevelEditorContentView >> startPlacingDuplicatedElements: duplicatedElements 
 		yourself)
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> togglePerspective [
 	camera isPerspective: camera isPerspective not.
 	self updateCameraAndGrid
 ]
 
-{ #category : #'camera views' }
+{ #category : 'camera views' }
 WDELevelEditorContentView >> topView [
 	camera isPerspective: false.
 	gridOrientation := Quaternion lookAtBottom.
@@ -906,23 +908,23 @@ WDELevelEditorContentView >> topView [
 	self rotateCameraToAngles: (Vector3 x: Float halfPi negated).
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> translateCameraBy: translation [
 	cameraNode translateBy: translation.
 	self updateCameraAndGrid.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorContentView >> translateSelectedElements [
 	^ self startActionDraggingOnCurrentSelectionWith: WDELevelEditorTranslateToolMode
 ]
 
-{ #category : #'editor modes' }
+{ #category : 'editor modes' }
 WDELevelEditorContentView >> updateActiveToolStatusBarIndicator [
 	self model ifNotNil: [ :m | m activeToolModeOrEditionModeName: self activeToolModeOrEditionMode modeName ]
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> updateCamera [
 	cameraNode orientation: self validCameraOrientation.
 	camera focalDistance: self cameraFocalPointDistance.
@@ -937,7 +939,7 @@ WDELevelEditorContentView >> updateCamera [
 	]
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> updateCameraAndGrid [
 	self
 		updateCamera;
@@ -946,7 +948,7 @@ WDELevelEditorContentView >> updateCameraAndGrid [
 	sceneView refresh
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> updateGrid [
 	| viewGridOrientation gridTransform scale u v du dv gridPosition |
 	viewGridOrientation := camera isPerspective
@@ -972,17 +974,17 @@ WDELevelEditorContentView >> updateGrid [
 	subGridNode transform: gridTransform.
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> updateManipulatorsForCamera [
 	self activeToolManipulator ifNotNil: [:manip | manip updateForViewCamera]
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> validCameraOrientation [
 	^ (Quaternion yRotation: cameraAngle y) * (Quaternion xRotation: cameraAngle x)
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> validCameraTransform [
 	^ TRSTransform3D identity
 		rotation: self validCameraOrientation;
@@ -990,12 +992,12 @@ WDELevelEditorContentView >> validCameraTransform [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> viewScale [
 	^ viewScale
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorContentView >> viewScale: newViewScale [
 	| oldFocalPoint |
 	oldFocalPoint := self cameraFocalPoint.
@@ -1003,17 +1005,17 @@ WDELevelEditorContentView >> viewScale: newViewScale [
 	self rotateCameraToAngles: cameraAngle withFocalPoint: oldFocalPoint distance: self cameraFocalPointDistance
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> windowOrigin [
 	^ sceneView adapter widget bounds origin
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> windowToLocal: aPosition depth: aDepth [
 	^ self normalizedToLocal: (self normalizeScreenPosition: aPosition) depth: aDepth
 ]
 
-{ #category : #manipulators }
+{ #category : 'manipulators' }
 WDELevelEditorContentView >> worldRayAtWindowCoordinate: point [
 	| ray frustum |
 	frustum := self cameraFrustum.
@@ -1023,22 +1025,22 @@ WDELevelEditorContentView >> worldRayAtWindowCoordinate: point [
 	^ ray transformedWith: cameraNode transform
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> xDragDirection [
 	^ cameraNode orientation rotateVector: (Vector3 x: 1)
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> xyDragDirection [
 	^ self xDragDirection + self yDragDirection
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> yDragDirection [
 	^ cameraNode orientation rotateVector: (Vector3 y: 1)
 ]
 
-{ #category : #camera }
+{ #category : 'camera' }
 WDELevelEditorContentView >> zDragDirection [
 	^ cameraNode orientation rotateVector: (Vector3 z: -1)
 ]

@@ -1,6 +1,6 @@
 Class {
-	#name : #WDELevelEditorSelectionClickWheel,
-	#superclass : #Object,
+	#name : 'WDELevelEditorSelectionClickWheel',
+	#superclass : 'Object',
 	#instVars : [
 		'clickPosition',
 		'elements',
@@ -9,15 +9,17 @@ Class {
 	#classVars : [
 		'PositionValidationTolerance'
 	],
-	#category : #'WodenEditor-UI-Selection'
+	#category : 'WodenEditor-UI-Selection',
+	#package : 'WodenEditor-UI',
+	#tag : 'Selection'
 }
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 WDELevelEditorSelectionClickWheel class >> initialize [
 	PositionValidationTolerance := 10.
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 WDELevelEditorSelectionClickWheel >> advance [
 	elements ifEmpty: [ ^ self ].
 	index := index + 1.
@@ -26,54 +28,54 @@ WDELevelEditorSelectionClickWheel >> advance [
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSelectionClickWheel >> clickPosition [
 
 	^ clickPosition
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSelectionClickWheel >> clickPosition: anObject [
 
 	clickPosition := anObject
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 WDELevelEditorSelectionClickWheel >> currentElement [
 	elements ifNil: [ ^ nil  ].
 	index <= elements size ifTrue: [ ^ elements at: index ].
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSelectionClickWheel >> elements [
 
 	^ elements
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSelectionClickWheel >> elements: anObject [
 
 	elements := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSelectionClickWheel >> index [
 
 	^ index
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorSelectionClickWheel >> initialize [
 	index := 1
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDELevelEditorSelectionClickWheel >> isValidForPosition: testPosition [
 	^ (clickPosition - testPosition) asVector2 length2 < (PositionValidationTolerance*PositionValidationTolerance)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDELevelEditorSelectionClickWheel >> isValidForPositionForRightClick: testPosition view: aView [
 	| testElement ray |
 	testElement := self currentElement.

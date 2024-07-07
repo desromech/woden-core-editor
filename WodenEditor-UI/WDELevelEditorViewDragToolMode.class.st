@@ -1,19 +1,21 @@
 Class {
-	#name : #WDELevelEditorViewDragToolMode,
-	#superclass : #WDELevelEditorViewMode,
+	#name : 'WDELevelEditorViewDragToolMode',
+	#superclass : 'WDELevelEditorViewMode',
 	#instVars : [
 		'dragStartPosition',
 		'dragEndPosition'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewDragToolMode >> dragStartedWith: startEvent [
 	dragStartPosition := startEvent position.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewDragToolMode >> finishDraggingWith: event [
 	dragEndPosition := event position.
 	self view
@@ -21,7 +23,7 @@ WDELevelEditorViewDragToolMode >> finishDraggingWith: event [
 		activeToolMode: nil
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewDragToolMode >> onMouseDragEnd: event [
 	self finishDraggingWith: event.
 ]

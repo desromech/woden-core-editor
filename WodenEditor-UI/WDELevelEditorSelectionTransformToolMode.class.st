@@ -1,33 +1,35 @@
 Class {
-	#name : #WDELevelEditorSelectionTransformToolMode,
-	#superclass : #WDELevelEditorViewActionMoveToolMode,
+	#name : 'WDELevelEditorSelectionTransformToolMode',
+	#superclass : 'WDELevelEditorViewActionMoveToolMode',
 	#instVars : [
 		'elements',
 		'pivot',
 		'selectedAxis',
 		'screenPivot'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> applyTransformToElements [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> dragCancelled [
 	self restoreMementos.
 	view selectedItemsBoundingBoxChanged; refresh.
 	super dragCancelled
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> dragDelta: delta [
 	self applyTransformToElements
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> dragFinished [
 	self levelEditorSession
 		doWith: [
@@ -39,7 +41,7 @@ WDELevelEditorSelectionTransformToolMode >> dragFinished [
 	super dragFinished
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> dragStarted [
 	| bbox |
 	bbox := AABox empty.
@@ -56,19 +58,19 @@ WDELevelEditorSelectionTransformToolMode >> dragStarted [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSelectionTransformToolMode >> elements: newElements [
 
 	elements := newElements.
 	self storeMementos
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> restoreMementos [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> shortcuts [
 	^ super shortcuts , {
 		$x asKeyCombination . [ self toggleAxisSelection: (Vector3 x: 1) ].
@@ -81,12 +83,12 @@ WDELevelEditorSelectionTransformToolMode >> shortcuts [
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> storeMementos [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorSelectionTransformToolMode >> toggleAxisSelection: newAxis [
 	selectedAxis = newAxis ifTrue: [ 
 		selectedAxis := nil

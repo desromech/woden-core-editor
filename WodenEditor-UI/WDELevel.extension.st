@@ -1,6 +1,6 @@
-Extension { #name : #WDELevel }
+Extension { #name : 'WDELevel' }
 
-{ #category : #'*WodenEditor-UI' }
+{ #category : '*WodenEditor-UI' }
 WDELevel >> openEditor [
 	^ self newEditorSession openEditor
 ]

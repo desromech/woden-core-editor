@@ -1,34 +1,36 @@
 Class {
-	#name : #WDELevelEditorViewEditionMode,
-	#superclass : #WDELevelEditorViewMode,
+	#name : 'WDELevelEditorViewEditionMode',
+	#superclass : 'WDELevelEditorViewMode',
 	#instVars : [
 		'clickSelectionWheel'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorViewEditionMode >> activateAction [
 	view activeToolManipulator ifNotNil: [ :manip |
 		manip activateAction
 	]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorViewEditionMode >> cancelAction [
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> currentModelingEditionMode [
 	^ WDObjectEditionMode
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> elementInPositionWithRayPicking: position mode: modelingEditionMode [
 	^ view elementInPositionWithRayPicking: position mode: modelingEditionMode
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> manipulatorForSelection: selection [
 	(self supportsElementSelection and: [ self supportsManipulators ]) ifTrue: [ 
 		| selectedElements |
@@ -43,7 +45,7 @@ WDELevelEditorViewEditionMode >> manipulatorForSelection: selection [
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> nextValidClickSelectionWheelFor: clickPosition [
 	(clickSelectionWheel notNil and: [ clickSelectionWheel isValidForPosition: clickPosition ]) ifFalse: [
 		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new
@@ -55,7 +57,7 @@ WDELevelEditorViewEditionMode >> nextValidClickSelectionWheelFor: clickPosition 
 	^ clickSelectionWheel advance
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewEditionMode >> onLeftClick: event [
 	| elements |
 	self supportsElementSelection ifFalse: [ ^ self ].
@@ -71,14 +73,14 @@ WDELevelEditorViewEditionMode >> onLeftClick: event [
 	^ self levelEditorSession setSelectedElements: elements
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> onMouseDragStart: event [
 	event isPrimaryButton ifTrue: [ ^ self startManipulatorOrActionDraggingWith: event ].
 	event isMiddleButton ifTrue: [ ^ self startCameraRotateDraggingWith: event ].
 	event isSecondaryButton ifTrue: [ ^ self startCameraDraggingWith: event ].
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewEditionMode >> onMouseMove: event [
 	| elementBeingPointed manipulatorBeingPointed |
 	manipulatorBeingPointed := self supportsManipulators
@@ -108,7 +110,7 @@ WDELevelEditorViewEditionMode >> onMouseMove: event [
 	^ super onMouseMove: event
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewEditionMode >> onMouseWheel: event [
 	| delta |
 	delta := 0.
@@ -125,7 +127,7 @@ WDELevelEditorViewEditionMode >> onMouseWheel: event [
 
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewEditionMode >> onRightClick: event [
 	| elements |
 	self supportsElementSelection ifFalse: [ ^ self ].
@@ -137,7 +139,7 @@ WDELevelEditorViewEditionMode >> onRightClick: event [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> shortcuts [
 	^ super shortcuts , {
 		KeyboardKey escape asKeyCombination . [ self cancelAction ].
@@ -177,25 +179,25 @@ WDELevelEditorViewEditionMode >> shortcuts [
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> startActionDraggingWith: event [
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> startCameraDraggingWith: event [
 	view activeToolMode: ((WDELevelEditorViewCameraDragToolMode for: view)
 		dragStartedWith: event;
 		yourself)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> startCameraRotateDraggingWith: event [
 	view activeToolMode: ((WDELevelEditorViewCameraRotateDragToolMode for: view)
 		dragStartedWith: event;
 		yourself)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> startManipulatorOrActionDraggingWith: event [
 	self supportsManipulators ifTrue: [
 		| manipulator |
@@ -208,17 +210,17 @@ WDELevelEditorViewEditionMode >> startManipulatorOrActionDraggingWith: event [
 	^ self startActionDraggingWith: event
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> supportsElementSelection [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> supportsManipulators [
 	^ false
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewEditionMode >> validRightClickSelectionWheelFor: clickPosition [
 	(clickSelectionWheel notNil and: [ clickSelectionWheel isValidForPositionForRightClick: clickPosition view: view ]) ifFalse: [
 		^ clickSelectionWheel := WDELevelEditorSelectionClickWheel new

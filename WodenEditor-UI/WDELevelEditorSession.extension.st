@@ -1,10 +1,10 @@
-Extension { #name : #WDELevelEditorSession }
+Extension { #name : 'WDELevelEditorSession' }
 
-{ #category : #'*WodenEditor-UI' }
+{ #category : '*WodenEditor-UI' }
 WDELevelEditorSession >> buildUnselectedElementContextMenuOn: menuPresenter [
 ]
 
-{ #category : #'*WodenEditor-UI' }
+{ #category : '*WodenEditor-UI' }
 WDELevelEditorSession >> openEditor [
 	^ (WDELevelEditor on: self) open
 ]

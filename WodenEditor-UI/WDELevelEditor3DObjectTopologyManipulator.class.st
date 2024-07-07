@@ -1,18 +1,20 @@
 Class {
-	#name : #WDELevelEditor3DObjectTopologyManipulator,
-	#superclass : #WDELevelEditor3DManipulator,
+	#name : 'WDELevelEditor3DObjectTopologyManipulator',
+	#superclass : 'WDELevelEditor3DManipulator',
 	#instVars : [
 		'transform'
 	],
-	#category : #'WodenEditor-UI-Manipulators'
+	#category : 'WodenEditor-UI-Manipulators',
+	#package : 'WodenEditor-UI',
+	#tag : 'Manipulators'
 }
 
-{ #category : #scene }
+{ #category : 'scene' }
 WDELevelEditor3DObjectTopologyManipulator >> createSceneNode [
 	^ WDSceneNode new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DObjectTopologyManipulator >> rayCast: ray [
 	| bestResult |
 	self visible ifFalse: [ ^ nil ].
@@ -31,13 +33,13 @@ WDELevelEditor3DObjectTopologyManipulator >> rayCast: ray [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DObjectTopologyManipulator >> transform [
 
 	^ transform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DObjectTopologyManipulator >> transform: anObject [
 
 	transform := anObject

@@ -1,10 +1,12 @@
 Class {
-	#name : #WDELevelEditorRectangleSelectionDragToolMode,
-	#superclass : #WDELevelEditorViewDragToolMode,
-	#category : #'WodenEditor-UI-ViewMode'
+	#name : 'WDELevelEditorRectangleSelectionDragToolMode',
+	#superclass : 'WDELevelEditorViewDragToolMode',
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorRectangleSelectionDragToolMode >> finishDraggingWith: event [
 	| elements |
 	super finishDraggingWith: event.
@@ -19,12 +21,12 @@ WDELevelEditorRectangleSelectionDragToolMode >> finishDraggingWith: event [
 	^ self levelEditorSession setSelectedElements: elements
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorRectangleSelectionDragToolMode >> modeName [
 	^ 'Rectangle selection'
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorRectangleSelectionDragToolMode >> onMouseDrag: event delta: delta [
 	super onMouseDrag: event delta: delta.
 	view dragToolScreenOverlay: (WDELevelEditorDragRectangleOverlay new

@@ -1,14 +1,16 @@
 Class {
-	#name : #WDELevelEditorOperation,
-	#superclass : #Object,
+	#name : 'WDELevelEditorOperation',
+	#superclass : 'Object',
 	#instVars : [
 		'doBlock',
 		'undoBlock'
 	],
-	#category : #'WodenEditor-Model-Session'
+	#category : 'WodenEditor-Model-Session',
+	#package : 'WodenEditor-Model',
+	#tag : 'Session'
 }
 
-{ #category : #construction }
+{ #category : 'construction' }
 WDELevelEditorOperation class >> doWith: doBlock undoWith: undoBlock [
 	^ self new
 		doBlock: doBlock;
@@ -16,36 +18,36 @@ WDELevelEditorOperation class >> doWith: doBlock undoWith: undoBlock [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorOperation >> doBlock [
 
 	^ doBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorOperation >> doBlock: anObject [
 
 	doBlock := anObject
 ]
 
-{ #category : #'do-its' }
+{ #category : 'do-its' }
 WDELevelEditorOperation >> doIt [
 	^ doBlock value
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorOperation >> undoBlock [
 
 	^ undoBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorOperation >> undoBlock: anObject [
 
 	undoBlock := anObject
 ]
 
-{ #category : #'do-its' }
+{ #category : 'do-its' }
 WDELevelEditorOperation >> undoIt [
 	^ undoBlock value
 ]

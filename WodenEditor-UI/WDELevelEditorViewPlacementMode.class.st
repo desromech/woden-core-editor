@@ -1,25 +1,27 @@
 Class {
-	#name : #WDELevelEditorViewPlacementMode,
-	#superclass : #WDELevelEditorViewEditionMode,
-	#category : #'WodenEditor-UI-ViewMode'
+	#name : 'WDELevelEditorViewPlacementMode',
+	#superclass : 'WDELevelEditorViewEditionMode',
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditorViewPlacementMode >> cancelAction [
 	view activateObjectMode
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDELevelEditorViewPlacementMode >> isPlacementMode [
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorViewPlacementMode >> modeName [
 	^ 'Placement Mode'
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewPlacementMode >> onLeftClick: event [
 	self levelEditorSession activeLevelElementTemplate ifNotNil: [ :elementTemplate |
 		elementTemplate isPointElementTemplate ifTrue: [
@@ -32,7 +34,7 @@ WDELevelEditorViewPlacementMode >> onLeftClick: event [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewPlacementMode >> startActionDraggingWith: event [
 	| manipulator |
 	manipulator := view manipulatorInScreenPosition: event position.
@@ -49,7 +51,7 @@ WDELevelEditorViewPlacementMode >> startActionDraggingWith: event [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewPlacementMode >> supportsManipulators [
 	^ true
 ]

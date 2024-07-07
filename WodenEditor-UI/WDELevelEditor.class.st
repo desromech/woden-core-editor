@@ -1,6 +1,6 @@
 Class {
-	#name : #WDELevelEditor,
-	#superclass : #SpPresenterWithModel,
+	#name : 'WDELevelEditor',
+	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'mainMenuBar',
 		'mainToolbar',
@@ -11,10 +11,12 @@ Class {
 		'paletteNotebook',
 		'contentView'
 	],
-	#category : #'WodenEditor-UI-Spec'
+	#category : 'WodenEditor-UI-Spec',
+	#package : 'WodenEditor-UI',
+	#tag : 'Spec'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 WDELevelEditor class >> defaultLayout [
 
 	^ SpBoxLayout newVertical
@@ -45,7 +47,7 @@ WDELevelEditor class >> defaultLayout [
 		  yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor class >> fillShadingMenu: menu viewBlock: viewBlock [
 	^ menu addItem: [ :item |
 			item
@@ -80,7 +82,7 @@ WDELevelEditor class >> fillShadingMenu: menu viewBlock: viewBlock [
 		yourself
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 WDELevelEditor class >> menuCommandOn: builder [
 	<worldMenu>
 	(builder item: #'Woden Level Editor')
@@ -89,14 +91,14 @@ WDELevelEditor class >> menuCommandOn: builder [
 		action: [ self openEditorWorldMenuCommand  ].
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 WDELevelEditor class >> openEditorWithGameSettings: gameSettings [
 	gameSettings emptyLevel newEditorSession
 		gameSettings: gameSettings;
 		openEditor
 ]
 
-{ #category : #'world menu' }
+{ #category : 'world menu' }
 WDELevelEditor class >> openEditorWorldMenuCommand [
 	| availableSettings |
 	availableSettings := WDEGameSettings allSettings.
@@ -120,17 +122,17 @@ WDELevelEditor class >> openEditorWorldMenuCommand [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor >> actionPlayLevel [
 	^ self model playLevel
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor >> actionPlayLevelInVR [
 	^ self model playLevelInVR
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 WDELevelEditor >> buildMainMenuBar [
 	^ self newMenuBar
 		addGroup: [ :group |
@@ -164,7 +166,7 @@ WDELevelEditor >> buildMainMenuBar [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditor >> buildMainToolbar [
 	^ self newToolbar
 		
@@ -200,7 +202,7 @@ WDELevelEditor >> buildMainToolbar [
 		yourself
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 WDELevelEditor >> cameraMenu [
 	^ self newMenu
 		addGroup: [ :group |
@@ -264,18 +266,18 @@ WDELevelEditor >> cameraMenu [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditor >> connectForNewLevel: level [
 	levelTreeView roots: {level modelingTree}.
 	level whenAddedOrRemovedElementDo: [ levelTreeView roots: {level modelingTree} ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor >> contentView [
 	^ contentView
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 WDELevelEditor >> editMenu [
 	^ self newMenu
 		addGroup: [ :group |
@@ -334,7 +336,7 @@ WDELevelEditor >> editMenu [
 		yourself
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 WDELevelEditor >> fileMenu [
 	^ self newMenu
 		addGroup: [ :group |
@@ -371,7 +373,7 @@ WDELevelEditor >> fileMenu [
 		yourself
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 WDELevelEditor >> gameMenu [
 	^ self newMenu
 		addGroup: [ :group |
@@ -391,7 +393,7 @@ WDELevelEditor >> gameMenu [
 		yourself
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 WDELevelEditor >> helpMenu [
 	^ self newMenu
 		addGroup: [ :group |
@@ -405,7 +407,7 @@ WDELevelEditor >> helpMenu [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditor >> initializePresenters [
 	mainMenuBar := self buildMainMenuBar.
 	mainToolbar := self buildMainToolbar.
@@ -442,13 +444,13 @@ WDELevelEditor >> initializePresenters [
 	mainMenuBar addKeybindingsTo: self.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditor >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter initialExtent: 1024@768
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditor >> modelChanged [
 	contentView model: self model; modelChanged.
 	elementProperties model: self model selection; modelChanged.
@@ -466,7 +468,7 @@ WDELevelEditor >> modelChanged [
 		].
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 WDELevelEditor >> shadingMenu [
 	| menu |
 	menu := self newMenu.
@@ -475,12 +477,12 @@ WDELevelEditor >> shadingMenu [
 		
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor >> treeViewMenu [
 	^ self model buildSelectionContextMenu
 ]
 
-{ #category : #menu }
+{ #category : 'menu' }
 WDELevelEditor >> viewMenu [
 	^ self newMenu
 		addGroup: [ :group |

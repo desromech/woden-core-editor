@@ -1,6 +1,6 @@
-Extension { #name : #WDModelingTree }
+Extension { #name : 'WDModelingTree' }
 
-{ #category : #'*WodenEditor-UI' }
+{ #category : '*WodenEditor-UI' }
 WDModelingTree >> openLevelEditor [
 	^ WDEModelingTreeLevel new modelingTree: self; openEditor
 ]

@@ -2,44 +2,46 @@
 I am an entity in a quake style level.
 "
 Class {
-	#name : #WDEEntity,
-	#superclass : #WDModelingGroup,
+	#name : 'WDEEntity',
+	#superclass : 'WDModelingGroup',
 	#instVars : [
 		'className',
 		'properties'
 	],
-	#category : #'WodenEditor-Model-Level'
+	#category : 'WodenEditor-Model-Level',
+	#package : 'WodenEditor-Model',
+	#tag : 'Level'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDEEntity class >> jsonObjectTypeName [
 	^ self name withoutPrefix: 'WDE'
 ]
 
-{ #category : #'property pages' }
+{ #category : 'property pages' }
 WDEEntity >> buildModelingElementMainPropertyPageWith: builder [
 	super buildModelingElementMainPropertyPageWith: builder.
 	builder
 		stringPropertyNamed: 'Class Name' selector: #className
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEEntity >> canBeDuplicatedAndPlaced [
 	^ self isWorldEntity not
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEEntity >> className [
 	^ className
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEEntity >> className: anObject [
 
 	className := anObject
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDEEntity >> encodeJsonKeyValuesWithContext: serializationContext [
 	^ (super encodeJsonKeyValuesWithContext: serializationContext) , {
 		#className . className .
@@ -47,39 +49,39 @@ WDEEntity >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDEEntity >> initialize [
 	super initialize.
 	className := ''.
 	properties := Dictionary new.
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEEntity >> isPointEntity [
 	^ self children isEmpty and: [ self isWorldEntity not ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEEntity >> isPointModelingElement [
 	^ self isPointEntity
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEEntity >> isPointPlacedElement [
 	^ self isPointEntity
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEEntity >> isSceneSelectableObject [
 	^ self isWorldEntity not
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEEntity >> isWorldEntity [
 	^ #(worldspawn world) includes: className
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDEEntity >> loadFromJson: jsonData withContext: level [
 	super loadFromJson: jsonData withContext: level.
 	className := jsonData at: #className ifAbsent: [ className ].
@@ -87,7 +89,7 @@ WDEEntity >> loadFromJson: jsonData withContext: level [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEEntity >> localBoundingBox [
 	self isPointEntity ifTrue: [
 		^ WDModelingCommonMeshes uniqueInstance pointObjectBoundingBox
@@ -95,12 +97,12 @@ WDEEntity >> localBoundingBox [
 	^ super localBoundingBox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEEntity >> objectTypeName [
 	^ 'Entity'
 ]
 
-{ #category : #'scene presentation' }
+{ #category : 'scene presentation' }
 WDEEntity >> updateScenePresentationHandle: aHandle [
 	super updateScenePresentationHandle: aHandle.
 	self isPointEntity ifTrue: [

@@ -1,14 +1,16 @@
 Class {
-	#name : #WDEMaterialPaletteElement,
-	#superclass : #WDEPaletteElement,
+	#name : 'WDEMaterialPaletteElement',
+	#superclass : 'WDEPaletteElement',
 	#instVars : [
 		'material',
 		'thumbnail'
 	],
-	#category : #'WodenEditor-Model-Palette'
+	#category : 'WodenEditor-Model-Palette',
+	#package : 'WodenEditor-Model',
+	#tag : 'Palette'
 }
 
-{ #category : #'single color materials' }
+{ #category : 'single color materials' }
 WDEMaterialPaletteElement class >> dielectricBaseColor: albedo roughness: roughness [
 	^ self new 
 		material: (WDMetallicRoughnessMaterial new
@@ -19,7 +21,7 @@ WDEMaterialPaletteElement class >> dielectricBaseColor: albedo roughness: roughn
 		yourself
 ]
 
-{ #category : #'single color materials' }
+{ #category : 'single color materials' }
 WDEMaterialPaletteElement class >> metallicBaseColor: albedo roughness: roughness [
 	^ self new 
 		material: (WDMetallicRoughnessMaterial new
@@ -30,14 +32,14 @@ WDEMaterialPaletteElement class >> metallicBaseColor: albedo roughness: roughnes
 		yourself
 ]
 
-{ #category : #'single color materials' }
+{ #category : 'single color materials' }
 WDEMaterialPaletteElement class >> path: path [
 	^ self new 
 		material: (WDModelingMaterialInfo new path: path);
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDEMaterialPaletteElement >> activateInLevelSession: levelSession [
 	| oldSelection memento |
 	oldSelection := levelSession selection.
@@ -55,18 +57,18 @@ WDEMaterialPaletteElement >> activateInLevelSession: levelSession [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEMaterialPaletteElement >> material [
 
 	^ material
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEMaterialPaletteElement >> material: anObject [
 	material := anObject asWDModelingMaterialInfo
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEMaterialPaletteElement >> thumbnailFor: levelEditorSession [
 	^ thumbnail ifNil: [ thumbnail := material ifNotNil: [ material thumbnailFor: levelEditorSession ] ]
 ]

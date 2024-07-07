@@ -1,53 +1,55 @@
 Class {
-	#name : #WDELevelEditorViewActionMoveToolMode,
-	#superclass : #WDELevelEditorViewMode,
+	#name : 'WDELevelEditorViewActionMoveToolMode',
+	#superclass : 'WDELevelEditorViewMode',
 	#instVars : [
 		'screenDistance',
 		'currentPosition',
 		'endPosition',
 		'startPosition'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorViewActionMoveToolMode >> cameraXZDeltaToWorld: delta [
 	^ view cameraXZDeltaToWorld: delta distance: screenDistance
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewActionMoveToolMode >> dragCancelled [
 	self view
 		activeToolMode: nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewActionMoveToolMode >> dragDelta: delta [
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewActionMoveToolMode >> dragFinished [
 	self view
 		activeToolMode: nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewActionMoveToolMode >> dragStarted [
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorViewActionMoveToolMode >> initialize [
 	super initialize.
 	screenDistance := 1.0.
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewActionMoveToolMode >> onLeftClick: event [
 	endPosition := currentPosition := event position.
 	self dragFinished
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewActionMoveToolMode >> onMouseMove: event [
 	currentPosition := event position.
 	startPosition ifNil: [
@@ -58,19 +60,19 @@ WDELevelEditorViewActionMoveToolMode >> onMouseMove: event [
 	]
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewActionMoveToolMode >> onRightClick: event [
 	self dragCancelled
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewActionMoveToolMode >> shortcuts [
 	^ super shortcuts , {
 		KeyboardKey escape asKeyCombination . [ self dragCancelled ].
 	}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorViewActionMoveToolMode >> view: aView [
 	super view: aView.
 	screenDistance := aView cameraFocalPointDistance.

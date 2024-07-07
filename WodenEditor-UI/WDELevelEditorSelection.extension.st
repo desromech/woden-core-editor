@@ -1,6 +1,6 @@
-Extension { #name : #WDELevelEditorSelection }
+Extension { #name : 'WDELevelEditorSelection' }
 
-{ #category : #'*WodenEditor-UI' }
+{ #category : '*WodenEditor-UI' }
 WDELevelEditorSelection >> buildContextMenuFor: levelSession [
 	| presenter |
 	presenter := SpMenuPresenter new.
@@ -9,7 +9,7 @@ WDELevelEditorSelection >> buildContextMenuFor: levelSession [
 
 ]
 
-{ #category : #'*WodenEditor-UI' }
+{ #category : '*WodenEditor-UI' }
 WDELevelEditorSelection >> buildContextMenuFor: levelSession on: menuPresenter [
 	| firstParent elementsWithTextureMapping |
 	selectedItems ifEmpty: [

@@ -1,10 +1,12 @@
 Class {
-	#name : #WDEWodenGameFrameworkSettings,
-	#superclass : #WDEGameSettings,
-	#category : #'WodenEditor-Model-GameSettings'
+	#name : 'WDEWodenGameFrameworkSettings',
+	#superclass : 'WDEGameSettings',
+	#category : 'WodenEditor-Model-GameSettings',
+	#package : 'WodenEditor-Model',
+	#tag : 'GameSettings'
 }
 
-{ #category : #palette }
+{ #category : 'palette' }
 WDEWodenGameFrameworkSettings >> actorCategories [
 	| category actorClassesWithPaths |
 	category := WDEPaletteCategory new
@@ -35,61 +37,61 @@ WDEWodenGameFrameworkSettings >> actorCategories [
 	^ { category }
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEWodenGameFrameworkSettings >> applicationSettings [
 	^	WDGFApplicationSettings
 
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEWodenGameFrameworkSettings >> assetsFolders [
 	^ self applicationSettings asApplicationSettings assetsLocations
 ]
 
-{ #category : #palette }
+{ #category : 'palette' }
 WDEWodenGameFrameworkSettings >> constructPaletteForActorClass: actorClass inCategory: category [
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDEWodenGameFrameworkSettings >> defaultMapsLocation [
 	^ self applicationSettings asApplicationSettings mapsLocation
 ]
 
-{ #category : #constructing }
+{ #category : 'constructing' }
 WDEWodenGameFrameworkSettings >> emptyLevel [
 	^ WDEWodenGameFrameworkWorldLevel empty
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEWodenGameFrameworkSettings >> loadFromFileReference: aFileReference [
 	^ WDEWodenGameFrameworkWorldLevel loadFromJsonString: aFileReference contents
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEWodenGameFrameworkSettings >> name [
 	^ 'Woden Game Framework'
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEWodenGameFrameworkSettings >> playLevelInVRWithFileName: fileName [
 	(WDGFWorld withApplicationSettings: self applicationSettings)
 		loadFromFileNamed: fileName;
 		playInVR
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEWodenGameFrameworkSettings >> playLevelWithFileName: fileName [
 	(WDGFWorld withApplicationSettings: self applicationSettings)
 		loadFromFileNamed: fileName;
 		playInOSWindow
 ]
 
-{ #category : #palette }
+{ #category : 'palette' }
 WDEWodenGameFrameworkSettings >> topLevelElementTemplateCategories [
 	^ super topLevelElementTemplateCategories , self actorCategories
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEWodenGameFrameworkSettings >> validExtensions [
 	^ WDEWodenGameFrameworkWorldLevel validExtensions
 ]

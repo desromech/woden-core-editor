@@ -1,24 +1,26 @@
 Class {
-	#name : #WDELevelGenericElementTemplateProvider,
-	#superclass : #WDELevelElementTemplateProvider,
-	#category : #'WodenEditor-Model-Palette'
+	#name : 'WDELevelGenericElementTemplateProvider',
+	#superclass : 'WDELevelElementTemplateProvider',
+	#category : 'WodenEditor-Model-Palette',
+	#package : 'WodenEditor-Model',
+	#tag : 'Palette'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> basicEntities [
 	^ self makeCategoryNamed: 'Basic Entities' withElements: {
 		'Point Entity' . WDEEntity new.
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> bspGeometryCategory [
 	^ self makeCategoryNamed: 'CSG (BSP style)' withElements: {
 		'Box' . (WDMBSPBrush forBox: AABox unit).
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> lightsCategory [
 	^ self makeCategoryNamed: 'Light Sources' withElements: {
 		'Point Light' . WDModelingPointLightSource new.
@@ -27,7 +29,7 @@ WDELevelGenericElementTemplateProvider >> lightsCategory [
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> makeCategoryNamed: categoryName withElements: elements [
 	| category |
 	category :=  WDEPaletteCategory new
@@ -44,7 +46,7 @@ WDELevelGenericElementTemplateProvider >> makeCategoryNamed: categoryName withEl
 	^ category
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> terrainGeometryCategory [
 	^ self makeCategoryNamed: 'Terrain Geometry' withElements: {
 		'Terrain 32 1x1' . WDMTerrain patchSize: 32 gridExtent: 1@1.
@@ -54,7 +56,7 @@ WDELevelGenericElementTemplateProvider >> terrainGeometryCategory [
 	}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelGenericElementTemplateProvider >> topLevelPaletteCategories [
 	^ {
 		self lightsCategory.

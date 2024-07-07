@@ -1,6 +1,6 @@
-Extension { #name : #WDGFWorld }
+Extension { #name : 'WDGFWorld' }
 
-{ #category : #'*WodenEditor-UI' }
+{ #category : '*WodenEditor-UI' }
 WDGFWorld >> openInEditor [
 	WDEWodenGameFrameworkWorldLevel new
 		world: self;

@@ -1,53 +1,55 @@
 Class {
-	#name : #WDEGameSettings,
-	#superclass : #Object,
+	#name : 'WDEGameSettings',
+	#superclass : 'Object',
 	#traits : 'TWDMModelingMaterialInfoResolver',
 	#classTraits : 'TWDMModelingMaterialInfoResolver classTrait',
 	#instVars : [
 		'modelAssetCache',
 		'propAssetCache'
 	],
-	#category : #'WodenEditor-Model-GameSettings'
+	#category : 'WodenEditor-Model-GameSettings',
+	#package : 'WodenEditor-Model',
+	#tag : 'GameSettings'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEGameSettings class >> allSettings [
 	^ self withAllSubclasses
 		reject: [ :each | each isAbstract  ]
 		thenCollect: [ :each | each new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEGameSettings class >> default [
 	^ WDEWodenGameFrameworkSettings new
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEGameSettings class >> isAbstract [
 	^ self == WDEGameSettings
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> assetsFolders [
 	^ #()
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> defaultMapsLocation [
 	^ FileLocator imageDirectory
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> editorMaterials [
 	^ self findAssetsWithExtensions: self materialExtensions on: self specialMaterialsFolders
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> emptyLevel [
 	self subclassResponsibility
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> findAssetsWithExtensions: aListOfExtensions on: folders [
 	| assets |
 	assets := OrderedCollection new.
@@ -66,49 +68,49 @@ WDEGameSettings >> findAssetsWithExtensions: aListOfExtensions on: folders [
 	^ assets
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> gameHDRIs [
 	^ self findAssetsWithExtensions: self hdriExtensions on: self hdriFolders
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> gameMaterials [
 	^ self findAssetsWithExtensions: self materialExtensions on: self materialsFolders
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> gameModels [
 	^ self findAssetsWithExtensions: self modelExtensions on: self modelsFolders
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> gameProps [
 	^ self findAssetsWithExtensions: self propExtensions on: self propsFolders
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> hdriExtensions [
 	^	#(hdr)
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> hdriFolders [
 	^ self assetsFolders collect: [ :each | {each / 'hdri' . each} ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDEGameSettings >> initialize [
 	super initialize.
 	modelAssetCache := WeakValueDictionary new.
 	propAssetCache := WeakValueDictionary new.
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> loadFromFileReference: aFileReference [
 	self subclassResponsibility
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> loadModelWithPath: path [
 	| solvedPath |
 	solvedPath := self resolveAssetPath: path.
@@ -121,7 +123,7 @@ WDEGameSettings >> loadModelWithPath: path [
 	]
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> loadPropModelWithPath: path [
 	| solvedPath |
 	solvedPath := self resolveAssetPath: path.
@@ -135,7 +137,7 @@ WDEGameSettings >> loadPropModelWithPath: path [
 	]
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> loadValidMaterialForInfo: aMaterialInfo [
 	| resolvedPath |
 	aMaterialInfo path ifNil: [ ^ nil ].
@@ -145,17 +147,17 @@ WDEGameSettings >> loadValidMaterialForInfo: aMaterialInfo [
 	^ WDMaterial loadFromFileReference: resolvedPath
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> materialExtensions [
 	^	#(wdmat)
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> materialsFolders [
 	^ self assetsFolders collect: [ :each | {each / 'materials' . each} ]
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> modelCategories [
 	| category |
 	category := WDEPaletteCategory new
@@ -174,32 +176,32 @@ WDEGameSettings >> modelCategories [
 	^ {category} select: [ :each | each isNotEmpty ]
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> modelExtensions [
 	^	#(obj ply gltf glb)
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> modelsFolders [
 	^ self assetsFolders collect: [ :each | {each / 'models' . each} ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEGameSettings >> name [
 	self subclassResponsibility
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> playLevelInVRWithFileName: fileName [
 	self inform: 'TODO: playLevelInVRWithFileName: ' , fileName
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> playLevelWithFileName: fileName [
 	self inform: 'TODO: playLevelWithFileName: ' , fileName
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> propCategories [
 	| category |
 	category := WDEPaletteCategory new
@@ -218,17 +220,17 @@ WDEGameSettings >> propCategories [
 	^ {category} select: [ :each | each isNotEmpty ]
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> propExtensions [
 	^	#(wdprop)
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> propsFolders [
 	^ self assetsFolders collect: [ :each | {each / 'props' . each} ]
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> resolveAssetPath: path [
 	| fileReference resolveBlock |
 	fileReference := path asFileReference.
@@ -243,22 +245,22 @@ WDEGameSettings >> resolveAssetPath: path [
 	^ fileReference
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> specialAssetsFolders [
 	^ #()
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> specialMaterialsFolders [
 	^ self specialAssetsFolders collect: [ :each | {each / 'materials' . each} ]
 ]
 
-{ #category : #palette }
+{ #category : 'palette' }
 WDEGameSettings >> topLevelElementTemplateCategories [
 	^ self modelCategories , self propCategories
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> topLevelHDRIPaletteCategories [
 	| category |
 	category := WDEPaletteCategory new
@@ -274,12 +276,12 @@ WDEGameSettings >> topLevelHDRIPaletteCategories [
 	^ {category} select: [ :each | each isNotEmpty ]
 ]
 
-{ #category : #palette }
+{ #category : 'palette' }
 WDEGameSettings >> topLevelLightSourcePaletteCategories [
 	^ #()
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> topLevelMaterialPaletteCategories [
 	| category editorCategory |
 	category := WDEPaletteCategory new
@@ -306,7 +308,7 @@ WDEGameSettings >> topLevelMaterialPaletteCategories [
 	^ {category . editorCategory} select: [ :each | each isNotEmpty ]
 ]
 
-{ #category : #'path finding' }
+{ #category : 'path finding' }
 WDEGameSettings >> validExtensions [
 	^ self subclassResponsibility
 ]

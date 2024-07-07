@@ -1,6 +1,6 @@
 Class {
-	#name : #WDELevelEditor3DManipulator,
-	#superclass : #Object,
+	#name : 'WDELevelEditor3DManipulator',
+	#superclass : 'Object',
 	#instVars : [
 		'view',
 		'highlighted',
@@ -9,44 +9,46 @@ Class {
 		'children',
 		'sceneNode'
 	],
-	#category : #'WodenEditor-UI-Manipulators'
+	#category : 'WodenEditor-UI-Manipulators',
+	#package : 'WodenEditor-UI',
+	#tag : 'Manipulators'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 WDELevelEditor3DManipulator class >> for: aView [
 	^ self new view: aView; yourself
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditor3DManipulator >> activateAction [
 	"This activates and action associated with this manipulator"
 ]
 
-{ #category : #scene }
+{ #category : 'scene' }
 WDELevelEditor3DManipulator >> addToScene: aScene [
 	sceneNode := self createSceneNode.
 	sceneNode ifNotNil: [ aScene add: sceneNode ].
 	children do: [ :each | each addToScene: aScene ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DManipulator >> applyHighlightingEffect [
 ]
 
-{ #category : #'element manipulation' }
+{ #category : 'element manipulation' }
 WDELevelEditor3DManipulator >> applyTransform: transformation [
 ]
 
-{ #category : #'element manipulation' }
+{ #category : 'element manipulation' }
 WDELevelEditor3DManipulator >> applyTransformForTranslationDelta: translationDelta [
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> boundingBox [
 	^ boundingBox
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> children: newChildren [
 	sceneNode ifNotNil: [
 		children do: [ :each | each removeFromScene ].
@@ -58,34 +60,34 @@ WDELevelEditor3DManipulator >> children: newChildren [
 	]
 ]
 
-{ #category : #scene }
+{ #category : 'scene' }
 WDELevelEditor3DManipulator >> createSceneNode [
 	self subclassResponsibility
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DManipulator >> currentDragToolClass [
 	^ nil
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DManipulator >> editorTheme [
 	^ WDELevelEditorTheme current
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> highlighted [
 
 	^ highlighted
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> highlighted: aBoolean [
 	highlighted := aBoolean.
 	self applyHighlightingEffect.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditor3DManipulator >> initialize [
 	super initialize.
 	highlighted := false.
@@ -93,24 +95,24 @@ WDELevelEditor3DManipulator >> initialize [
 	children := #().
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DManipulator >> mementoForDragging [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> parent [
 
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> parent: anObject [
 
 	parent := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DManipulator >> rayCast: ray [
 	| bestResult distance |
 	self visible ifFalse: [ ^ nil ].
@@ -130,7 +132,7 @@ WDELevelEditor3DManipulator >> rayCast: ray [
 	^ distance -> self.
 ]
 
-{ #category : #scene }
+{ #category : 'scene' }
 WDELevelEditor3DManipulator >> removeFromScene [
 	children do: [ :each | each removeFromScene ].
 	sceneNode ifNotNil: [
@@ -139,27 +141,27 @@ WDELevelEditor3DManipulator >> removeFromScene [
 	]
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DManipulator >> restoreMementoForDragging: memento [
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> sceneNode [
 	^ sceneNode
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DManipulator >> selectedItemsBoundingBoxChanged [
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DManipulator >> sizeScaleFactorForPosition: position [
 	^ view isPerspective
 		ifTrue: [ (position - view cameraPosition) length max: 1.0 ]
 		ifFalse: [ view viewScale * 2.0 ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DManipulator >> startDragToolWithEvent: event [
 	| dragToolClass |
 	dragToolClass := self currentDragToolClass.
@@ -171,29 +173,29 @@ WDELevelEditor3DManipulator >> startDragToolWithEvent: event [
 			yourself)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DManipulator >> updateForViewCamera [
 	children do: [ :each | each updateForViewCamera ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> view [
 
 	^ view
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> view: anObject [
 
 	view := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> visible [
 	^ sceneNode notNil and: [ sceneNode visible ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DManipulator >> visible: aBoolean [
 	sceneNode ifNotNil: [
 		sceneNode visible: aBoolean.

@@ -1,15 +1,17 @@
 Class {
-	#name : #WDELevelEditorViewTranslateManipulatorDragToolMode,
-	#superclass : #WDELevelEditorViewManipulatorDragToolMode,
-	#category : #'WodenEditor-UI-ViewMode'
+	#name : 'WDELevelEditorViewTranslateManipulatorDragToolMode',
+	#superclass : 'WDELevelEditorViewManipulatorDragToolMode',
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorViewTranslateManipulatorDragToolMode >> modeName [
 	^ 'Translate'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorViewTranslateManipulatorDragToolMode >> onMouseDrag: event delta: delta [
 	| mouseDelta worldDelta |
 	mouseDelta := event position - dragStartPosition.

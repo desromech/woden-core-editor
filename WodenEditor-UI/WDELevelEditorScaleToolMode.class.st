@@ -1,13 +1,15 @@
 Class {
-	#name : #WDELevelEditorScaleToolMode,
-	#superclass : #WDELevelEditorSelectionTransformToolMode,
+	#name : 'WDELevelEditorScaleToolMode',
+	#superclass : 'WDELevelEditorSelectionTransformToolMode',
 	#instVars : [
 		'transformStateMementos'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorScaleToolMode >> applyTransformToElements [
 	| transform scaleFactor scaleFactorVector |
 	currentPosition ifNil: [ ^ self ].
@@ -25,19 +27,19 @@ WDELevelEditorScaleToolMode >> applyTransformToElements [
 	view selectedItemsBoundingBoxChanged; refresh.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorScaleToolMode >> modeName [
 	^ 'Scale elements'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorScaleToolMode >> restoreMementos [
 	elements doWithIndex: [ :element :index |
 		element restoreTransformStateMemento: (transformStateMementos at: index)
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorScaleToolMode >> storeMementos [
 	transformStateMementos := elements collect: [ :each | each transformStateMemento ].
 ]

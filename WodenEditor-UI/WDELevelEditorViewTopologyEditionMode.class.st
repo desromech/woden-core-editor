@@ -1,20 +1,22 @@
 Class {
-	#name : #WDELevelEditorViewTopologyEditionMode,
-	#superclass : #WDELevelEditorViewEditionMode,
-	#category : #'WodenEditor-UI-ViewMode'
+	#name : 'WDELevelEditorViewTopologyEditionMode',
+	#superclass : 'WDELevelEditorViewEditionMode',
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewTopologyEditionMode >> commitModeChanges [
 	view model activeEditionElements do: [ :each | each commitTopologyChanges ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewTopologyEditionMode >> currentModelingEditionMode [
 	^ WDTopologyEditionMode
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewTopologyEditionMode >> manipulatorForActiveEditionElements: activeEditionElements [
 	| objectManipulators |
 	objectManipulators := OrderedCollection new.
@@ -38,12 +40,12 @@ WDELevelEditorViewTopologyEditionMode >> manipulatorForActiveEditionElements: ac
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorViewTopologyEditionMode >> modeName [
 	^ 'Topology Edition Mode'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewTopologyEditionMode >> supportsManipulators [
 	^ true
 ]

@@ -1,15 +1,17 @@
 Class {
-	#name : #WDELevelEditorSculptDrawDragToolMode,
-	#superclass : #WDELevelEditorViewDragToolMode,
-	#category : #'WodenEditor-UI-ViewMode'
+	#name : 'WDELevelEditorSculptDrawDragToolMode',
+	#superclass : 'WDELevelEditorViewDragToolMode',
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorSculptDrawDragToolMode >> modeName [
 	^ 'Sculpt Drawing'
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorSculptDrawDragToolMode >> onMouseDrag: event delta: delta [
 	| ray drawIntensity drawRadius |
 	super onMouseDrag: event delta: delta.

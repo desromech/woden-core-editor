@@ -1,14 +1,16 @@
 Class {
-	#name : #WDELevelEditor3DBoxCornerHandle,
-	#superclass : #WDELevelEditor3DManipulator,
+	#name : 'WDELevelEditor3DBoxCornerHandle',
+	#superclass : 'WDELevelEditor3DManipulator',
 	#instVars : [
 		'currentHalfExtent',
 		'material'
 	],
-	#category : #'WodenEditor-UI-Manipulators'
+	#category : 'WodenEditor-UI-Manipulators',
+	#package : 'WodenEditor-UI',
+	#tag : 'Manipulators'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DBoxCornerHandle >> applyHighlightingEffect [
 	material ifNotNil: [
 		material colorFactor: self currentColor.
@@ -16,7 +18,7 @@ WDELevelEditor3DBoxCornerHandle >> applyHighlightingEffect [
 	]
 ]
 
-{ #category : #'element manipulation' }
+{ #category : 'element manipulation' }
 WDELevelEditor3DBoxCornerHandle >> applyTransformForTranslationDelta: translation [
 	| axis constrainedTranslation originalBox min max newBox transform sanitizedNewBox |
 	originalBox := parent boundingBox.
@@ -38,14 +40,14 @@ WDELevelEditor3DBoxCornerHandle >> applyTransformForTranslationDelta: translatio
 	parent applyTransform: transform
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DBoxCornerHandle >> boundingBoxChanged [
 	sceneNode ifNotNil: [ 
 		sceneNode transform: boundingBox trsTransformToConvertUnitBoxToMe
 	]
 ]
 
-{ #category : #scene }
+{ #category : 'scene' }
 WDELevelEditor3DBoxCornerHandle >> createSceneNode [
 	boundingBox isEmpty ifTrue: [ ^ nil ].
 	material := WDUnlitMaterial new
@@ -58,59 +60,59 @@ WDELevelEditor3DBoxCornerHandle >> createSceneNode [
 		yourself
 ]
 
-{ #category : #'brick-properties' }
+{ #category : 'brick-properties' }
 WDELevelEditor3DBoxCornerHandle >> currentColor [
 	^ highlighted
 		ifTrue: [ self editorTheme highlightedBoxCornerHandleColor  ]
 		ifFalse: [ self editorTheme boxCornerHandleColor ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DBoxCornerHandle >> currentDragToolClass [
 	^ WDELevelEditorViewTranslateManipulatorDragToolMode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DBoxCornerHandle >> halfExtent: halfExtent [
 	currentHalfExtent := halfExtent.
 	self position: boundingBox center
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditor3DBoxCornerHandle >> initialize [
 	super initialize.
 	currentHalfExtent:= Vector3 withAll: 0.1
 ]
 
-{ #category : #'element manipulation' }
+{ #category : 'element manipulation' }
 WDELevelEditor3DBoxCornerHandle >> manipulatedBoxCornerAxis [
 	^ (self position - self parent boundingBox center roundTo: 0.00001) sign.
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DBoxCornerHandle >> mementoForDragging [
 	^ {boundingBox . parent transformStateMemento}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DBoxCornerHandle >> position [
 	^ boundingBox center
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DBoxCornerHandle >> position: position [
 	boundingBox := AABox center: position halfExtent: currentHalfExtent.
 	self boundingBoxChanged
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DBoxCornerHandle >> restoreMementoForDragging: memento [
 	boundingBox := memento first.
 	parent restoreTransformStateMemento: memento second.
 	view refresh
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DBoxCornerHandle >> updateForViewCamera [
 	super updateForViewCamera.
 	self halfExtent: 0.005 * (self sizeScaleFactorForPosition: self position).

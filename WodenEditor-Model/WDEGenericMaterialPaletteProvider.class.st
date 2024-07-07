@@ -1,10 +1,12 @@
 Class {
-	#name : #WDEGenericMaterialPaletteProvider,
-	#superclass : #WDEMaterialPaletteProvider,
-	#category : #'WodenEditor-Model-Palette'
+	#name : 'WDEGenericMaterialPaletteProvider',
+	#superclass : 'WDEMaterialPaletteProvider',
+	#category : 'WodenEditor-Model-Palette',
+	#package : 'WodenEditor-Model',
+	#tag : 'Palette'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDEGenericMaterialPaletteProvider >> basicDielectrics [
 	| category |
 	category :=  WDEPaletteCategory new
@@ -27,7 +29,7 @@ WDEGenericMaterialPaletteProvider >> basicDielectrics [
 	^ category
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDEGenericMaterialPaletteProvider >> basicMetals [
 	| category |
 	category :=  WDEPaletteCategory new
@@ -44,7 +46,7 @@ WDEGenericMaterialPaletteProvider >> basicMetals [
 	^ category
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDEGenericMaterialPaletteProvider >> topLevelPaletteCategories [
 	^ {
 		self basicDielectrics.

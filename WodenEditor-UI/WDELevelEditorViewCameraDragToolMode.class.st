@@ -1,20 +1,22 @@
 Class {
-	#name : #WDELevelEditorViewCameraDragToolMode,
-	#superclass : #WDELevelEditorViewDragToolMode,
-	#category : #'WodenEditor-UI-ViewMode'
+	#name : 'WDELevelEditorViewCameraDragToolMode',
+	#superclass : 'WDELevelEditorViewDragToolMode',
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewCameraDragToolMode >> doNotAffectManipulators [
 	^ true
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorViewCameraDragToolMode >> modeName [
 	^ 'Camera dragging'
 ]
 
-{ #category : #event }
+{ #category : 'event' }
 WDELevelEditorViewCameraDragToolMode >> onMouseDrag: event delta: delta [
 	event controlKeyPressed ifTrue: [
 		view freePerspectiveView.

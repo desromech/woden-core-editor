@@ -1,10 +1,12 @@
 Class {
-	#name : #WDELevelEditor3DBoxPlacementManipulator,
-	#superclass : #WDELevelEditor3DBoxManipulator,
-	#category : #'WodenEditor-UI-Manipulators'
+	#name : 'WDELevelEditor3DBoxPlacementManipulator',
+	#superclass : 'WDELevelEditor3DBoxManipulator',
+	#category : 'WodenEditor-UI-Manipulators',
+	#package : 'WodenEditor-UI',
+	#tag : 'Manipulators'
 }
 
-{ #category : #actions }
+{ #category : 'actions' }
 WDELevelEditor3DBoxPlacementManipulator >> activateAction [
 	| session |
 	session := view levelEditorSession.
@@ -20,7 +22,7 @@ WDELevelEditor3DBoxPlacementManipulator >> activateAction [
 		refresh
 ]
 
-{ #category : #'brick-properties' }
+{ #category : 'brick-properties' }
 WDELevelEditor3DBoxPlacementManipulator >> currentColor [
 	^ highlighted
 		ifTrue: [ self editorTheme highlightedBoxPlacementManipulatorColor ]

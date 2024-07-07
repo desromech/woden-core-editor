@@ -1,6 +1,6 @@
 Class {
-	#name : #WDELevelEditorTheme,
-	#superclass : #Object,
+	#name : 'WDELevelEditorTheme',
+	#superclass : 'Object',
 	#instVars : [
 		'highlightColor',
 		'boxCornerHandleColor',
@@ -15,122 +15,123 @@ Class {
 	#classVars : [
 		'Current'
 	],
-	#category : #'WodenEditor-UI'
+	#category : 'WodenEditor-UI',
+	#package : 'WodenEditor-UI'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme class >> current [
 	^ Current ifNil: [ Current := self new ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme class >> current: newTheme [
 	Current := newTheme
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorTheme class >> reset [
 	<script>
 	Current := self new
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> boxCornerHandleColor [
 
 	^ boxCornerHandleColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> boxCornerHandleColor: anObject [
 
 	boxCornerHandleColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> boxManipulatorColor [
 
 	^ boxManipulatorColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> boxManipulatorColor: anObject [
 
 	boxManipulatorColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> boxPlacementManipulatorColor [
 
 	^ boxPlacementManipulatorColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> boxPlacementManipulatorColor: anObject [
 
 	boxPlacementManipulatorColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightColor [
 
 	^ highlightColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightColor: anObject [
 
 	highlightColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightedBoxCornerHandleColor [
 
 	^ highlightedBoxCornerHandleColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightedBoxCornerHandleColor: anObject [
 
 	highlightedBoxCornerHandleColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightedBoxManipulatorColor [
 
 	^ highlightedBoxManipulatorColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightedBoxManipulatorColor: anObject [
 
 	highlightedBoxManipulatorColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightedBoxPlacementManipulatorColor [
 
 	^ highlightedBoxPlacementManipulatorColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightedBoxPlacementManipulatorColor: anObject [
 
 	highlightedBoxPlacementManipulatorColor := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightedSelectionManipulatorColor [
 
 	^ highlightedSelectionManipulatorColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> highlightedSelectionManipulatorColor: anObject [
 
 	highlightedSelectionManipulatorColor := anObject
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelEditorTheme >> initialize [
 	super initialize.
 	highlightColor := Color r: 0.5 g: 0.6 b: 0.9 alpha: 0.1.
@@ -148,13 +149,13 @@ WDELevelEditorTheme >> initialize [
 	highlightedSelectionManipulatorColor := Color r: 0.95 g: 0.95 b: 0.6 alpha: 0.1.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> selectionManipulatorColor [
 
 	^ selectionManipulatorColor
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTheme >> selectionManipulatorColor: anObject [
 
 	selectionManipulatorColor := anObject

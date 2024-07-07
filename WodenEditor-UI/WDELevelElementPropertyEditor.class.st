@@ -1,26 +1,28 @@
 Class {
-	#name : #WDELevelElementPropertyEditor,
-	#superclass : #SpPresenterWithModel,
+	#name : 'WDELevelElementPropertyEditor',
+	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'treeView',
 		'propertiesNotebook'
 	],
-	#category : #'WodenEditor-UI-Spec'
+	#category : 'WodenEditor-UI-Spec',
+	#package : 'WodenEditor-UI',
+	#tag : 'Spec'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 WDELevelElementPropertyEditor class >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: #propertiesNotebook;
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelElementPropertyEditor >> initializePresenters [
 	propertiesNotebook := self newNotebook.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelElementPropertyEditor >> modelChanged [
 	propertiesNotebook removeAll.
 	self propertyPages do: [ :each |
@@ -32,12 +34,12 @@ WDELevelElementPropertyEditor >> modelChanged [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelElementPropertyEditor >> propertiesNotebook [
 	^ propertiesNotebook
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelElementPropertyEditor >> propertyPages [
 	^ (self model
 		ifNil: [#()]

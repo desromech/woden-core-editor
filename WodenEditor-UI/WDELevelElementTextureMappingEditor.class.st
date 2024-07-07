@@ -1,6 +1,6 @@
 Class {
-	#name : #WDELevelElementTextureMappingEditor,
-	#superclass : #SpPresenterWithModel,
+	#name : 'WDELevelElementTextureMappingEditor',
+	#superclass : 'SpPresenterWithModel',
 	#instVars : [
 		'textureScaleX',
 		'textureScaleY',
@@ -8,10 +8,12 @@ Class {
 		'textureOffsetY',
 		'textureRotation'
 	],
-	#category : #'WodenEditor-UI-Spec'
+	#category : 'WodenEditor-UI-Spec',
+	#package : 'WodenEditor-UI',
+	#tag : 'Spec'
 }
 
-{ #category : #specs }
+{ #category : 'specs' }
 WDELevelElementTextureMappingEditor class >> defaultLayout [
 	^ SpGridLayout new
 		add: 'Texture Scale:' at: 1@1;
@@ -26,7 +28,7 @@ WDELevelElementTextureMappingEditor class >> defaultLayout [
 		
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelElementTextureMappingEditor >> initializePresenters [
 	textureScaleX := self newNumberInput beFloat; yourself.
 	textureScaleY := self newNumberInput beFloat; yourself.
@@ -51,7 +53,7 @@ WDELevelElementTextureMappingEditor >> initializePresenters [
 	].
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevelElementTextureMappingEditor >> modelChanged [
 	| elements scaleX scaleY offsetX offsetY rotation |
 	elements := self model.
@@ -77,61 +79,61 @@ WDELevelElementTextureMappingEditor >> modelChanged [
 	rotation ifNotNil: [ textureRotation number: rotation radiansToDegrees ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureOffsetX [
 
 	^ textureOffsetX
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureOffsetX: anObject [
 
 	textureOffsetX := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureOffsetY [
 
 	^ textureOffsetY
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureOffsetY: anObject [
 
 	textureOffsetY := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureRotation [
 
 	^ textureRotation
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureRotation: anObject [
 
 	textureRotation := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureScaleX [
 
 	^ textureScaleX
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureScaleX: anObject [
 
 	textureScaleX := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureScaleY [
 
 	^ textureScaleY
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelElementTextureMappingEditor >> textureScaleY: anObject [
 
 	textureScaleY := anObject

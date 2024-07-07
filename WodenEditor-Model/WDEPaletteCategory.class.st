@@ -1,42 +1,44 @@
 Class {
-	#name : #WDEPaletteCategory,
-	#superclass : #WDEPaletteTreeNode,
+	#name : 'WDEPaletteCategory',
+	#superclass : 'WDEPaletteTreeNode',
 	#instVars : [
 		'name',
 		'templates',
 		'subcategories',
 		'subcategoryDictionary'
 	],
-	#category : #'WodenEditor-Model-Palette'
+	#category : 'WodenEditor-Model-Palette',
+	#package : 'WodenEditor-Model',
+	#tag : 'Palette'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> addAllTemplates: newTemplates [
 	templates addAll: newTemplates
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> addSubCategory: aSubCategory [
 	subcategories add: aSubCategory.
 	subcategoryDictionary at: aSubCategory name put: aSubCategory
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> addTemplate: aTemplate [
 	templates add: aTemplate
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 WDEPaletteCategory >> asPaletteElement [
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> children [
 	^ subcategories , templates
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> getOrCreateSubcategoryNamed: subcategoryName [
 	^ subcategoryDictionary at: subcategoryName ifAbsentPut: [ 
 		| subcategory |
@@ -46,7 +48,7 @@ WDEPaletteCategory >> getOrCreateSubcategoryNamed: subcategoryName [
 	]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDEPaletteCategory >> getOrCreateSubcategoryWithPath: path [
 	| category |
 	category := self.
@@ -56,7 +58,7 @@ WDEPaletteCategory >> getOrCreateSubcategoryWithPath: path [
 	^ category
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDEPaletteCategory >> initialize [
 	subcategories := OrderedCollection new.
 	subcategoryDictionary := Dictionary new.
@@ -64,27 +66,27 @@ WDEPaletteCategory >> initialize [
 	
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEPaletteCategory >> isEmpty [
 	^ templates isEmpty and: [ subcategories isEmpty ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 WDEPaletteCategory >> isNotEmpty [
 	^ self isEmpty not
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> name [
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> name: anObject [
 	name := anObject
 ]
 
-{ #category : #sorting }
+{ #category : 'sorting' }
 WDEPaletteCategory >> sort [
 	| sortBlock |
 	sortBlock := [ :a :b | a name <= b name ].
@@ -92,18 +94,18 @@ WDEPaletteCategory >> sort [
 	templates sort: sortBlock.
 ]
 
-{ #category : #sorting }
+{ #category : 'sorting' }
 WDEPaletteCategory >> sortRecursively [
 	subcategories do: [ :each | each sort ].
 	self sort
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> subcategories [
 	^ subcategories
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDEPaletteCategory >> templates [
 	^ templates
 ]

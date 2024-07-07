@@ -1,14 +1,16 @@
 Class {
-	#name : #WDELevelEditor3DSelectionManipulator,
-	#superclass : #WDELevelEditor3DBoxManipulator,
+	#name : 'WDELevelEditor3DSelectionManipulator',
+	#superclass : 'WDELevelEditor3DBoxManipulator',
 	#instVars : [
 		'selectedElements',
 		'displayBoundingBox'
 	],
-	#category : #'WodenEditor-UI-Manipulators'
+	#category : 'WodenEditor-UI-Manipulators',
+	#package : 'WodenEditor-UI',
+	#tag : 'Manipulators'
 }
 
-{ #category : #'element manipulation' }
+{ #category : 'element manipulation' }
 WDELevelEditor3DSelectionManipulator >> applyTransform: transform [
 	selectedElements do: [ :each |
 		each transformWith: transform
@@ -16,7 +18,7 @@ WDELevelEditor3DSelectionManipulator >> applyTransform: transform [
 	self computeBoundingBoxes.
 ]
 
-{ #category : #'element manipulation' }
+{ #category : 'element manipulation' }
 WDELevelEditor3DSelectionManipulator >> applyTransformForTranslationDelta: translation [
 	selectedElements do: [ :each |
 		each translateBy: translation
@@ -24,7 +26,7 @@ WDELevelEditor3DSelectionManipulator >> applyTransformForTranslationDelta: trans
 	self computeBoundingBoxes.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DSelectionManipulator >> computeBoundingBoxes [
 	boundingBox := AABox empty.
 	displayBoundingBox := AABox empty.
@@ -37,7 +39,7 @@ WDELevelEditor3DSelectionManipulator >> computeBoundingBoxes [
 	self boundingBoxChanged.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DSelectionManipulator >> computeManipulationPoints [
 	(selectedElements size = 1 and: [ selectedElements first isPointModelingElement ]) ifTrue: [ 
 		^ #()
@@ -46,22 +48,22 @@ WDELevelEditor3DSelectionManipulator >> computeManipulationPoints [
 	^ super computeManipulationPoints
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DSelectionManipulator >> displayBoundingBox [
 	^ displayBoundingBox
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DSelectionManipulator >> positionStateMemento [
 	^ { super positionStateMemento . selectedElements collect: [ :each | each positionStateMemento ]}
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DSelectionManipulator >> restoreMementoForDragging: memento [
 	^ self restorePositionStateMemento: memento
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DSelectionManipulator >> restorePositionStateMemento: memento [
 	| elementsMemento |
 	super restorePositionStateMemento: memento first.
@@ -72,7 +74,7 @@ WDELevelEditor3DSelectionManipulator >> restorePositionStateMemento: memento [
 	].
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DSelectionManipulator >> restoreTransformStateMemento: memento [
 	| superMemento myMemento elementsMemento |
 	superMemento := super restoreTransformStateMemento: memento first.
@@ -84,24 +86,24 @@ WDELevelEditor3DSelectionManipulator >> restoreTransformStateMemento: memento [
 	].		
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DSelectionManipulator >> selectedElements [
 
 	^ selectedElements
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditor3DSelectionManipulator >> selectedElements: anObject [
 	selectedElements := anObject.
 	self computeBoundingBoxes
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditor3DSelectionManipulator >> selectedItemsBoundingBoxChanged [
 	self computeBoundingBoxes
 ]
 
-{ #category : #memento }
+{ #category : 'memento' }
 WDELevelEditor3DSelectionManipulator >> transformStateMemento [
 	^ {
 		super transformStateMemento.

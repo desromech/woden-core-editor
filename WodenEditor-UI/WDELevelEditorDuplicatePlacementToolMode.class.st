@@ -1,15 +1,17 @@
 Class {
-	#name : #WDELevelEditorDuplicatePlacementToolMode,
-	#superclass : #WDELevelEditorViewActionMoveToolMode,
+	#name : 'WDELevelEditorDuplicatePlacementToolMode',
+	#superclass : 'WDELevelEditorViewActionMoveToolMode',
 	#instVars : [
 		'oldSelection',
 		'duplicatedElements',
 		'transformStateMementos'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorDuplicatePlacementToolMode >> applyPositionToElements [
 	| translation |
 	currentPosition ifNil: [ ^ self ].
@@ -23,18 +25,18 @@ WDELevelEditorDuplicatePlacementToolMode >> applyPositionToElements [
 	view refresh.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorDuplicatePlacementToolMode >> dragCancelled [
 	duplicatedElements do: [ :each | each removeFromParent ].
 	super dragCancelled
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorDuplicatePlacementToolMode >> dragDelta: delta [
 	self applyPositionToElements
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorDuplicatePlacementToolMode >> dragFinished [
 	| parents undoBlock newSelection editorSession |
 	self applyPositionToElements.
@@ -59,7 +61,7 @@ WDELevelEditorDuplicatePlacementToolMode >> dragFinished [
 	super dragFinished
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorDuplicatePlacementToolMode >> dragStarted [
 	| bbox |
 	bbox := AABox empty.
@@ -73,31 +75,31 @@ WDELevelEditorDuplicatePlacementToolMode >> dragStarted [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDuplicatePlacementToolMode >> duplicatedElements [
 
 	^ duplicatedElements
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDuplicatePlacementToolMode >> duplicatedElements: anObject [
 
 	duplicatedElements := anObject.
 	transformStateMementos := duplicatedElements collect: [ :each | each transformStateMemento ].
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDuplicatePlacementToolMode >> modeName [
 	^ 'Duplicate Placement'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDuplicatePlacementToolMode >> oldSelection [
 
 	^ oldSelection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDuplicatePlacementToolMode >> oldSelection: anObject [
 
 	oldSelection := anObject

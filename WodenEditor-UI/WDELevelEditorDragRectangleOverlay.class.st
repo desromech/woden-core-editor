@@ -1,41 +1,43 @@
 Class {
-	#name : #WDELevelEditorDragRectangleOverlay,
-	#superclass : #WDELevelEditorScreenOverlay,
+	#name : 'WDELevelEditorDragRectangleOverlay',
+	#superclass : 'WDELevelEditorScreenOverlay',
 	#instVars : [
 		'color',
 		'rectangle'
 	],
-	#category : #'WodenEditor-UI-Overlay'
+	#category : 'WodenEditor-UI-Overlay',
+	#package : 'WodenEditor-UI',
+	#tag : 'Overlay'
 }
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 WDELevelEditorDragRectangleOverlay >> buildSceneGraphWith: builder [
 	^ builder borderRectangle: rectangle color: color width: 1
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDragRectangleOverlay >> color [
 
 	^ color
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDragRectangleOverlay >> color: anObject [
 
 	color := anObject
 ]
 
-{ #category : #drawing }
+{ #category : 'drawing' }
 WDELevelEditorDragRectangleOverlay >> drawOn: aCanvas [
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDragRectangleOverlay >> rectangle [
 
 	^ rectangle
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorDragRectangleOverlay >> rectangle: anObject [
 
 	rectangle := anObject

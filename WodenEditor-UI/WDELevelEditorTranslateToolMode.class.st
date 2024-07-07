@@ -1,13 +1,15 @@
 Class {
-	#name : #WDELevelEditorTranslateToolMode,
-	#superclass : #WDELevelEditorSelectionTransformToolMode,
+	#name : 'WDELevelEditorTranslateToolMode',
+	#superclass : 'WDELevelEditorSelectionTransformToolMode',
 	#instVars : [
 		'positionStateMementos'
 	],
-	#category : #'WodenEditor-UI-ViewMode'
+	#category : 'WodenEditor-UI-ViewMode',
+	#package : 'WodenEditor-UI',
+	#tag : 'ViewMode'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorTranslateToolMode >> applyTransformToElements [
 	| translation |
 	currentPosition ifNil: [ ^ self ].
@@ -22,19 +24,19 @@ WDELevelEditorTranslateToolMode >> applyTransformToElements [
 	view selectedItemsBoundingBoxChanged; refresh.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTranslateToolMode >> modeName [
 	^ 'Translate elements'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevelEditorTranslateToolMode >> restoreMementos [
 	elements doWithIndex: [ :element :index |
 		element restorePositionStateMemento: (positionStateMementos at: index)
 	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevelEditorTranslateToolMode >> storeMementos [
 	positionStateMementos := elements collect: [ :each | each positionStateMemento ].
 ]

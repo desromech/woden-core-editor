@@ -2,48 +2,50 @@
 I provide an abstract interface for connecting the level editor with an actual game specific level model.
 "
 Class {
-	#name : #WDELevel,
-	#superclass : #Object,
+	#name : 'WDELevel',
+	#superclass : 'Object',
 	#instVars : [
 		'gameSettings',
 		'modelingTree'
 	],
-	#category : #'WodenEditor-Model-Level'
+	#category : 'WodenEditor-Model-Level',
+	#package : 'WodenEditor-Model',
+	#tag : 'Level'
 }
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDELevel class >> loadFromJson: jsonData [
 	^ self new loadFromJson: jsonData
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevel class >> loadFromJsonString: jsonString [
 	^ self loadFromJson: (STONJSON fromString: jsonString)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevel >> activeGroup [
 	^ self modelingTree
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevel >> activeGroupForInstantiating: aPrototype [
 	^ self activeGroup
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevel >> elementsInFrustum: frustum [
 	^ modelingTree findVolumeElementsThatIntersectFrustum: frustum
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevel >> gameSettings [
 
 	^ gameSettings
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevel >> gameSettings: anObject [
 	gameSettings := anObject.
 	modelingTree ifNotNil: [
@@ -55,7 +57,7 @@ WDELevel >> gameSettings: anObject [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 WDELevel >> initialize [
 	super initialize.
 	modelingTree := WDModelingTree new.
@@ -65,23 +67,23 @@ WDELevel >> initialize [
 		assetResolver: gameSettings.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevel >> level [
 	^ self
 ]
 
-{ #category : #serialization }
+{ #category : 'serialization' }
 WDELevel >> loadFromJson: jsonData [
 	modelingTree := WDModelingTree new.
 	modelingTree loadFromJson: jsonData
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 WDELevel >> modelingTree [
 	^ modelingTree
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 WDELevel >> newEditorSession [
 	^ WDELevelEditorSession new
 		gameSettings: (gameSettings ifNil: [WDEGameSettings default]);
@@ -89,7 +91,7 @@ WDELevel >> newEditorSession [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevel >> rayPickElement: ray mode: modelingEditionMode [
 	| picker |
 	picker := WDMFirstRayPicker ray: ray editionMode: modelingEditionMode.
@@ -97,7 +99,7 @@ WDELevel >> rayPickElement: ray mode: modelingEditionMode [
 	^ picker result
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevel >> rayPickElements: ray mode: modelingEditionMode [
 	| picker |
 	picker := WDMRayPicker ray: ray editionMode: modelingEditionMode.
@@ -105,19 +107,19 @@ WDELevel >> rayPickElements: ray mode: modelingEditionMode [
 	^ picker sortedDistancesWithResults
 ]
 
-{ #category : #fileout }
+{ #category : 'fileout' }
 WDELevel >> saveTo: aFileReference [
 	| encodedLevel |
 	encodedLevel := modelingTree encodeAsJSONString.
 	aFileReference writeStreamDo: [ :out | out truncate; nextPutAll: encodedLevel ].
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 WDELevel >> validExtensions [
 	self subclassResponsibility
 ]
 
-{ #category : #hooks }
+{ #category : 'hooks' }
 WDELevel >> whenAddedOrRemovedElementDo: aBlock [
 	modelingTree whenAddedOrRemovedElementDo: aBlock
 ]
