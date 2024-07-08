@@ -821,6 +821,7 @@ WDELevelEditorContentView >> rayPickManipulator: ray [
 
 { #category : 'accessing' }
 WDELevelEditorContentView >> refresh [
+	self updateCamera.
 	sceneView refresh
 ]
 
@@ -944,6 +945,7 @@ WDELevelEditorContentView >> updateActiveToolStatusBarIndicator [
 
 { #category : 'camera' }
 WDELevelEditorContentView >> updateCamera [
+	| level |
 	cameraNode orientation: self validCameraOrientation.
 	camera focalDistance: self cameraFocalPointDistance.
 	camera isPerspective ifTrue: [ 
@@ -954,7 +956,16 @@ WDELevelEditorContentView >> updateCamera [
 		camera
 			nearDistance: OrthographicNearDistance;
 			farDistance: OrthographicFarDistance
-	]
+	].
+
+	level := self session level modelingTree.
+	camera
+		fogColor: level fogColor;
+		fogStartDistance: level fogStartDistance;
+		fogEndDistance: level fogEndDistance;
+		fogDensity: level fogDensity;
+		fogMode: level fogModeObject
+
 ]
 
 { #category : 'camera' }
