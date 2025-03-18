@@ -366,6 +366,14 @@ WDELevelEditor >> fileMenu [
 			group
 				addItem: [ :item |
 					item
+						name: 'Export as gltf...';
+						action: [ contentView exportAsGltf ].
+				]
+		];
+		addGroup: [ :group |
+			group
+				addItem: [ :item |
+					item
 						name: 'Exit';
 						action: [ self actionExit ].
 				]

@@ -39,6 +39,15 @@ WDELevel >> elementsInFrustum: frustum [
 	^ modelingTree findVolumeElementsThatIntersectFrustum: frustum
 ]
 
+{ #category : 'as yet unclassified' }
+WDELevel >> exportToGltf [
+]
+
+{ #category : 'as yet unclassified' }
+WDELevel >> exportToGltf: aFileReference [
+
+]
+
 { #category : 'accessing' }
 WDELevel >> gameSettings [
 

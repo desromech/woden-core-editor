@@ -490,6 +490,20 @@ WDELevelEditorContentView >> elementsInScreenRectangle: screenRectangle [
 	^ self level elementsInFrustum: selectionFrustum
 ]
 
+{ #category : 'actions' }
+WDELevelEditorContentView >> exportAsGltf [
+	| dialog result |
+	dialog := self createLevelFileDialog.
+	dialog
+		title: 'Select the location to save the level';
+		fileNameText: 'level.gltf';
+		answerSaveFile.
+
+	result := dialog openModal answer.
+	result ifNil: [ ^ self ].
+	self model exportToGltf: result asFileReference
+]
+
 { #category : 'camera views' }
 WDELevelEditorContentView >> freePerspectiveView [
 	gridOrientation := Quaternion lookAtBottom.

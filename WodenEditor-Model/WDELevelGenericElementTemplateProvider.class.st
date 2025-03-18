@@ -17,7 +17,6 @@ WDELevelGenericElementTemplateProvider >> basicEntities [
 WDELevelGenericElementTemplateProvider >> bspGeometryCategory [
 	^ self makeCategoryNamed: 'CSG (BSP style)' withElements: {
 		'Box' . (WDMBSPBrush forBox: AABox unit).
-		'Combiner' . (WDMBSPCombiner with: (WDMBSPBrush forBox: AABox unit)).
 	}
 ]
 
