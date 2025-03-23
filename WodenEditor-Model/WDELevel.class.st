@@ -39,13 +39,14 @@ WDELevel >> elementsInFrustum: frustum [
 	^ modelingTree findVolumeElementsThatIntersectFrustum: frustum
 ]
 
-{ #category : 'as yet unclassified' }
-WDELevel >> exportToGltf [
-]
-
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 WDELevel >> exportToGltf: aFileReference [
-
+	| builder rootNode json |
+	builder := WDSRWGLTF2Builder new.
+	rootNode := modelingTree exportToGltfWith: builder.
+	(builder newScene: 'Level') nodes: { rootNode }.
+	json := builder buildJson.
+	aFileReference writeStreamDo: [ :out | out truncate; nextPutAll: json ]
 ]
 
 { #category : 'accessing' }

@@ -95,6 +95,12 @@ WDELevelEditorSession >> duplicateSelectedItems [
 ]
 
 { #category : 'accessing' }
+WDELevelEditorSession >> exportToGltf: aFileReference [
+	self level ifNil: [ ^ self ].
+	self level exportToGltf: aFileReference.
+]
+
+{ #category : 'accessing' }
 WDELevelEditorSession >> gameSettings [
 	^ gameSettings
 ]
