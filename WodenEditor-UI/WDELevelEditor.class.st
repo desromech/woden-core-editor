@@ -366,6 +366,11 @@ WDELevelEditor >> fileMenu [
 			group
 				addItem: [ :item |
 					item
+						name: 'Import from gltf...';
+						action: [ contentView importFromGltf ].
+				];
+				addItem: [ :item |
+					item
 						name: 'Export as gltf...';
 						action: [ contentView exportAsGltf ].
 				]

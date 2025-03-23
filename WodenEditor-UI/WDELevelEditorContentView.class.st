@@ -552,6 +552,31 @@ WDELevelEditorContentView >> highlightManipulator: aManipulator [
 	highlightedManipulator ifNotNil: [ highlightedManipulator highlighted: true ].
 ]
 
+{ #category : 'actions' }
+WDELevelEditorContentView >> importFromGltf [
+	| dialog result fileRef model |
+	dialog := FileDialogWindow basicNew
+		initialize;
+		validExtensions: #(gltf glb);
+		selectPath: self session gameSettings defaultMapsLocation;
+		title: 'Select the gltf to import level';
+		fileNameText: 'level.gltf';
+		answerFileName.
+
+	result := dialog openModal answer.
+	result ifNil: [ ^ self ].
+	
+	fileRef := result asFileReference.
+	fileRef extension = 'glb' ifTrue: [
+		model := WDSRWGLTF2BinaryReadWriter readFromFileReference: fileRef.
+	] ifFalse: [
+		fileRef extension = 'gltf' ifFalse: [ self error: 'Unsupported non-gltf model for importing a level.'].
+		model := WDSRWGLTF2ReadWriter readFromFileReference: fileRef.
+	].
+
+	self model importFromModelAsset: model
+]
+
 { #category : 'initialization' }
 WDELevelEditorContentView >> initialize [
 	cameraAngle := Vector3 zeros.

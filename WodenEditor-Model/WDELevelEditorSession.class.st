@@ -132,6 +132,20 @@ WDELevelEditorSession >> gridSizeIncrementFactor [
 	^ 10
 ]
 
+{ #category : 'as yet unclassified' }
+WDELevelEditorSession >> importFromModelAsset: model [
+	| sceneToImport |
+	sceneToImport := model scenes first.
+	sceneToImport normalLayer children do: [ :child |
+		self importRootNode: child
+	].
+]
+
+{ #category : 'as yet unclassified' }
+WDELevelEditorSession >> importRootNode: aSceneNode [
+	self halt
+]
+
 { #category : 'action' }
 WDELevelEditorSession >> increaseGridSize [
 	self gridSize: self gridSize * self gridSizeIncrementFactor
