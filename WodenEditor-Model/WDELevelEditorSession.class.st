@@ -177,7 +177,9 @@ WDELevelEditorSession >> importSceneNode: aSceneNode [
 	aSceneNode lights ifNotEmpty: [ 
 		| light | 
 		light := aSceneNode lights first.
-		self halt
+		^ light asModelingLightSource
+			transform: aSceneNode transform;
+			yourself
 	].
 
 	^ WDModelingNullObject new
