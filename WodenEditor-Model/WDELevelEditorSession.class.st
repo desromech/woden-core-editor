@@ -143,7 +143,46 @@ WDELevelEditorSession >> importFromModelAsset: model [
 
 { #category : 'as yet unclassified' }
 WDELevelEditorSession >> importRootNode: aSceneNode [
-	self halt
+	| importedNode |
+	importedNode := self importSceneNode: aSceneNode.
+	self level modelingTree add: importedNode
+]
+
+{ #category : 'as yet unclassified' }
+WDELevelEditorSession >> importSceneNode: aSceneNode [
+	aSceneNode children ifNotEmpty: [
+		| group |
+		group := WDModelingGroup new
+			name: aSceneNode name;
+			transform: aSceneNode transform;
+			yourself.
+		
+		aSceneNode children do: [ :eachChild |
+			(self importSceneNode: eachChild) ifNotNil: [:importedChild | group add: importedChild ]
+		].
+	
+		^ group
+	].
+
+	aSceneNode renderables ifNotEmpty: [ 
+		| renderable staticMesh |
+		renderable := aSceneNode renderables first.
+		staticMesh := WDModelingStaticMesh new
+			mesh: renderable;
+			transform: aSceneNode transform;
+			yourself.
+		^ staticMesh
+	].
+
+	aSceneNode lights ifNotEmpty: [ 
+		| light | 
+		light := aSceneNode lights first.
+		self halt
+	].
+
+	^ WDModelingNullObject new
+		name: aSceneNode name;
+		yourself
 ]
 
 { #category : 'action' }
