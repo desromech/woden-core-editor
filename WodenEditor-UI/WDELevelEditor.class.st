@@ -373,6 +373,11 @@ WDELevelEditor >> fileMenu [
 					item
 						name: 'Export as gltf...';
 						action: [ contentView exportAsGltf ].
+				];
+				addItem: [ :item |
+					item
+						name: 'Export as map...';
+						action: [ contentView exportAsMap ].
 				]
 		];
 		addGroup: [ :group |

@@ -504,6 +504,20 @@ WDELevelEditorContentView >> exportAsGltf [
 	self model exportToGltf: result asFileReference
 ]
 
+{ #category : 'actions' }
+WDELevelEditorContentView >> exportAsMap [
+	| dialog result |
+	dialog := self createLevelFileDialog.
+	dialog
+		title: 'Select the location to save the level';
+		fileNameText: 'level.map';
+		answerSaveFile.
+
+	result := dialog openModal answer.
+	result ifNil: [ ^ self ].
+	self model exportToMap: result asFileReference
+]
+
 { #category : 'camera views' }
 WDELevelEditorContentView >> freePerspectiveView [
 	gridOrientation := Quaternion lookAtBottom.
