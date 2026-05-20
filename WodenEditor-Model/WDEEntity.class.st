@@ -55,8 +55,18 @@ WDEEntity >> exportToMap: out [
 	out nextPutAll: '// entity ';lf.
 
 	out nextPutAll: '{'; lf.
-	out nextPutAll: ('"{1}" "{2}"' format: {'mapversion'. '220'}); lf.
+	className  = 'worldspawn' ifTrue: [ 
+		out nextPutAll: ('"{1}" "{2}"' format: {'mapversion'. '220'}); lf.
+	].
 	out nextPutAll: ('"{1}" "{2}"' format: {'classname'. className}); lf.
+	
+	transform translation = Vector3 zeros ifFalse: [ 
+		| origin |
+		origin := self class wodenToQuakeCoordinates: transform translation.
+		out nextPutAll: ('"{1}" "{2} {3} {4}"' format: {
+			'origin'. origin x rounded printString. origin y rounded printString. origin z rounded printString 
+		}); lf.
+	].
 	
 	sortedProperties := OrderedCollection new.
 	properties keysAndValuesDo: [ :key : value |

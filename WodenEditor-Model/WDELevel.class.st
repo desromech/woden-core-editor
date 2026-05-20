@@ -60,7 +60,7 @@ WDELevel >> exportToMap: aFileReference [
 		]
 	].
 
-	aFileReference writeStreamDo: [ :out | out nextPutAll: mapData ]
+	aFileReference writeStreamDo: [ :out | out truncate; nextPutAll: mapData ]
 ]
 
 { #category : 'accessing' }
