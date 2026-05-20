@@ -55,13 +55,8 @@ WDELevel >> exportToMap: aFileReference [
 	mapData := ByteString streamContents: [ :out |
 		out nextPutAll: '// Game: Woden'; lf.
 		out nextPutAll: '// Format: Valve'; lf.
-		modelingTree children doWithIndex: [ :entity :index |
-			out nextPutAll: '// entity '; print: index; lf.
-			out nextPutAll: '{'; lf.
-			entity children select: [ :each | each isBSPBrush ] thenDo: [ :each |
-				each exportToMap: out
-			].
-			out nextPutAll: '}'; lf.
+		modelingTree children do: [ :entity |
+			entity exportToMap: out
 		]
 	].
 

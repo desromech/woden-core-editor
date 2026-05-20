@@ -49,6 +49,30 @@ WDEEntity >> encodeJsonKeyValuesWithContext: serializationContext [
 	}
 ]
 
+{ #category : 'accessing' }
+WDEEntity >> exportToMap: out [
+	| sortedProperties |
+	out nextPutAll: '// entity ';lf.
+
+	out nextPutAll: '{'; lf.
+	out nextPutAll: ('"{1}" "{2}"' format: {'mapversion'. '220'}); lf.
+	out nextPutAll: ('"{1}" "{2}"' format: {'classname'. className}); lf.
+	
+	sortedProperties := OrderedCollection new.
+	properties keysAndValuesDo: [ :key : value |
+		sortedProperties add: key -> value
+	].
+	sortedProperties sort.
+	sortedProperties do: [ :property |
+		out nextPutAll: ('"{1}" "{2}"' format: {property key. property value}); lf.
+	].
+
+	self children select: [ :each | each isBSPBrush ] thenDo: [ :each |
+		each exportToMap: out
+	].
+	out nextPutAll: '}'; lf.
+]
+
 { #category : 'initialization' }
 WDEEntity >> initialize [
 	super initialize.
