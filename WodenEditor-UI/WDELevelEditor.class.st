@@ -458,8 +458,6 @@ WDELevelEditor >> initializePresenters [
 		addPageTitle: 'Materials' provider: [ WDELevelEditorMaterialPalettePresenter on: self model];
 		addPageTitle: 'Light Sources' provider: [ WDELevelEditorLightSourcePalettePresenter on: self model];
 		addPageTitle: 'HDRI' provider: [ WDELevelEditorHDRIPalettePresenter on: self model].
-
-	mainMenuBar addKeybindingsTo: self.
 ]
 
 { #category : 'initialization' }
